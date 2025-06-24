@@ -1,0 +1,10 @@
+:host {
+  display: block;
+}
+
+footer {
+  background-color: #E5E5E5; /* Gris institucional */
+  text-align: center;
+  padding: 1rem;
+  font-size: 0.9em;
+}
