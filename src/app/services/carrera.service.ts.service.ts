@@ -4,7 +4,7 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { ResponseList } from '../dto/response-list.model';
 import { Observable } from 'rxjs';
-import { Asignatura } from '../models/asignatura.model';
+import { Carrera } from '../models/carrera.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,11 +24,11 @@ export class CarreraServiceTsService extends BaseService<any> {
   }
 
 
-  consultarCarreras(carrera: string, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<Asignatura>> {
+  consultarCarreras(page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<Carrera>> {
     this.resource = "/carreras";
 
     const params = new HttpParams()
-    .set('page', 1)
+    .set('page', page)
     .set('pageSize', pageSize)
     .set('field', field)
     .set('asc', asc);
@@ -36,11 +36,12 @@ export class CarreraServiceTsService extends BaseService<any> {
     return this.executeGet('', { params: params, headers: this.headers });
   }
 
-  consultarCarrerasPorNombre(name: string, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<Asignatura>> {
+  
+  consultarCarrerasPorNombre(name: string, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<Carrera>> {
     this.resource = "/carreras/" + name;
 
     const params = new HttpParams()
-    .set('page', 1)
+    .set('page', page)
     .set('pageSize', pageSize)
     .set('field', field)
     .set('asc', asc);
