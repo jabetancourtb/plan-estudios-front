@@ -28,7 +28,7 @@ export class AsignaturaService extends BaseService<any> {
     this.resource = "/carreras/" + carrera + "/asignaturas";
 
     const params = new HttpParams()
-    .set('page', 1)
+    .set('page', page)
     .set('pageSize', pageSize)
     .set('field', field)
     .set('asc', asc);
@@ -41,7 +41,7 @@ export class AsignaturaService extends BaseService<any> {
     this.resource = "/campos-formacion/" + campoFormacion + "/asignaturas";
 
     const params = new HttpParams()
-    .set('page', 1)
+    .set('page', page)
     .set('pageSize', pageSize)
     .set('field', field)
     .set('asc', asc);
@@ -54,7 +54,7 @@ export class AsignaturaService extends BaseService<any> {
     this.resource = "/areas-formacion/" + areaFormacion + "/asignaturas";
 
     const params = new HttpParams()
-    .set('page', 1)
+    .set('page', page)
     .set('pageSize', pageSize)
     .set('field', field)
     .set('asc', asc);
@@ -67,7 +67,7 @@ export class AsignaturaService extends BaseService<any> {
     this.resource = "/semestre/" + semestre + "/asignaturas";
 
     const params = new HttpParams()
-    .set('page', 1)
+    .set('page', page)
     .set('pageSize', pageSize)
     .set('field', field)
     .set('asc', asc);
@@ -80,7 +80,7 @@ export class AsignaturaService extends BaseService<any> {
     this.resource = "/asignaturas";
 
     const params = new HttpParams()
-    .set('page', 1)
+    .set('page', page)
     .set('pageSize', pageSize)
     .set('field', field)
     .set('asc', asc);
@@ -92,6 +92,16 @@ export class AsignaturaService extends BaseService<any> {
   consultarAsignaturaPorId(idAsignatura: number) : Observable<Asignatura> {
     this.resource = "/asignaturas";
     return this.executeGet(`/${idAsignatura}`, { headers: this.headers });
+  }
+
+
+  consultarSemestres(asc: boolean) : Observable<ResponseList<number>> {
+    this.resource = "/semestres";
+
+    const params = new HttpParams()
+    .set('asc', asc);
+
+    return this.executeGet('', { params: params, headers: this.headers });
   }
 
 }
