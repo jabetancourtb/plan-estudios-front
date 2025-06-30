@@ -25,27 +25,27 @@ export class CampoFormacionService extends BaseService<any> {
   }
 
 
-  consultarCamposFormacion(page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<CampoFormacion>> {
+  consultarCamposFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<CampoFormacion>> {
     this.resource = "/campos-formacion";
 
     const params = new HttpParams()
-    .set('page', page)
-    .set('pageSize', pageSize)
-    .set('field', field)
-    .set('asc', asc);
+    .set('page', page || 0)
+    .set('pageSize', pageSize || 100)
+    .set('field', field || 'id')
+    .set('asc', asc || true);
 
     return this.executeGet('', { params: params, headers: this.headers });
   }
 
   
-  consultarCamposFormacionPorNombre(name: string, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<CampoFormacion>> {
+  consultarCamposFormacionPorNombre(name: string, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<CampoFormacion>> {
     this.resource = "/campos-formacion/" + name;
 
     const params = new HttpParams()
-    .set('page', page)
-    .set('pageSize', pageSize)
-    .set('field', field)
-    .set('asc', asc);
+    .set('page', page || 0)
+    .set('pageSize', pageSize || 100)
+    .set('field', field || 'id')
+    .set('asc', asc || true);
 
     return this.executeGet('', { params: params, headers: this.headers });
   }

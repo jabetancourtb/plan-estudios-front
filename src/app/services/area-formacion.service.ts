@@ -25,27 +25,27 @@ export class AreaFormacionService extends BaseService<any> {
   }
 
 
-  consultarAreasFormacion(page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<AreaFormacion>> {
+  consultarAreasFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<AreaFormacion>> {
     this.resource = "/areas-formacion";
 
     const params = new HttpParams()
-    .set('page', page)
-    .set('pageSize', pageSize)
-    .set('field', field)
-    .set('asc', asc);
+    .set('page', page || 0)
+    .set('pageSize', pageSize || 100)
+    .set('field', field || 'id')
+    .set('asc', asc || true);
 
     return this.executeGet('', { params: params, headers: this.headers });
   }
 
   
-  consultarAreasFormacionPorNombre(name: string, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<AreaFormacion>> {
+  consultarAreasFormacionPorNombre(name: string, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<AreaFormacion>> {
     this.resource = "/areas-formacion/" + name;
 
     const params = new HttpParams()
-    .set('page', page)
-    .set('pageSize', pageSize)
-    .set('field', field)
-    .set('asc', asc);
+    .set('page', page || 0)
+    .set('pageSize', pageSize || 100)
+    .set('field', field || 'id')
+    .set('asc', asc || true);
 
     return this.executeGet('', { params: params, headers: this.headers });
   }
