@@ -37,9 +37,22 @@ export class CampoFormacionService extends BaseService<any> {
     return this.executeGet('', { params: params, headers: this.headers });
   }
 
-  
+
+  consultarCamposFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<CampoFormacion>> {
+    this.resource = "/campos-formacion/" + id;
+
+    const params = new HttpParams()
+    .set('page', page || 0)
+    .set('pageSize', pageSize || 100)
+    .set('field', field || 'id')
+    .set('asc', asc || true);
+
+    return this.executeGet('', { params: params, headers: this.headers });
+  }
+
+
   consultarCamposFormacionPorNombre(name: string, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<CampoFormacion>> {
-    this.resource = "/campos-formacion/" + name;
+    this.resource = "/campos-formacion/nombre/" + name;
 
     const params = new HttpParams()
     .set('page', page || 0)

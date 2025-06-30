@@ -37,9 +37,22 @@ export class AreaFormacionService extends BaseService<any> {
     return this.executeGet('', { params: params, headers: this.headers });
   }
 
+
+  consultarAreasFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<AreaFormacion>> {
+    this.resource = "/areas-formacion/" + id;
+
+    const params = new HttpParams()
+    .set('page', page || 0)
+    .set('pageSize', pageSize || 100)
+    .set('field', field || 'id')
+    .set('asc', asc || true);
+
+    return this.executeGet('', { params: params, headers: this.headers });
+  }
   
+
   consultarAreasFormacionPorNombre(name: string, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<AreaFormacion>> {
-    this.resource = "/areas-formacion/" + name;
+    this.resource = "/areas-formacion/nombre/" + name;
 
     const params = new HttpParams()
     .set('page', page || 0)
