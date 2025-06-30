@@ -1,6 +1,10 @@
 <app-header></app-header>
 
 <app-bubble-chart
+    [data]="responseListCamposFormacion().content"
+/>
+
+<app-bubble-chart
     [data]="responseListAreasFormacion().content"
 />
 
