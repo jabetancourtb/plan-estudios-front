@@ -1,4 +1,6 @@
 export interface CampoFormacion {
     id: number;
-    nombre: string
+    nombre: string,
+    colorHtml: string,
+    cantidadAsignaturas: number
 }
