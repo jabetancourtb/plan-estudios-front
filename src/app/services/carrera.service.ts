@@ -9,7 +9,7 @@ import { Carrera } from '../models/carrera.model';
 @Injectable({
   providedIn: 'root'
 })
-export class CarreraServiceTsService extends BaseService<any> {
+export class CarreraService extends BaseService<any> {
 
   protected apiPlanEstudiosUDistrital: string = environment.apiPlanEstudiosUDistrital.url;
   protected apiPlanEstudiosUDistritalApiKeyRequestHeader: string = environment.apiPlanEstudiosUDistrital.apiKey.requestHeader;
