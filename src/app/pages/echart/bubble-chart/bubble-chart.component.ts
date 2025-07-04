@@ -27,14 +27,23 @@ export class BubbleChartComponent {
   menuY = 0;
   clickedData: any = null;
 
-  ngOnInit() {
-    this.chartInstance = echarts.init(this.chartContainer.nativeElement);
-  }
-
   
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['data'] && this.chartInstance) {
-      this.renderChart();
+    if (changes['data'] && this.data && this.data.length > 0) {
+      // Solo inicializar una vez
+      if (!this.chartInstance && this.chartContainer?.nativeElement?.clientHeight > 0) {
+        this.chartInstance = echarts.init(this.chartContainer.nativeElement);
+      }
+  
+      if (this.chartInstance) {
+        this.renderChart();
+      }
+
+      window.addEventListener('resize', () => {
+        if (this.chartInstance) {
+          this.chartInstance.resize();
+        }
+      });   
     }
   }
 
@@ -56,15 +65,15 @@ export class BubbleChartComponent {
       let circleSize = 0;
       let color = '#B0C4DE';
 
-      if(this.dataType() === 'camposFormacion') {
+      if(this.dataType() === 'Campos de formación') {
         circleSize = data.cantidadAsignaturas * 10;
         color = data.colorHtml;
       } 
-      else if (this.dataType() === 'areasFormacion') {
+      else if (this.dataType() === 'Áreas de formación') {
         circleSize = data.cantidadAsignaturas * 20;
         color = data.colorHtml;
       }
-      else if (this.dataType() === 'asignaturas') {
+      else if (this.dataType() === 'Asignaturas') {
         circleSize = 30;
       }
 
@@ -99,9 +108,11 @@ export class BubbleChartComponent {
 
     this.chartInstance.on('click', (params: any) => {
       if (params.data?.ruta && params.data.ruta.startsWith('/')) {
+        this.router.navigate(['/index']);
         //this.router.navigate([params.data.ruta]); // navegación interna
-        window.open(params.data.link, '_blank'); // navegación externa
-      } else if (params.data?.link) {
+        //window.open(params.data.link, '_blank'); // navegación externa
+      } 
+      else if (params.data?.link) {
         window.open(params.data.link, '_blank'); // navegación externa
       }
     });
@@ -109,7 +120,7 @@ export class BubbleChartComponent {
     this.chartInstance.on('contextmenu', (params: any) => {
       if (params.data) {
         this.clickedData = params.data;
-        this.menuX = params.event.offsetX;
+        this.menuX = params.event.event.pageX;
         this.menuY = params.event.event.pageY;
         this.menuVisible = true;
         params.event.event.preventDefault();
@@ -142,6 +153,11 @@ export class BubbleChartComponent {
       }
     }
     this.menuVisible = false;
+  }
+
+
+  reloadPage(): void {
+    window.location.reload();
   }
 
 }
