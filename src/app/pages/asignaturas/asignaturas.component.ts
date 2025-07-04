@@ -11,10 +11,12 @@ import { CampoFormacion } from '../../models/campo-formacion.model';
 import { LoaderService } from '../../services/loader.service';
 import { AreaFormacion } from '../../models/area-formacion.model';
 import { AreaFormacionService } from '../../services/area-formacion.service';
+import { TreegraphChartComponent } from "../highchart/treegraph-chart/treegraph-chart.component";
+import { CirclePackingComponent } from "../echart/circle-packing/circle-packing.component";
 
 @Component({
   selector: 'app-asignaturas',
-  imports: [FooterComponent, HeaderComponent, BubbleChartComponent],
+  imports: [FooterComponent, HeaderComponent, BubbleChartComponent, TreegraphChartComponent, CirclePackingComponent],
   templateUrl: './asignaturas.component.html',
   styleUrl: './asignaturas.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -90,10 +92,10 @@ export class AsignaturasComponent {
     this.areaFormacionService.consultarAreasFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
 
-        // Múltipla la cantidadAsignaturas por 8 para asignarlo al tamaño de las burbujas.
+        // Múltipla la cantidadAsignaturas por 20 para asignarlo al tamaño de las burbujas.
         const contenidoTransformado = res.content.map(c => ({
           ...c,
-          cantidadAsignaturas: c.cantidadAsignaturas * 8
+          cantidadAsignaturas: c.cantidadAsignaturas * 20
         }));
   
         this.responseListAreasFormacion.set({
