@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+
+aside {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 220px;
+  background-color: #0d47a1;
+  color: white;
+  padding: 1rem;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1000;
+  padding: 40px;
+}
+
+/* Mostrar cuando está abierto */
+aside.open {
+  transform: translateX(0);
+}
+
+/* Marca y navegación */
+.brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+nav a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin: 1rem 0;
+  font-weight: 500;
+}
+
+nav a.active {
+  text-decoration: underline;
+}
+
+/* Botón hamburguesa */
+.toggle-button {
+  position: fixed;
+  top: 0.5rem;
+  left: 1rem;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 2rem;
+  z-index: 1100;
+  display: none;
+}
+
+/* Mostrar botón en pantallas pequeñas */
+@media (max-width: 768px) {
+  .toggle-button {
+    display: block;
+  }
+}
+
+/* Mostrar siempre en escritorio */
+@media (min-width: 769px) {
+  aside {
+    transform: translateX(0);
+  }
+
+  .toggle-button {
+    display: none;
+  }
+
+}

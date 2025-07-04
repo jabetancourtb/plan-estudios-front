@@ -1,0 +1,12 @@
+<!-- Botón hamburguesa (solo en móvil) -->
+<button class="toggle-button" (click)="toggleMenu()">☰</button>
+
+<!-- Menú lateral -->
+<aside [class.open]="menuOpen">
+  <h2 class="brand">Contenido</h2>
+  <nav>
+    <a routerLink="/index" routerLinkActive="active">Inicio</a>
+    <a [routerLink]="['/index', 'campos-formacion']" routerLinkActive="active">Acerca</a>
+    <a [routerLink]="['/index']"  [queryParams]="{ categoria: 'campos-formacion' }" routerLinkActive="active">Campos de formación</a>
+  </nav>
+</aside>
