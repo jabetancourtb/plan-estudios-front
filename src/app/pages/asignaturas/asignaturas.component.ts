@@ -35,7 +35,7 @@ export class AsignaturasComponent {
 
   asignaturas = signal<Asignatura[]>([]);
 
-  responseListDTO = signal<ResponseList<Asignatura>>({
+  responseListAsignaturas = signal<ResponseList<Asignatura>>({
     recordCountPerPage: 0,
     totalRecordCount: 0,
     totalPages: 0,
@@ -116,7 +116,7 @@ export class AsignaturasComponent {
     this.loaderService.show();
     this.asignaturaService.consultarAsignaturasPorCarrera(carrera, 1, 100, 'codigo', true).subscribe({
       next: (res) => {
-        this.responseListDTO.set(res);
+        this.responseListAsignaturas.set(res);
       },
       error: (e) => {
         this.loaderService.hide();
@@ -129,7 +129,7 @@ export class AsignaturasComponent {
     this.loaderService.show();
     this.asignaturaService.consultarAsignaturas(1, 100, 'codigo', true).subscribe({
       next: (res) => {
-        this.responseListDTO.set(res);
+        this.responseListAsignaturas.set(res);
       },
       error: (e) => {
         this.loaderService.hide();
