@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, input, SimpleChanges, ViewChild } from '@angular/core';
 import * as echarts from 'echarts';
-import { CampoFormacion } from '../../../models/campo-formacion.model';
+import { HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-bubble-chart',
@@ -12,6 +12,8 @@ import { CampoFormacion } from '../../../models/campo-formacion.model';
 export class BubbleChartComponent { 
 
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
+  @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
+
   chartInstance!: echarts.ECharts;
 
   //data = input.required<any[]>();
@@ -35,20 +37,34 @@ export class BubbleChartComponent {
   }
 
 
+  // Ocultar el menú contextual cuando se da click por fuera.
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: MouseEvent) {
+    if (this.menuVisible && this.contextMenuRef && !this.contextMenuRef.nativeElement.contains(event.target)) {
+      this.menuVisible = false;
+    }
+  }
+
+
   renderChart() {
     let dataGraph : any[] = [];
 
     for(let data of this.data) {
 
       let circleSize = 0;
+      let color = '#B0C4DE';
 
       if(this.dataType() === 'camposFormacion') {
         circleSize = data.cantidadAsignaturas * 10;
+        color = data.colorHtml;
       } 
-      else {
+      else if (this.dataType() === 'areasFormacion') {
         circleSize = data.cantidadAsignaturas * 20;
+        color = data.colorHtml;
       }
-
+      else if (this.dataType() === 'asignaturas') {
+        circleSize = 30;
+      }
 
       dataGraph.push(
         { 
@@ -56,7 +72,7 @@ export class BubbleChartComponent {
           symbolSize: circleSize, 
           link: 'https://example.com/sistemas', 
           itemStyle: { 
-            color: data.colorHtml 
+            color: color
           } 
         },
       ); 
