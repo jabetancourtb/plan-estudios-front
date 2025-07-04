@@ -16,7 +16,7 @@ type EstructuraResultado = Record<string, any>;
   styleUrl: './circle-packing.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CirclePackingComponent implements OnChanges { 
+export class CirclePackingComponent  { 
 
   @Input() camposFormacion: CampoFormacion[] = [];
   @Input() areasFormacion: AreaFormacion[] = [];
@@ -33,33 +33,13 @@ export class CirclePackingComponent implements OnChanges {
   }
 
 
-  async loadData() {
-    return {
-      "$count": 100,
-      "A": {
-        "$count": 50,
-        "A1": { "$count": 20 },
-        "A2": { "$count": 30 }
-      },
-      "B": {
-        "$count": 50,
-        "B1": {
-          "$count": 25,
-          "B1a": { "$count": 10 },
-          "B1b": { "$count": 15 }
-        },
-        "B2": { "$count": 25 }
-      }
-    };
-  }
-
-
   async loadD3() {
     if (!(window as any).d3) {
       const module = await import('d3-hierarchy');
       (window as any).d3 = module.default ?? module;
     }
   }
+  
 
   ngOnChanges(changes: SimpleChanges): void {
     if (
@@ -82,7 +62,7 @@ export class CirclePackingComponent implements OnChanges {
   loadAndConvertExternalData() : EstructuraResultado{
 
     const resultado: EstructuraResultado = {
-      $count: 100,
+      $count: this.asignaturas.length,
       color: '#B41E1E'
     };
   
@@ -105,13 +85,13 @@ export class CirclePackingComponent implements OnChanges {
   
         for (const asig of asignaturasFiltradas) {
           resultado[campoNombre][areaNombre][asig.nombre] = {
-            $count: asig.numero_creditos,
+            $count: 1,
             color: '#FFFFFF' 
           };
         }
       }
     }
- 
+
     return resultado;
   }
 
@@ -178,10 +158,6 @@ export class CirclePackingComponent implements OnChanges {
         type: 'circle',
         shape: { cx: node.x, cy: node.y, r: node.r },
         transition: ['shape', 'style'],
-        /*style: { 
-          //fill: this.colorPalette[node.data.index % this.colorPalette.length] 
-          //fill: this.estructuraResultado[node.id.split('.').pop()]
-        },*/
         style: { fill: api.value('color') },
         textContent: {
           type: 'text',
@@ -200,15 +176,16 @@ export class CirclePackingComponent implements OnChanges {
 
     this.ngZone.run(() => {
       this.chartOption = {
+        backgroundColor: '#499bd1',
         dataset: { source: seriesData },
         tooltip: {},
-        /*visualMap: [{
+        visualMap: [{
           show: false,
           min: 0,
           max: maxDepth,
           dimension: 'depth',
           inRange: { color: ['#006edd', '#e0ffff'] }
-        }],*/
+        }],
         hoverLayerThreshold: Infinity,
         series: {
           type: 'custom',
@@ -238,7 +215,7 @@ export class CirclePackingComponent implements OnChanges {
       setTimeout(() => this.chartInstance.resize(), 0);
     };
 
-    //setTimeout(() => this.chartInstance.resize(), 0);
+    setTimeout(() => this.chartInstance.resize(), 0);
 
     this.chartInstance.getZr().on('click', (event: any) => {
       if (!event.target) drillDown(null);
