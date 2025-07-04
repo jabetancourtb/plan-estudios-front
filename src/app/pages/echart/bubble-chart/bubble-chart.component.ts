@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, input, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, Input, input, SimpleChanges, ViewChild } from '@angular/core';
 import * as echarts from 'echarts';
 import { HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-bubble-chart',
@@ -17,6 +18,7 @@ export class BubbleChartComponent {
   chartInstance!: echarts.ECharts;
 
   //data = input.required<any[]>();
+  router = inject(Router);
   @Input() data: any[] = [];
   dataType = input();
 
@@ -71,6 +73,7 @@ export class BubbleChartComponent {
           name: data.nombre, 
           symbolSize: circleSize, 
           link: 'https://example.com/sistemas', 
+          ruta: `/detalle/${data.id}`,
           itemStyle: { 
             color: color
           } 
@@ -94,6 +97,15 @@ export class BubbleChartComponent {
 
     this.chartInstance.off('contextmenu'); // evita múltiples listeners
 
+    this.chartInstance.on('click', (params: any) => {
+      if (params.data?.ruta && params.data.ruta.startsWith('/')) {
+        //this.router.navigate([params.data.ruta]); // navegación interna
+        window.open(params.data.link, '_blank'); // navegación externa
+      } else if (params.data?.link) {
+        window.open(params.data.link, '_blank'); // navegación externa
+      }
+    });
+
     this.chartInstance.on('contextmenu', (params: any) => {
       if (params.data) {
         this.clickedData = params.data;
@@ -114,13 +126,21 @@ export class BubbleChartComponent {
 
 
   onOptionSelected(action: string) {
+    if (!this.clickedData) return;
+
     if (action === 'ver') {
       alert(`Detalles de: ${this.clickedData.name}`);
     } 
     else if (action === 'ir') {
-      window.open(this.clickedData.link, '_blank');
+      const ruta = this.clickedData.ruta;
+
+      if (ruta?.startsWith('/')) {
+        this.router.navigate([ruta]); // ruta interna de Angular
+      } 
+      else {
+        window.open(this.clickedData.link, '_blank'); // externo
+      }
     }
-    
     this.menuVisible = false;
   }
 
