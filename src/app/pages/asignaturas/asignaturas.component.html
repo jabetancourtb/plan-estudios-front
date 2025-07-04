@@ -10,10 +10,12 @@
 
 <app-bubble-chart
     [data]="responseListCamposFormacion().content"
+    [dataType]="'camposFormacion'"
 />
 
 <app-bubble-chart
     [data]="responseListAreasFormacion().content"
+    [dataType]="'areasFormacion'"
 />
 
 <app-footer></app-footer>

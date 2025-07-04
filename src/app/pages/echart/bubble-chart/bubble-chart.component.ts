@@ -16,6 +16,7 @@ export class BubbleChartComponent {
 
   //data = input.required<any[]>();
   @Input() data: any[] = [];
+  dataType = input();
 
   menuVisible = false;
   menuX = 0;
@@ -24,17 +25,6 @@ export class BubbleChartComponent {
 
   ngOnInit() {
     this.chartInstance = echarts.init(this.chartContainer.nativeElement);
-
-    /*const data = [
-      { name: 'Ciencias  Básicas', symbolSize: 60, link: 'https://example.com/sistemas', itemStyle: { color: '#91CC75' } },
-      { name: 'Socio humanística', symbolSize: 50, link: 'https://example.com/industrial', itemStyle: { color: '#FAC858' } },
-      { name: 'Ingeniería Aplicada', symbolSize: 50, link: 'https://example.com/industrial', itemStyle: { color: '#FAC858' } },
-      { name: 'Básicas de la Ingeniería', symbolSize: 150, link: 'https://example.com/industrial', itemStyle: { color: '#FAC858' } },
-      { name: 'Socio  humanística', symbolSize: 50, link: 'https://example.com/industrial', itemStyle: { color: '#FAC858' } },
-      { name: 'Económico Administrativa', symbolSize: 50, link: 'https://example.com/industrial', itemStyle: { color: '#FAC858' } },
-      { name: 'Ciencias Básicas', symbolSize: 50, link: 'https://example.com/industrial', itemStyle: { color: '#FAC858' } },
-    ];
-    */
   }
 
   
@@ -49,10 +39,21 @@ export class BubbleChartComponent {
     let dataGraph : any[] = [];
 
     for(let data of this.data) {
+
+      let circleSize = 0;
+
+      if(this.dataType() === 'camposFormacion') {
+        circleSize = data.cantidadAsignaturas * 10;
+      } 
+      else {
+        circleSize = data.cantidadAsignaturas * 20;
+      }
+
+
       dataGraph.push(
         { 
           name: data.nombre, 
-          symbolSize: data.cantidadAsignaturas, 
+          symbolSize: circleSize, 
           link: 'https://example.com/sistemas', 
           itemStyle: { 
             color: data.colorHtml 

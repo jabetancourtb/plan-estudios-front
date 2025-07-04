@@ -68,6 +68,7 @@ export class AsignaturasComponent {
     this.campoFormacionService.consultarCamposFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
 
+        /*
         // Múltipla la cantidadAsignaturas por 10 para asignarlo al tamaño de las burbujas.
         const contenidoTransformado = res.content.map(c => ({
           ...c,
@@ -78,7 +79,9 @@ export class AsignaturasComponent {
           ...res,
           content: contenidoTransformado
         });
+        */
 
+        this.responseListCamposFormacion.set(res);
         this.loaderService.hide();
       },
       error: (e) => {
@@ -92,6 +95,7 @@ export class AsignaturasComponent {
     this.areaFormacionService.consultarAreasFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
 
+        /*
         // Múltipla la cantidadAsignaturas por 20 para asignarlo al tamaño de las burbujas.
         const contenidoTransformado = res.content.map(c => ({
           ...c,
@@ -101,8 +105,9 @@ export class AsignaturasComponent {
         this.responseListAreasFormacion.set({
           ...res,
           content: contenidoTransformado
-        });
+        });*/
 
+        this.responseListAreasFormacion.set(res);
         this.loaderService.hide();
       },
       error: (e) => {
