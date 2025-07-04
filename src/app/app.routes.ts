@@ -1,14 +1,15 @@
 import { Routes } from '@angular/router';
 import { AsignaturasComponent } from './pages/asignaturas/asignaturas.component';
+import { IndexComponent } from './pages/index/index.component';
 
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'asignaturas',
+        redirectTo: 'index',
         pathMatch: 'full'
     },
     {
-        path: 'asignaturas',
-        component: AsignaturasComponent,
+        path: 'index',
+        component: IndexComponent,
     },
 ];

@@ -1,0 +1,11 @@
+.main-content {
+    margin-left: 300px;
+    margin-top: 60px; 
+    padding: 1rem;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+      margin-left: 0;
+    }
+}
