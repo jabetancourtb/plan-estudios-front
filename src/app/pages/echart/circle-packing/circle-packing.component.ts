@@ -21,7 +21,6 @@ export class CirclePackingComponent implements OnChanges {
   @Input() camposFormacion: CampoFormacion[] = [];
   @Input() areasFormacion: AreaFormacion[] = [];
   @Input() asignaturas: Asignatura[] = [];
-  estructuraResultado: any;
 
   chartInstance!: any;
   chartOption: any = {};
@@ -83,19 +82,20 @@ export class CirclePackingComponent implements OnChanges {
   loadAndConvertExternalData() : EstructuraResultado{
 
     const resultado: EstructuraResultado = {
-      $count: this.asignaturas.length
+      $count: 100,
+      color: '#B41E1E'
     };
   
     for(const campo of this.camposFormacion) {
       
       const campoNombre = campo.nombre;
-      resultado[campoNombre] = { $count: campo.cantidadAreasFormacion };
+      resultado[campoNombre] = { $count: campo.cantidadAreasFormacion, color: campo.colorHtml };
   
-      const areas = this.areasFormacion.filter(area => area.idCampoFormacion === campo.id);
+      const areasFiltradas = this.areasFormacion.filter(area => area.idCampoFormacion === campo.id);
   
-      for(const area of areas) {
+      for(const area of areasFiltradas) {
         const areaNombre = area.nombre;
-        resultado[campoNombre][areaNombre] = { $count: area.cantidadAsignaturas  };
+        resultado[campoNombre][areaNombre] = { $count: area.cantidadAsignaturas, color: area.colorHtml  };
   
         const asignaturasFiltradas = this.asignaturas.filter(
           asig =>
@@ -105,15 +105,13 @@ export class CirclePackingComponent implements OnChanges {
   
         for (const asig of asignaturasFiltradas) {
           resultado[campoNombre][areaNombre][asig.nombre] = {
-            $count: asig.numero_creditos
-            
+            $count: asig.numero_creditos,
+            color: '#FFFFFF' 
           };
         }
       }
     }
-
-    this.estructuraResultado = resultado;
-  
+ 
     return resultado;
   }
 
@@ -125,10 +123,10 @@ export class CirclePackingComponent implements OnChanges {
     function convert(source: any, basePath: string, depth: number) {
       if (!source || depth > 5) return;
       maxDepth = Math.max(depth, maxDepth);
-      seriesData.push({ id: basePath, value: source.$count, depth, index: seriesData.length  });
+      seriesData.push({ id: basePath, value: source.$count, depth, index: seriesData.length, color: source.color || '#FFFFFF'  });
 
       for (let key in source) {
-        if (source.hasOwnProperty(key) && !key.startsWith('$')) {
+        if ((source.hasOwnProperty(key) && !key.startsWith('$')) && key != 'color') {
           convert(source[key], basePath + '.' + key, depth + 1);
         }
       }
@@ -140,7 +138,7 @@ export class CirclePackingComponent implements OnChanges {
 
   
   initChart(seriesData: any[], maxDepth: number) {
-
+   
     const d3 = (window as any).d3;   
     
     if (!d3 || typeof d3.stratify !== 'function') {
@@ -184,7 +182,7 @@ export class CirclePackingComponent implements OnChanges {
           //fill: this.colorPalette[node.data.index % this.colorPalette.length] 
           //fill: this.estructuraResultado[node.id.split('.').pop()]
         },*/
-        style: { fill: api.visual('color') },
+        style: { fill: api.value('color') },
         textContent: {
           type: 'text',
           style: {
@@ -204,13 +202,13 @@ export class CirclePackingComponent implements OnChanges {
       this.chartOption = {
         dataset: { source: seriesData },
         tooltip: {},
-        visualMap: [{
+        /*visualMap: [{
           show: false,
           min: 0,
           max: maxDepth,
           dimension: 'depth',
           inRange: { color: ['#006edd', '#e0ffff'] }
-        }],
+        }],*/
         hoverLayerThreshold: Infinity,
         series: {
           type: 'custom',
