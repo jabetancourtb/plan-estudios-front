@@ -1,0 +1,22 @@
+
+ 
+<div>
+
+    @if(categoria() == 'campos-formacion') {
+        <app-bubble-chart
+        [data]="responseListCamposFormacion().content"
+        [dataType]="'Campos de formación'"
+        />
+    }
+    
+    
+    @if(categoria() == 'areas-formacion') {
+        <app-bubble-chart
+        [data]="responseListAreasFormacion().content"
+        [dataType]="'Áreas de formación'"
+        />
+    }
+    
+
+</div>
+
