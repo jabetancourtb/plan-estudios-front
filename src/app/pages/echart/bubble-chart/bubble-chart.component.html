@@ -1,6 +1,12 @@
 <div #chartContainer style="width: 50%; height: 1000px;" (contextmenu)="onGlobalContextMenu($event)"></div>
-<app-contextual-menu
-    [menuVisible]="menuVisible"
-    [menuX]="menuX"
-    [menuY]="menuY"
-/>
+
+
+@if(menuVisible) {
+    <ul
+        [style.left.px]="menuX"
+        [style.top.px]="menuY"
+        class="context-menu">
+        <li (click)="onOptionSelected('ver')">🔍 Ver detalles</li>
+        <li (click)="onOptionSelected('ir')">🔗 Ir al enlace</li>
+    </ul>
+}
