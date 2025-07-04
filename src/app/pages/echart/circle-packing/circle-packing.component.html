@@ -1,0 +1,8 @@
+<!--<div echarts #chart [style.height]="'600px'" [options]="chartOption"></div>-->
+
+<echarts
+  [options]="chartOption"
+  (chartInit)="onChartInit($event)"
+  style="height: 600px; width: 100%; display: block;">
+</echarts>
+     
