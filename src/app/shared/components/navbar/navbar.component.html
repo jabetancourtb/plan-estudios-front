@@ -5,8 +5,8 @@
 <aside [class.open]="menuOpen">
   <h2 class="brand">Contenido</h2>
   <nav>
-    <a routerLink="/index" routerLinkActive="active">Inicio</a>
-    <a [routerLink]="['/index', 'campos-formacion']" routerLinkActive="active">Acerca</a>
-    <a [routerLink]="['/index']"  [queryParams]="{ categoria: 'campos-formacion' }" routerLinkActive="active">Campos de formación</a>
+    <a [routerLink]="['/index']" routerLinkActive="active">Inicio</a>
+    <a [routerLink]="['/index', 'bubble-chart']" [queryParams]="{ categoria: 'campos-formacion' }" routerLinkActive="active">Campos de formación</a>
+    <a [routerLink]="['/index', 'bubble-chart']" [queryParams]="{ categoria: 'areas-formacion' }" routerLinkActive="active">Áreas de formación</a>
   </nav>
 </aside>
