@@ -8,6 +8,7 @@ import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { Router } from '@angular/router';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
 import { FooterComponent } from "../../../../shared/components/footer/footer.component";
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -29,6 +30,9 @@ export class CamposFormacionBubbleChartComponent {
 
   router = inject(Router);
 
+  campoFormacion = signal<CampoFormacion>({} as CampoFormacion);
+
+
   responseListCamposFormacion = signal<ResponseListDTO<CampoFormacion>>({
     recordCountPerPage: 0,
     totalRecordCount: 0,
@@ -44,6 +48,21 @@ export class CamposFormacionBubbleChartComponent {
 
   ngOnInit(): void {
     this.consultarCamposFormacion(1, 100, 'id', true);
+  }
+
+
+  private consultarCampoFormacionPorId(id: number) {
+    this.loaderService.show();
+    this.campoFormacionService.consultarCamposFormacionPorId(id).subscribe({
+      next: (res) => {
+        this.campoFormacion.set(res);
+        this.showSwalEvent();
+        this.loaderService.hide();
+      },
+      error: (e) => {
+        this.loaderService.hide();
+      }
+    });
   }
 
 
@@ -206,7 +225,7 @@ export class CamposFormacionBubbleChartComponent {
     if (!this.clickedData) return;
 
     if (action === 'ver') {
-      alert(`Detalles de: ${this.clickedData.name}`);
+      this.consultarCampoFormacionPorId(this.clickedData.id);
     }
     else if (action === 'ir') {
       const ruta = this.clickedData.ruta;
@@ -219,6 +238,38 @@ export class CamposFormacionBubbleChartComponent {
       }
     }
     this.menuVisible = false;
+  }
+
+
+  showSwalEvent() {
+    const a = this.campoFormacion();
+
+    let html = `
+      <div style="max-height: 300px; overflow-y: auto;">
+        <table class="table table-bordered text-start">
+          <tr><th>Id</th><td>${a.id}</td></tr>
+          <tr><th>Color</th>
+            <td>
+              <span style="
+                display: inline-block;
+                width: 0;
+                height: 0;
+                border-top: 10px solid transparent;
+                border-bottom: 10px solid transparent;
+                border-left: 15px solid ${a.colorHtml};">
+              </span>
+            </td>
+          </tr>
+          <tr><th>Cantidad áreas de formación</th><td>${a.cantidadAreasFormacion}</td></tr>
+          <tr><th>Cantidad de asignaturas</th><td>${a.cantidadAsignaturas}</td></tr>
+        </table>
+      </div>
+      `;
+
+    Swal.fire({
+      title: this.campoFormacion().nombre,
+      html: html
+    });
   }
 
 }
