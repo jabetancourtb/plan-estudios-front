@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { ActivatedRoute } from '@angular/router';
 import { AsignaturaService } from '../../services/asignatura.service';
 import { Asignatura } from '../../models/asignatura.model';
-import { ResponseList } from '../../dto/response-list.model';
+import { ResponseListDTO } from '../../dto/response-list.model';
 import { FooterComponent } from "../../shared/components/footer/footer.component";
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { BubbleChartComponent } from "../echart/bubble-chart/bubble-chart.component";
@@ -35,21 +35,21 @@ export class AsignaturasComponent {
 
   asignaturas = signal<Asignatura[]>([]);
 
-  responseListAsignaturas = signal<ResponseList<Asignatura>>({
+  responseListAsignaturas = signal<ResponseListDTO<Asignatura>>({
     recordCountPerPage: 0,
     totalRecordCount: 0,
     totalPages: 0,
     content: []
   });
 
-  responseListCamposFormacion = signal<ResponseList<CampoFormacion>>({
+  responseListCamposFormacion = signal<ResponseListDTO<CampoFormacion>>({
     recordCountPerPage: 0,
     totalRecordCount: 0,
     totalPages: 0,
     content: []
   });
 
-  responseListAreasFormacion = signal<ResponseList<AreaFormacion>>({
+  responseListAreasFormacion = signal<ResponseListDTO<AreaFormacion>>({
     recordCountPerPage: 0,
     totalRecordCount: 0,
     totalPages: 0,
