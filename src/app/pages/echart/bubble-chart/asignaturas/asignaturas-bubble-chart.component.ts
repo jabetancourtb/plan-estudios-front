@@ -7,16 +7,18 @@ import { Asignatura } from '../../../../models/asignatura.model';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { LoaderService } from '../../../../services/loader.service';
 import { AsignaturaService } from '../../../../services/asignatura.service';
+import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
+import { FooterComponent } from "../../../../shared/components/footer/footer.component";
 
 
 @Component({
   selector: 'app-asignaturas-bubble-chart',
-  imports: [],
+  imports: [NavbarComponent, FooterComponent],
   templateUrl: './asignaturas-bubble-chart.component.html',
   styleUrl: './asignaturas-bubble-chart.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AsignaturasBubbleChartComponent { 
+export class AsignaturasBubbleChartComponent {
 
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
@@ -87,7 +89,7 @@ export class AsignaturasBubbleChartComponent {
     }
   }
 
-  
+
   private consultarAsignaturasPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
     this.loaderService.show();
     this.asignaturaService.consultarAsignaturas(1, 100, 'codigo', true).subscribe({
@@ -146,7 +148,7 @@ export class AsignaturasBubbleChartComponent {
       if (this.chartInstance) {
         this.chartInstance.resize();
       }
-    });   
+    });
   }
 
 
@@ -159,17 +161,17 @@ export class AsignaturasBubbleChartComponent {
       let color = '#B0C4DE';
 
       dataGraph.push(
-        { 
+        {
           id: data.codigo,
-          name: data.nombre, 
-          symbolSize: circleSize, 
-          link: 'https://example.com/sistemas', 
+          name: data.nombre,
+          symbolSize: circleSize,
+          link: 'https://example.com/sistemas',
           ruta: `/detalle/${data.codigo}`,
-          itemStyle: { 
+          itemStyle: {
             color: color
-          } 
+          }
         },
-      ); 
+      );
     }
 
     const option = {
@@ -201,15 +203,15 @@ export class AsignaturasBubbleChartComponent {
           //this.router.navigate(['/index']);
           //this.router.navigate([params.data.ruta]); // navegación interna
           //window.open(params.data.link, '_blank'); // navegación externa
-        }        
-      } 
+        }
+      }
       else if (params.data?.link) {
         window.open(params.data.link, '_blank'); // navegación externa
       }
     });
 
     // evita múltiples listeners
-    this.chartInstance.off('contextmenu'); 
+    this.chartInstance.off('contextmenu');
 
     // Abre menú contextual click derecho
     this.chartInstance.on('contextmenu', (params: any) => {
@@ -232,7 +234,47 @@ export class AsignaturasBubbleChartComponent {
       this.menuVisible = false;
     }
   }
-  
+
+
+  // Menú contextual con click derecho o largo
+  // Se activa con click derecho o manteniendo presionado el botón del mouse/touch
+  @HostListener('mousedown', ['$event'])
+  @HostListener('touchstart', ['$event'])
+  onHoldStart(event: MouseEvent | TouchEvent) {
+    this.holdTimer = setTimeout(() => {
+      this.onLongClick(event);
+    }, 500);
+  }
+
+  @HostListener('mouseup')
+  @HostListener('mouseleave')
+  @HostListener('touchend')
+  @HostListener('touchcancel')
+  onHoldEnd() {
+    clearTimeout(this.holdTimer);
+  }
+
+  holdTimer: any;
+
+  onLongClick(event: any) {
+    let clientX = 0;
+    let clientY = 0;
+
+    if (event instanceof MouseEvent) {
+      clientX = event.clientX;
+      clientY = event.clientY;
+      event.preventDefault(); // evita menú por defecto
+    }
+    else if (event instanceof TouchEvent && event.touches.length > 0) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    }
+
+    this.menuX = clientX;
+    this.menuY = clientY;
+    this.menuVisible = true;
+  }
+
 
   onGlobalContextMenu(event: MouseEvent) {
     event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
@@ -245,13 +287,13 @@ export class AsignaturasBubbleChartComponent {
 
     if (action === 'ver') {
       alert(`Detalles de: ${this.clickedData.name}`);
-    } 
+    }
     else if (action === 'ir') {
       const ruta = this.clickedData.ruta;
 
       if (ruta?.startsWith('/')) {
         this.router.navigate([ruta]); // ruta interna de Angular
-      } 
+      }
       else {
         window.open(this.clickedData.link, '_blank'); // externo
       }
