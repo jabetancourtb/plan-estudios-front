@@ -1,15 +1,16 @@
 
- 
-<div>
+<app-navbar>
 
-    
-    <app-circle-packing
-        [camposFormacion]="responseListCamposFormacion().content"
-        [areasFormacion]="responseListAreasFormacion().content"
-        [asignaturas]="responseListAsignaturas().content"
-    />
-    -
-    
+    <div>
 
-</div>
+        <app-circle-packing
+            [camposFormacion]="responseListCamposFormacion().content"
+            [areasFormacion]="responseListAreasFormacion().content"
+            [asignaturas]="responseListAsignaturas().content"
+        />
 
+    </div>
+
+    <app-footer></app-footer>
+
+</app-navbar>

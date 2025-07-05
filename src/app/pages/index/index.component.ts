@@ -13,11 +13,14 @@ import { URLParamsDTO } from '../../dto/url-params.model';
 import { CamposFormacionBubbleChartComponent } from "../echart/bubble-chart/campos-formacion/campos-formacion-bubble-chart.component";
 import { AreasFormacionBubbleChartComponent } from "../echart/bubble-chart/areas-formacion/areas-formacion-bubble-chart.component";
 import { AsignaturasBubbleChartComponent } from "../echart/bubble-chart/asignaturas/asignaturas-bubble-chart.component";
+import { NavbarComponent } from "../../shared/components/navbar/navbar.component";
+import { HeaderComponent } from "../../shared/components/header/header.component";
+import { FooterComponent } from "../../shared/components/footer/footer.component";
 
 
 @Component({
   selector: 'app-index',
-  imports: [CirclePackingComponent],
+  imports: [CirclePackingComponent, NavbarComponent, HeaderComponent, FooterComponent],
   templateUrl: './index.component.html',
   styleUrl: './index.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
