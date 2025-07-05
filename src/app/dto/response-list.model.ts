@@ -1,4 +1,4 @@
-export interface ResponseList<T> {
+export interface ResponseListDTO<T> {
     recordCountPerPage: number,
     totalRecordCount: number,
     totalPages: number,
