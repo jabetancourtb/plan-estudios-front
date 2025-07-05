@@ -2,20 +2,28 @@
  
 <div>
 
-    @if(categoria() == 'campos-formacion') {
+    @if(urlParams().categoria == 'campos-formacion') {
         <app-bubble-chart
-        [data]="responseListCamposFormacion().content"
-        [dataType]="'Campos de formación'"
+            [data]="responseListCamposFormacion().content"
+            [urlParams]="urlParams()"
         />
     }
     
     
-    @if(categoria() == 'areas-formacion') {
+    @if(urlParams().categoria == 'areas-formacion') {
         <app-bubble-chart
-        [data]="responseListAreasFormacion().content"
-        [dataType]="'Áreas de formación'"
+            [data]="responseListAreasFormacion().content"
+            [urlParams]="urlParams()"
         />
     }
+
+    @if(urlParams().categoria == 'asignaturas') {
+        <app-bubble-chart
+            [data]="responseListAsignaturas().content"
+            [urlParams]="urlParams()"
+        />
+    }
+    
     
 
 </div>
