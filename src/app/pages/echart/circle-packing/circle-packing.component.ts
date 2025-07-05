@@ -137,7 +137,7 @@ export class CirclePackingComponent implements OnChanges {
     const renderItem = (params: any, api: any) => {
 
       const context = params.context;
-      
+
       if (!context.layout) {
         context.layout = true;
         const pack = d3.pack().size([api.getWidth() - 2, api.getHeight() - 2]).padding(3);
@@ -176,7 +176,7 @@ export class CirclePackingComponent implements OnChanges {
 
     this.ngZone.run(() => {
       this.chartOption = {
-        backgroundColor: '#499bd1',
+        //backgroundColor: '#499bd1',
         dataset: { source: seriesData },
         tooltip: {},
         visualMap: [{
@@ -224,10 +224,10 @@ export class CirclePackingComponent implements OnChanges {
     if (this.chartOption && this.chartOption.series) {
       this.chartOption.series.context = null;
     }
-    
+
     this.chartOption = { ...this.chartOption, dataset: { source: this.currentSeriesData } };
     setTimeout(() => this.chartInstance.resize(), 0);
   }
 
-  
+
 }
