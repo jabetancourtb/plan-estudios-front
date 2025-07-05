@@ -10,22 +10,18 @@ import { AreaFormacion } from '../../models/area-formacion.model';
 import { AreaFormacionService } from '../../services/area-formacion.service';
 import { CirclePackingComponent } from "../echart/circle-packing/circle-packing.component";
 import { URLParamsDTO } from '../../dto/url-params.model';
-import { CamposFormacionBubbleChartComponent } from "../echart/bubble-chart/campos-formacion/campos-formacion-bubble-chart.component";
-import { AreasFormacionBubbleChartComponent } from "../echart/bubble-chart/areas-formacion/areas-formacion-bubble-chart.component";
-import { AsignaturasBubbleChartComponent } from "../echart/bubble-chart/asignaturas/asignaturas-bubble-chart.component";
 import { NavbarComponent } from "../../shared/components/navbar/navbar.component";
-import { HeaderComponent } from "../../shared/components/header/header.component";
 import { FooterComponent } from "../../shared/components/footer/footer.component";
 
 
 @Component({
   selector: 'app-index',
-  imports: [CirclePackingComponent, NavbarComponent, HeaderComponent, FooterComponent],
+  imports: [CirclePackingComponent, NavbarComponent, FooterComponent],
   templateUrl: './index.component.html',
   styleUrl: './index.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IndexComponent { 
+export class IndexComponent {
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private loaderService: LoaderService = inject(LoaderService);
