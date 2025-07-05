@@ -125,6 +125,9 @@ export class BubbleChartComponent {
           else if(this.urlParams()?.categoria === 'areas-formacion') {
             this.router.navigate(['/index', 'bubble-chart'], {  queryParams: { categoria: 'asignaturas', nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: params.data.name } });
           }
+          else if(this.urlParams()?.categoria === 'asignaturas') {
+            //window.open(params.data.link, '_blank'); // navegación externa
+          }
   
           //this.router.navigate(['/index']);
           //this.router.navigate([params.data.ruta]); // navegación interna
