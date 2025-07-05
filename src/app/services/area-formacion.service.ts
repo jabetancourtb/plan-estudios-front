@@ -18,7 +18,7 @@ export class AreaFormacionService extends BaseService<any> {
 
   protected headers = new HttpHeaders({ [this.apiPlanEstudiosUDistritalApiKeyRequestHeader] : this.apiPlanEstudiosUDistritalApiKeyRequestValue });
 
-  
+
   constructor() {
     super();
     this.apiUrl = this.apiPlanEstudiosUDistrital;
@@ -38,18 +38,11 @@ export class AreaFormacionService extends BaseService<any> {
   }
 
 
-  consultarAreasFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<AreaFormacion>> {
+  consultarAreaFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<AreaFormacion> {
     this.resource = "/areas-formacion/" + id;
-
-    const params = new HttpParams()
-    .set('page', page || 0)
-    .set('pageSize', pageSize || 100)
-    .set('field', field || 'id')
-    .set('asc', asc || true);
-
-    return this.executeGet('', { params: params, headers: this.headers });
+    return this.executeGet('', { headers: this.headers });
   }
-  
+
 
   consultarAreasFormacionPorNombre(name: string, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<AreaFormacion>> {
     this.resource = "/areas-formacion/nombre/" + name;
