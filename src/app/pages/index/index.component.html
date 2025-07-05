@@ -2,6 +2,13 @@
  
 <div>
 
+    <app-circle-packing
+        [camposFormacion]="responseListCamposFormacion().content"
+        [areasFormacion]="responseListAreasFormacion().content"
+        [asignaturas]="responseListAsignaturas().content"
+    />
+
+
     @if(urlParams().categoria == 'campos-formacion') {
         <app-bubble-chart
             [data]="responseListCamposFormacion().content"

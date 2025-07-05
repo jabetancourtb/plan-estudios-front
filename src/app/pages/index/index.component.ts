@@ -69,6 +69,7 @@ export class IndexComponent {
   ngOnInit(): void {
     this.obtenerUrlParams();
     this.consultarCategoria();
+    this.consultarCategorias();
   }
 
 
@@ -110,8 +111,14 @@ export class IndexComponent {
       else {
         this.consultarAsignaturas(1, 100, 'codigo', true);
       }
-      
     }
+  }
+
+
+  private consultarCategorias() {
+    this.consultarCamposFormacion(1, 100, undefined, true);
+    this.consultarAreasFormacion(1, 100, undefined, true);
+    this.consultarAsignaturas(1, 100, 'codigo', true);
   }
 
 
