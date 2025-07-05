@@ -7,16 +7,18 @@ import { URLParamsDTO } from '../../../../dto/url-params.model';
 import { LoaderService } from '../../../../services/loader.service';
 import { AreaFormacionService } from '../../../../services/area-formacion.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
+import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
+import { FooterComponent } from "../../../../shared/components/footer/footer.component";
 
 
 @Component({
   selector: 'app-areas-formacion-bubble-chart',
-  imports: [],
+  imports: [NavbarComponent, FooterComponent],
   templateUrl: './areas-formacion-bubble-chart.component.html',
   styleUrl: './areas-formacion-bubble-chart.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AreasFormacionBubbleChartComponent { 
+export class AreasFormacionBubbleChartComponent {
 
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
@@ -28,7 +30,7 @@ export class AreasFormacionBubbleChartComponent {
   chartInstance!: echarts.ECharts;
 
   router = inject(Router);
- 
+
   urlParams = signal<URLParamsDTO>({
     "categoria": '',
     "idCampoFormacion": 0,
@@ -83,7 +85,7 @@ export class AreasFormacionBubbleChartComponent {
       this.consultarAreasFormacionPorPaginacion(1, 100, 'id', true);
     }
   }
-  
+
 
   private consultarAreasFormacionPorPaginacion(page?: number, pageSize?: number, field?: string, asc?: boolean) {
     this.loaderService.show();
@@ -131,25 +133,25 @@ export class AreasFormacionBubbleChartComponent {
       }
     });
   }
- 
-  
+
+
   renderChart() {
     let dataGraph : any[] = [];
 
     for(let data of this.responseListAreasFormacion().content) {
-   
+
       dataGraph.push(
-        { 
+        {
           id: data.id,
-          name: data.nombre, 
+          name: data.nombre,
           symbolSize: data.cantidadAsignaturas * 20,
-          link: 'https://example.com/sistemas', 
+          link: 'https://example.com/sistemas',
           ruta: `/detalle/${data.id}`,
-          itemStyle: { 
+          itemStyle: {
             color: data.colorHtml
-          } 
+          }
         },
-      ); 
+      );
     }
 
     const option = {
@@ -181,15 +183,15 @@ export class AreasFormacionBubbleChartComponent {
           else {
             this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreAreaFormacion: params.data.name } });
           }
-        }        
-      } 
+        }
+      }
       else if (params.data?.link) {
         window.open(params.data.link, '_blank'); // navegación externa
       }
     });
 
     // evita múltiples listeners
-    this.chartInstance.off('contextmenu'); 
+    this.chartInstance.off('contextmenu');
 
     // Abre menú contextual click derecho
     this.chartInstance.on('contextmenu', (params: any) => {
@@ -212,7 +214,47 @@ export class AreasFormacionBubbleChartComponent {
       this.menuVisible = false;
     }
   }
-  
+
+
+  // Menú contextual con click derecho o largo
+  // Se activa con click derecho o manteniendo presionado el botón del mouse/touch
+  @HostListener('mousedown', ['$event'])
+  @HostListener('touchstart', ['$event'])
+  onHoldStart(event: MouseEvent | TouchEvent) {
+    this.holdTimer = setTimeout(() => {
+      this.onLongClick(event);
+    }, 500);
+  }
+
+  @HostListener('mouseup')
+  @HostListener('mouseleave')
+  @HostListener('touchend')
+  @HostListener('touchcancel')
+  onHoldEnd() {
+    clearTimeout(this.holdTimer);
+  }
+
+  holdTimer: any;
+
+  onLongClick(event: any) {
+    let clientX = 0;
+    let clientY = 0;
+
+    if (event instanceof MouseEvent) {
+      clientX = event.clientX;
+      clientY = event.clientY;
+      event.preventDefault(); // evita menú por defecto
+    }
+    else if (event instanceof TouchEvent && event.touches.length > 0) {
+      clientX = event.touches[0].clientX;
+      clientY = event.touches[0].clientY;
+    }
+
+    this.menuX = clientX;
+    this.menuY = clientY;
+    this.menuVisible = true;
+  }
+
 
   onGlobalContextMenu(event: MouseEvent) {
     event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
@@ -225,13 +267,13 @@ export class AreasFormacionBubbleChartComponent {
 
     if (action === 'ver') {
       alert(`Detalles de: ${this.clickedData.name}`);
-    } 
+    }
     else if (action === 'ir') {
       const ruta = this.clickedData.ruta;
 
       if (ruta?.startsWith('/')) {
         this.router.navigate([ruta]); // ruta interna de Angular
-      } 
+      }
       else {
         window.open(this.clickedData.link, '_blank'); // externo
       }
