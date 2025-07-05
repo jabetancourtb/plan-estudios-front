@@ -34,9 +34,6 @@ export class IndexComponent {
   asignaturas = signal<Asignatura[]>([]);
 
   tipoGrafico = signal('');
-  //categoria = signal('');
-  //idCampoFormacionParam = signal(0);
-  //idAreaFormacionParam = signal(0);
 
   urlParams = signal<URLParamsDTO>({
     "categoria": '',
@@ -82,19 +79,6 @@ export class IndexComponent {
     });
 
     this.activatedRoute.queryParamMap.subscribe((params) => {
-      /*
-      this.paramsUrl.update(current => ({
-        ...current,
-        categoria: 'categoria',
-      }));
-
-      const idCampoFormacionParam = params.get('idCampoFormacion') ?? 0;
-      this.idCampoFormacionParam.set(Number(idCampoFormacionParam));
-
-      const idAreaFormacionParam = params.get('idCampoFormacion') ?? 0;
-      this.idAreaFormacionParam.set(Number(idAreaFormacionParam))
-      */
-
       this.urlParams.set({
         categoria: params.get('categoria') ?? '',
         idCampoFormacion: Number(params.get('idCampoFormacion')) ?? 0,
@@ -103,7 +87,6 @@ export class IndexComponent {
         nombreAreaFormacion: params.get('nombreAreaFormacion') ?? '',
         idAsignatura: Number(params.get('idAsignatura')) ?? 0,
       });
-
     });
   }
 
@@ -121,7 +104,7 @@ export class IndexComponent {
       } 
     }
     else if(this.urlParams().categoria == 'asignaturas') {
-      if(this.urlParams().idCampoFormacion && this.urlParams().idAreaFormacion) {
+      if(this.urlParams().nombreAreaFormacion && this.urlParams().nombreAreaFormacion) {
         this.consultarAsignaturasPorCampoFormacionYAreaFormacion(this.urlParams().nombreCampoFormacion, this.urlParams().nombreAreaFormacion, 1, 100, 'codigo', true);
       }
       else {
