@@ -12,4 +12,8 @@ export const routes: Routes = [
         path: 'index',
         component: IndexComponent,
     },
+    {
+        path: 'index/:tipoGrafico',
+        component: IndexComponent,
+    },
 ];
