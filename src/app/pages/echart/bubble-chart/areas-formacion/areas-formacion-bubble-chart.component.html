@@ -1,26 +1,7 @@
 
-
-@if(urlParams()?.categoria == 'campos-formacion') {
-    <h1>
-        Campos de formación
-    </h1>
-}
-
-@if(urlParams()?.categoria == 'areas-formacion') {
-    <h1>
-        Áreas de formación
-    </h1>
-}
-
-@if(urlParams()?.categoria == 'asignaturas') {
-    <h1>
-        Asignaturas
-    </h1>
-}
-
+<h1>Áreas de formación</h1>
 
 <div #chartContainer class="bubble-chart-container" style="width: 100%; height: 1000px;"  (contextmenu)="onGlobalContextMenu($event)"></div>
-
 
 @if(menuVisible) {
     <ul
