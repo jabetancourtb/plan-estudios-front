@@ -3,7 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AsignaturaService } from '../../services/asignatura.service';
 import { Asignatura } from '../../models/asignatura.model';
 import { ResponseListDTO } from '../../dto/response-list.model';
-import { BubbleChartComponent } from "../echart/bubble-chart/bubble-chart.component";
 import { CampoFormacionService } from '../../services/campo-formacion.service';
 import { CampoFormacion } from '../../models/campo-formacion.model';
 import { LoaderService } from '../../services/loader.service';
@@ -11,11 +10,14 @@ import { AreaFormacion } from '../../models/area-formacion.model';
 import { AreaFormacionService } from '../../services/area-formacion.service';
 import { CirclePackingComponent } from "../echart/circle-packing/circle-packing.component";
 import { URLParamsDTO } from '../../dto/url-params.model';
+import { CamposFormacionBubbleChartComponent } from "../echart/bubble-chart/campos-formacion/campos-formacion-bubble-chart.component";
+import { AreasFormacionBubbleChartComponent } from "../echart/bubble-chart/areas-formacion/areas-formacion-bubble-chart.component";
+import { AsignaturasBubbleChartComponent } from "../echart/bubble-chart/asignaturas/asignaturas-bubble-chart.component";
 
 
 @Component({
   selector: 'app-index',
-  imports: [BubbleChartComponent, CirclePackingComponent],
+  imports: [CirclePackingComponent],
   templateUrl: './index.component.html',
   styleUrl: './index.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -68,8 +70,9 @@ export class IndexComponent {
 
   ngOnInit(): void {
     this.obtenerUrlParams();
-    this.consultarCategoria();
-    this.consultarCategorias();
+    this.consultarCamposFormacion(1, 100, undefined, true);
+    this.consultarAreasFormacion(1, 100, undefined, true);
+    this.consultarAsignaturas(1, 100, 'codigo', true);
   }
 
 
@@ -89,36 +92,6 @@ export class IndexComponent {
         idAsignatura: Number(params.get('idAsignatura')) ?? 0,
       });
     });
-  }
-
-
-  consultarCategoria() {
-    if (this.urlParams().categoria == 'campos-formacion') {
-      this.consultarCamposFormacion(1, 100, undefined, true);
-    }
-    else if(this.urlParams().categoria == 'areas-formacion') {
-      if(this.urlParams().idCampoFormacion) {
-        this.consultarAreasFormacionPorIdCampoFormacion(this.urlParams().idCampoFormacion, 1, 100, undefined, true);
-      }
-      else {
-        this.consultarAreasFormacion(1, 100, undefined, true);
-      } 
-    }
-    else if(this.urlParams().categoria == 'asignaturas') {
-      if(this.urlParams().nombreAreaFormacion && this.urlParams().nombreAreaFormacion) {
-        this.consultarAsignaturasPorCampoFormacionYAreaFormacion(this.urlParams().nombreCampoFormacion, this.urlParams().nombreAreaFormacion, 1, 100, 'codigo', true);
-      }
-      else {
-        this.consultarAsignaturas(1, 100, 'codigo', true);
-      }
-    }
-  }
-
-
-  private consultarCategorias() {
-    this.consultarCamposFormacion(1, 100, undefined, true);
-    this.consultarAreasFormacion(1, 100, undefined, true);
-    this.consultarAsignaturas(1, 100, 'codigo', true);
   }
 
 
@@ -149,50 +122,10 @@ export class IndexComponent {
     });
   }
 
-  private consultarAreasFormacionPorIdCampoFormacion(idCampoFormacion: number, page?: number, pageSize?: number, field?: string, asc?: boolean) {
-    this.loaderService.show();
-    this.areaFormacionService.consultarAreasFormacionPorIdCampoFormacion(idCampoFormacion, page, pageSize, field, asc).subscribe({
-      next: (res) => {
-        this.responseListAreasFormacion.set(res);
-        this.loaderService.hide();
-      },
-      error: (e) => {
-        this.loaderService.hide();
-      }
-    });
-  }
 
-
-  private consultarAsignaturasPorCarrera(carrera: string, page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
-    this.asignaturaService.consultarAsignaturasPorCarrera(carrera, 1, 100, 'codigo', true).subscribe({
-      next: (res) => {
-        this.responseListAsignaturas.set(res);
-        this.loaderService.hide();
-      },
-      error: (e) => {
-        this.loaderService.hide();
-      }
-    });
-  }
-
-  
   private consultarAsignaturas(page: number, pageSize: number, field: string, asc: boolean) {
     this.loaderService.show();
     this.asignaturaService.consultarAsignaturas(1, 100, 'codigo', true).subscribe({
-      next: (res) => {
-        this.responseListAsignaturas.set(res);
-        this.loaderService.hide();
-      },
-      error: (e) => {
-        this.loaderService.hide();
-      }
-    });
-  }
-
-  private consultarAsignaturasPorCampoFormacionYAreaFormacion(camporFormacion:string, areaFormacion: string, page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
-    this.asignaturaService.consultarAsignaturasPorCampoFormacionYAreaFormacion(camporFormacion, areaFormacion, 1, 100, 'codigo', true).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.loaderService.hide();

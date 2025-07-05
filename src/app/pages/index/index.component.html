@@ -2,35 +2,13 @@
  
 <div>
 
+    
     <app-circle-packing
         [camposFormacion]="responseListCamposFormacion().content"
         [areasFormacion]="responseListAreasFormacion().content"
         [asignaturas]="responseListAsignaturas().content"
     />
-
-
-    @if(urlParams().categoria == 'campos-formacion') {
-        <app-bubble-chart
-            [data]="responseListCamposFormacion().content"
-            [urlParams]="urlParams()"
-        />
-    }
-    
-    
-    @if(urlParams().categoria == 'areas-formacion') {
-        <app-bubble-chart
-            [data]="responseListAreasFormacion().content"
-            [urlParams]="urlParams()"
-        />
-    }
-
-    @if(urlParams().categoria == 'asignaturas') {
-        <app-bubble-chart
-            [data]="responseListAsignaturas().content"
-            [urlParams]="urlParams()"
-        />
-    }
-    
+    -
     
 
 </div>
