@@ -18,7 +18,7 @@ export class CampoFormacionService extends BaseService<any> {
 
   protected headers = new HttpHeaders({ [this.apiPlanEstudiosUDistritalApiKeyRequestHeader] : this.apiPlanEstudiosUDistritalApiKeyRequestValue });
 
-  
+
   constructor() {
     super();
     this.apiUrl = this.apiPlanEstudiosUDistrital;
@@ -38,16 +38,9 @@ export class CampoFormacionService extends BaseService<any> {
   }
 
 
-  consultarCamposFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<CampoFormacion>> {
+  consultarCamposFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<CampoFormacion> {
     this.resource = "/campos-formacion/" + id;
-
-    const params = new HttpParams()
-    .set('page', page || 0)
-    .set('pageSize', pageSize || 100)
-    .set('field', field || 'id')
-    .set('asc', asc || true);
-
-    return this.executeGet('', { params: params, headers: this.headers });
+    return this.executeGet('', { headers: this.headers });
   }
 
 
