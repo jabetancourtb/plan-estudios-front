@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, Input, input, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, Input, input, signal, SimpleChanges, ViewChild } from '@angular/core';
 import * as echarts from 'echarts';
 import { HostListener } from '@angular/core';
 import { Router } from '@angular/router';
+import { URLParamsDTO } from '../../../dto/url-params.model';
 
 @Component({
   selector: 'app-bubble-chart',
@@ -20,7 +21,9 @@ export class BubbleChartComponent {
   //data = input.required<any[]>();
   router = inject(Router);
   @Input() data: any[] = [];
-  dataType = input();
+  //dataType = input();
+
+  urlParams = input<URLParamsDTO>();
 
   menuVisible = false;
   menuX = 0;
@@ -65,20 +68,21 @@ export class BubbleChartComponent {
       let circleSize = 0;
       let color = '#B0C4DE';
 
-      if(this.dataType() === 'Campos de formación') {
+      if(this.urlParams()?.categoria === 'campos-formacion') {
         circleSize = data.cantidadAsignaturas * 10;
         color = data.colorHtml;
       } 
-      else if (this.dataType() === 'Áreas de formación') {
+      else if (this.urlParams()?.categoria === 'areas-formacion') {
         circleSize = data.cantidadAsignaturas * 20;
         color = data.colorHtml;
       }
-      else if (this.dataType() === 'Asignaturas') {
-        circleSize = 30;
+      else if (this.urlParams()?.categoria === 'asignaturas') {
+        circleSize = 100;
       }
 
       dataGraph.push(
         { 
+          id: data.id,
           name: data.nombre, 
           symbolSize: circleSize, 
           link: 'https://example.com/sistemas', 
@@ -104,19 +108,38 @@ export class BubbleChartComponent {
 
     this.chartInstance.setOption(option, true);
 
-    this.chartInstance.off('contextmenu'); // evita múltiples listeners
+    this.clickEvents();
+  }
 
+  clickEvents() {
+
+    // Redirige con click izquierdo
     this.chartInstance.on('click', (params: any) => {
       if (params.data?.ruta && params.data.ruta.startsWith('/')) {
-        this.router.navigate(['/index']);
-        //this.router.navigate([params.data.ruta]); // navegación interna
-        //window.open(params.data.link, '_blank'); // navegación externa
+
+        if (params.data) {
+
+          if(this.urlParams()?.categoria === 'campos-formacion') {
+            this.router.navigate(['/index', 'bubble-chart'], { queryParams: { categoria: 'areas-formacion', idCampoFormacion: params.data.id, nombreCampoFormacion: params.data.name } });
+          }
+          else if(this.urlParams()?.categoria === 'areas-formacion') {
+            this.router.navigate(['/index', 'bubble-chart'], {  queryParams: { categoria: 'asignaturas', nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: params.data.name } });
+          }
+  
+          //this.router.navigate(['/index']);
+          //this.router.navigate([params.data.ruta]); // navegación interna
+          //window.open(params.data.link, '_blank'); // navegación externa
+        }        
       } 
       else if (params.data?.link) {
         window.open(params.data.link, '_blank'); // navegación externa
       }
     });
 
+    // evita múltiples listeners
+    this.chartInstance.off('contextmenu'); 
+
+    // Abre menú contextual click derecho
     this.chartInstance.on('contextmenu', (params: any) => {
       if (params.data) {
         this.clickedData = params.data;
