@@ -11,8 +11,8 @@
             [style.left.px]="menuX"
             [style.top.px]="menuY"
             class="context-menu">
-            <li (click)="onOptionSelected('ver')">🔍 Ver detalles</li>
-            <li (click)="onOptionSelected('ir')">🔗 Ir al enlace</li>
+            <li (click)="onOptionSelected('ver', $event)">🔍 Ver detalles</li>
+            <li (click)="onOptionSelected('ir', $event)">🔗 Ir al enlace</li>
         </ul>
     }
 

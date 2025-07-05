@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import * as echarts from 'echarts';
+import Swal from 'sweetalert2';
 import { HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { URLParamsDTO } from '../../../../dto/url-params.model';
@@ -47,6 +48,8 @@ export class AsignaturasBubbleChartComponent {
     content: []
   });
 
+  asignatura = signal<Asignatura>({} as Asignatura);
+
   menuVisible = false;
   menuX = 0;
   menuY = 0;
@@ -90,9 +93,24 @@ export class AsignaturasBubbleChartComponent {
   }
 
 
+  private consultarAsignaturaPorId(id: number) {
+    this.loaderService.show();
+    this.asignaturaService.consultarAsignaturaPorId(id,).subscribe({
+      next: (res) => {
+        this.asignatura.set(res);
+        this.showSwalEvent();
+        this.loaderService.hide();
+      },
+      error: (e) => {
+        this.loaderService.hide();
+      }
+    });
+  }
+
+
   private consultarAsignaturasPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
     this.loaderService.show();
-    this.asignaturaService.consultarAsignaturas(1, 100, 'codigo', true).subscribe({
+    this.asignaturaService.consultarAsignaturas(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.loadChart();
@@ -107,7 +125,7 @@ export class AsignaturasBubbleChartComponent {
 
   private consultarAsignaturasPorCampoFormacionYAreaFormacion(camporFormacion:string, areaFormacion: string, page: number, pageSize: number, field: string, asc: boolean) {
     this.loaderService.show();
-    this.asignaturaService.consultarAsignaturasPorCampoFormacionYAreaFormacion(camporFormacion, areaFormacion, 1, 100, 'codigo', true).subscribe({
+    this.asignaturaService.consultarAsignaturasPorCampoFormacionYAreaFormacion(camporFormacion, areaFormacion, page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.loadChart();
@@ -122,7 +140,7 @@ export class AsignaturasBubbleChartComponent {
 
   private consultarAsignaturasPorAreaFormacion(areaFormacion: string, page: number, pageSize: number, field: string, asc: boolean) {
     this.loaderService.show();
-    this.asignaturaService.consultarAsignaturasPorAreaFormacion(areaFormacion, 1, 100, 'codigo', true).subscribe({
+    this.asignaturaService.consultarAsignaturasPorAreaFormacion(areaFormacion, page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.loadChart();
@@ -223,7 +241,6 @@ export class AsignaturasBubbleChartComponent {
         params.event.event.preventDefault();
       }
     });
-
   }
 
 
@@ -282,11 +299,11 @@ export class AsignaturasBubbleChartComponent {
   }
 
 
-  onOptionSelected(action: string) {
+  onOptionSelected(action: string, event: any) {
     if (!this.clickedData) return;
 
     if (action === 'ver') {
-      alert(`Detalles de: ${this.clickedData.name}`);
+      this.consultarAsignaturaPorId(this.clickedData.id);
     }
     else if (action === 'ir') {
       const ruta = this.clickedData.ruta;
@@ -300,5 +317,32 @@ export class AsignaturasBubbleChartComponent {
     }
     this.menuVisible = false;
   }
+
+
+  showSwalEvent() {
+    const a = this.asignatura();
+
+    Swal.fire({
+      title: this.asignatura().nombre,
+      html: `
+      <div style="max-height: 300px; overflow-y: auto;">
+        <table class="table table-bordered text-start">
+          <tr><th>Código</th><td>${a.codigo}</td></tr>
+          <tr><th>Carrera</th><td>${a.carrera}</td></tr>
+          <tr><th>Semestre</th><td>${a.semestre_asignatura}</td></tr>
+          <tr><th>Campo de Formación</th><td>${a.campo_formacion}</td></tr>
+          <tr><th>Área de Formación</th><td>${a.area_formacion}</td></tr>
+          <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
+          <tr><th>Número de Créditos</th><td>${a.numero_creditos}</td></tr>
+          <tr><th>HTD</th><td>${a.HTD}</td></tr>
+          <tr><th>HTC</th><td>${a.HTC}</td></tr>
+          <tr><th>HTA</th><td>${a.HTA}</td></tr>
+          <tr><th>Justificación</th><td style="white-space: pre-line">${a.justificacion}</td></tr>
+        </table>
+      </div>
+      `
+    });
+  }
+
 
 }
