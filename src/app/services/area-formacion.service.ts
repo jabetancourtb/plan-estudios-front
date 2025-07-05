@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
-import { ResponseList } from '../dto/response-list.model';
+import { ResponseListDTO } from '../dto/response-list.model';
 import { Observable } from 'rxjs';
 import { AreaFormacion } from '../models/area-formacion.model';
 
@@ -25,7 +25,7 @@ export class AreaFormacionService extends BaseService<any> {
   }
 
 
-  consultarAreasFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<AreaFormacion>> {
+  consultarAreasFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<AreaFormacion>> {
     this.resource = "/areas-formacion";
 
     const params = new HttpParams()
@@ -38,7 +38,7 @@ export class AreaFormacionService extends BaseService<any> {
   }
 
 
-  consultarAreasFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<AreaFormacion>> {
+  consultarAreasFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<AreaFormacion>> {
     this.resource = "/areas-formacion/" + id;
 
     const params = new HttpParams()
@@ -51,7 +51,7 @@ export class AreaFormacionService extends BaseService<any> {
   }
   
 
-  consultarAreasFormacionPorNombre(name: string, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<AreaFormacion>> {
+  consultarAreasFormacionPorNombre(name: string, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<AreaFormacion>> {
     this.resource = "/areas-formacion/nombre/" + name;
 
     const params = new HttpParams()
@@ -63,7 +63,7 @@ export class AreaFormacionService extends BaseService<any> {
     return this.executeGet('', { params: params, headers: this.headers });
   }
 
-  consultarAreasFormacionPorIdCampoFormacion(idCampoFormacion: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<AreaFormacion>> {
+  consultarAreasFormacionPorIdCampoFormacion(idCampoFormacion: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<AreaFormacion>> {
     this.resource = "/campos-formacion/" + idCampoFormacion + "/areas-formacion";
 
     const params = new HttpParams()

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
-import { ResponseList } from '../dto/response-list.model';
+import { ResponseListDTO } from '../dto/response-list.model';
 import { Observable } from 'rxjs';
 import { CampoFormacion } from '../models/campo-formacion.model';
 
@@ -25,7 +25,7 @@ export class CampoFormacionService extends BaseService<any> {
   }
 
 
-  consultarCamposFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<CampoFormacion>> {
+  consultarCamposFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<CampoFormacion>> {
     this.resource = "/campos-formacion";
 
     const params = new HttpParams()
@@ -38,7 +38,7 @@ export class CampoFormacionService extends BaseService<any> {
   }
 
 
-  consultarCamposFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<CampoFormacion>> {
+  consultarCamposFormacionPorId(id: number, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<CampoFormacion>> {
     this.resource = "/campos-formacion/" + id;
 
     const params = new HttpParams()
@@ -51,7 +51,7 @@ export class CampoFormacionService extends BaseService<any> {
   }
 
 
-  consultarCamposFormacionPorNombre(name: string, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseList<CampoFormacion>> {
+  consultarCamposFormacionPorNombre(name: string, page?: number, pageSize?: number, field?: string, asc?: boolean) : Observable<ResponseListDTO<CampoFormacion>> {
     this.resource = "/campos-formacion/nombre/" + name;
 
     const params = new HttpParams()

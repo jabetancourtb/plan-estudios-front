@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
-import { ResponseList } from '../dto/response-list.model';
+import { ResponseListDTO } from '../dto/response-list.model';
 import { Observable } from 'rxjs';
 import { Carrera } from '../models/carrera.model';
 import { Prerrequisito } from '../models/prerrequisito.model';
@@ -25,7 +25,7 @@ export class PrerrequisitoService extends BaseService<any> {
   }
 
 
-  consultarPrerrequisitos(page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<Carrera>> {
+  consultarPrerrequisitos(page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Carrera>> {
     this.resource = "/prerrequisitos";
 
     const params = new HttpParams()
@@ -38,7 +38,7 @@ export class PrerrequisitoService extends BaseService<any> {
   }
 
   
-  consultarPrerrequisitosPorCodigo(codigoPrerrequisito: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<Carrera>> {
+  consultarPrerrequisitosPorCodigo(codigoPrerrequisito: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Carrera>> {
     this.resource = "/prerrequisitos/" + codigoPrerrequisito;
 
     const params = new HttpParams()
@@ -51,7 +51,7 @@ export class PrerrequisitoService extends BaseService<any> {
   }
 
 
-  consultarPrerrequisitosDeAsignaturaPorCodigoAsignatura(codigoAsignatura: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseList<Carrera>> {
+  consultarPrerrequisitosDeAsignaturaPorCodigoAsignatura(codigoAsignatura: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Carrera>> {
     this.resource = "/asignaturas/" + codigoAsignatura + "/prerrequisitos";
 
     const params = new HttpParams()
