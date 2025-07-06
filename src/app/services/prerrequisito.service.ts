@@ -4,7 +4,6 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { BaseService } from './base.service';
 import { ResponseListDTO } from '../dto/response-list.model';
 import { Observable } from 'rxjs';
-import { Carrera } from '../models/carrera.model';
 import { Prerrequisito } from '../models/prerrequisito.model';
 
 @Injectable({
@@ -18,14 +17,14 @@ export class PrerrequisitoService extends BaseService<any> {
 
   protected headers = new HttpHeaders({ [this.apiPlanEstudiosUDistritalApiKeyRequestHeader] : this.apiPlanEstudiosUDistritalApiKeyRequestValue });
 
-  
+
   constructor() {
     super();
     this.apiUrl = this.apiPlanEstudiosUDistrital;
   }
 
 
-  consultarPrerrequisitos(page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Carrera>> {
+  consultarPrerrequisitos(page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Prerrequisito>> {
     this.resource = "/prerrequisitos";
 
     const params = new HttpParams()
@@ -37,8 +36,8 @@ export class PrerrequisitoService extends BaseService<any> {
     return this.executeGet('', { params: params, headers: this.headers });
   }
 
-  
-  consultarPrerrequisitosPorCodigo(codigoPrerrequisito: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Carrera>> {
+
+  consultarAsignaturasPosterioresPorCodigoPrerrequisito(codigoPrerrequisito: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Prerrequisito>> {
     this.resource = "/prerrequisitos/" + codigoPrerrequisito;
 
     const params = new HttpParams()
@@ -51,7 +50,7 @@ export class PrerrequisitoService extends BaseService<any> {
   }
 
 
-  consultarPrerrequisitosDeAsignaturaPorCodigoAsignatura(codigoAsignatura: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Carrera>> {
+  consultarAsignaturaPrerrequisitosPorCodigoAsignatura(codigoAsignatura: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Prerrequisito>> {
     this.resource = "/asignaturas/" + codigoAsignatura + "/prerrequisitos";
 
     const params = new HttpParams()
