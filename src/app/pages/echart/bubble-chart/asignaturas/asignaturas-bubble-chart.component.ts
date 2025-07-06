@@ -345,6 +345,13 @@ export class AsignaturasBubbleChartComponent {
               </td>
             </tr>
 
+            <tr>
+              <th>Justificación</th>
+              <td>
+                <button type="button" id="btnJustificacion" class="btn btn-primary">Ver</button>
+              </td>
+            </tr>
+
             <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
             <tr><th>Número de Créditos</th><td>${a.numero_creditos}</td></tr>
             <tr><th>HTD</th><td>${a.HTD}</td></tr>
@@ -352,7 +359,15 @@ export class AsignaturasBubbleChartComponent {
             <tr><th>HTA</th><td>${a.HTA}</td></tr>
           </table>
         </div>
-      `
+      `,
+      didOpen: () => {
+        const btn = document.getElementById('btnJustificacion');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            this.showSwalAsignaturaJustificacion(); // ✅ Abre el otro swal
+          });
+        }
+      }
     });
   }
 
