@@ -8,15 +8,15 @@ import { CampoFormacion } from '../../models/campo-formacion.model';
 import { LoaderService } from '../../services/loader.service';
 import { AreaFormacion } from '../../models/area-formacion.model';
 import { AreaFormacionService } from '../../services/area-formacion.service';
-import { CirclePackingComponent } from "../echart/circle-packing/circle-packing.component";
 import { URLParamsDTO } from '../../dto/url-params.model';
 import { NavbarComponent } from "../../shared/components/navbar/navbar.component";
 import { FooterComponent } from "../../shared/components/footer/footer.component";
+import { PlanEstudiosCirclePackingComponent } from '../echart/circle-packing/plan-estudios/plan-estudios-circle-packing.component';
 
 
 @Component({
   selector: 'app-index',
-  imports: [CirclePackingComponent, NavbarComponent, FooterComponent],
+  imports: [PlanEstudiosCirclePackingComponent, NavbarComponent, FooterComponent],
   templateUrl: './index.component.html',
   styleUrl: './index.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
