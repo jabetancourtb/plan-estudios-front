@@ -177,7 +177,7 @@ export class AsignaturasBubbleChartComponent {
           studyObjectsURL: `https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${data.codigo}`,
           verbsURL: `https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${data.nombre}`,
           itemStyle: {
-            color: '#B0C4DE'
+            color: this.getRandomColor(),
           },
           subject: data
         },
@@ -199,6 +199,16 @@ export class AsignaturasBubbleChartComponent {
     this.chartInstance.setOption(option, true);
 
     this.clickEvents();
+  }
+
+
+  private getRandomColor(): string {
+    const lightLetters = '89ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += lightLetters[Math.floor(Math.random() * lightLetters.length)];
+    }
+    return color;
   }
 
 
