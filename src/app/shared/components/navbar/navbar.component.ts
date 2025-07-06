@@ -24,7 +24,7 @@ export class NavbarComponent {
   // Redirige a / luego redigecciona a la ruta deseada
   goToCamposFormacionBubbleChart() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/bubble-chart/campos-formacion']);
+        this.router.navigate(['/campos-formacion/echart/bubble-chart']);
     });
   }
 
@@ -32,7 +32,7 @@ export class NavbarComponent {
   // Redirige a / luego redigecciona a la ruta deseada
   goToAreasFormacionBubbleChart() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/bubble-chart/areas-formacion']);
+        this.router.navigate(['/areas-formacion/echart/bubble-chart']);
     });
   }
 
@@ -40,7 +40,7 @@ export class NavbarComponent {
   // Redirige a / luego redigecciona a la ruta deseada
   goToAsignaturasBubbleChart() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/bubble-chart/asignaturas']);
+        this.router.navigate(['/asignaturas/echart/bubble-chart']);
     });
   }
 

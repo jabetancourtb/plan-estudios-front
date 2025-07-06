@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 import { IndexComponent } from './pages/index/index.component';
-import { AsignaturasBubbleChartComponent } from './pages/echart/bubble-chart/asignaturas/asignaturas-bubble-chart.component';
-import { CamposFormacionBubbleChartComponent } from './pages/echart/bubble-chart/campos-formacion/campos-formacion-bubble-chart.component';
-import { AreasFormacionBubbleChartComponent } from './pages/echart/bubble-chart/areas-formacion/areas-formacion-bubble-chart.component';
+import { AsignaturasBubbleChartComponent } from './pages/asignaturas/bubble-chart/echart/asignaturas-bubble-chart.component';
+import { CamposFormacionBubbleChartComponent } from './pages/campos-formacion/echart/bubble-chart/campos-formacion-bubble-chart.component';
+import { AreasFormacionBubbleChartComponent } from './pages/areas-formacion/echart/bubble-chart/areas-formacion-bubble-chart.component';
 import { PlanEstudiosCirclePackingComponent } from './pages/echart/circle-packing/plan-estudios/plan-estudios-circle-packing.component';
 
 export const routes: Routes = [
@@ -16,15 +16,15 @@ export const routes: Routes = [
         component: IndexComponent,
     },
     {
-        path: 'bubble-chart/campos-formacion',
+        path: 'campos-formacion/echart/bubble-chart',
         component: CamposFormacionBubbleChartComponent,
     },
     {
-        path: 'bubble-chart/areas-formacion',
+        path: 'areas-formacion/echart/bubble-chart',
         component: AreasFormacionBubbleChartComponent,
     },
     {
-        path: 'bubble-chart/asignaturas',
+        path: 'asignaturas/echart/bubble-chart',
         component: AsignaturasBubbleChartComponent,
     },
     {
