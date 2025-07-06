@@ -55,6 +55,12 @@ export class AreasFormacionBubbleChartComponent {
   menuY = 0;
   clickedData: any = null;
 
+  contextualMenuOptions = {
+    verDetalles: '🔍 Ver detalles',
+  }
+
+  contextualMenuAction = '';
+
 
   ngOnInit(): void {
     this.obtenerUrlParams();
@@ -84,24 +90,12 @@ export class AreasFormacionBubbleChartComponent {
     if(this.urlParams().idCampoFormacion) {
       this.consultarAreasFormacionPorIdCampoFormacion(this.urlParams().idCampoFormacion, 1, 100, 'id', true);
     }
+    else if(this.urlParams().nombreCampoFormacion) {
+      this.consultarAreasFormacionPorNombreCampoFormacion(this.urlParams().nombreCampoFormacion, 1, 100, 'id', true);
+    }
     else {
       this.consultarAreasFormacionPorPaginacion(1, 100, 'id', true);
     }
-  }
-
-
-  private consultarAreaFormacionPorId(id: number) {
-    this.loaderService.show();
-    this.areaFormacionService.consultarAreaFormacionPorId(id).subscribe({
-      next: (res) => {
-        this.areaFormacion.set(res);
-        this.showSwalEvent();
-        this.loaderService.hide();
-      },
-      error: (e) => {
-        this.loaderService.hide();
-      }
-    });
   }
 
 
@@ -123,6 +117,21 @@ export class AreasFormacionBubbleChartComponent {
   private consultarAreasFormacionPorIdCampoFormacion(idCampoFormacion: number, page?: number, pageSize?: number, field?: string, asc?: boolean) {
     this.loaderService.show();
     this.areaFormacionService.consultarAreasFormacionPorIdCampoFormacion(idCampoFormacion, page, pageSize, field, asc).subscribe({
+      next: (res) => {
+        this.responseListAreasFormacion.set(res);
+        this.loadChart();
+        this.loaderService.hide();
+      },
+      error: (e) => {
+        this.loaderService.hide();
+      }
+    });
+  }
+
+
+  private consultarAreasFormacionPorNombreCampoFormacion(nombreCampoFormacion: string, page?: number, pageSize?: number, field?: string, asc?: boolean) {
+    this.loaderService.show();
+    this.areaFormacionService.consultarAreasFormacionPorNombreCampoFormacion(nombreCampoFormacion, page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
         this.loadChart();
@@ -163,11 +172,10 @@ export class AreasFormacionBubbleChartComponent {
           id: data.id,
           name: data.nombre,
           symbolSize: data.cantidadAsignaturas * 20,
-          link: 'https://example.com/sistemas',
-          ruta: `/detalle/${data.id}`,
           itemStyle: {
             color: data.colorHtml
-          }
+          },
+          area: data
         },
       );
     }
@@ -193,22 +201,18 @@ export class AreasFormacionBubbleChartComponent {
   clickEvents() {
     // Redirige con click izquierdo
     this.chartInstance.on('click', (params: any) => {
-      if (params.data?.ruta && params.data.ruta.startsWith('/')) {
-        if (params.data) {
-          if(this.urlParams()?.nombreCampoFormacion) {
-            this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: params.data.name } });
-          }
-          else {
-            this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreAreaFormacion: params.data.name } });
-          }
+      if (params.data) {
+        this.clickedData = params.data;
+        if(this.urlParams()?.nombreCampoFormacion) {
+          this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: params.data.name } });
         }
-      }
-      else if (params.data?.link) {
-        window.open(params.data.link, '_blank'); // navegación externa
+        else {
+          this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreAreaFormacion: params.data.name } });
+        }
       }
     });
 
-    // evita múltiples listeners
+    // Evita múltiples listeners
     this.chartInstance.off('contextmenu');
 
     // Abre menú contextual click derecho
@@ -276,41 +280,50 @@ export class AreasFormacionBubbleChartComponent {
 
   onGlobalContextMenu(event: MouseEvent) {
     event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
-    this.menuVisible = true;
+    if(this.menuX !== 0 && this.menuY !== 0) {
+      this.menuVisible = true;
+    }
   }
 
 
   onOptionSelected(action: string) {
     if (!this.clickedData) return;
 
-    if (action === 'ver') {
-      this.consultarAreaFormacionPorId(this.clickedData.id);
-    }
-    else if (action === 'ir') {
-      const ruta = this.clickedData.ruta;
+    this.contextualMenuAction = action;
 
-      if (ruta?.startsWith('/')) {
-        this.router.navigate([ruta]); // ruta interna de Angular
-      }
-      else {
-        window.open(this.clickedData.link, '_blank'); // externo
-      }
+     switch (this.contextualMenuAction) {
+      case this.contextualMenuOptions.verDetalles:
+        this.showSwalAreaFormacionDetalles();
+        break;
+      default:
     }
+
     this.menuVisible = false;
   }
 
 
-  showSwalEvent() {
-    const a = this.areaFormacion();
+  showSwalAreaFormacionDetalles() {
+    const a = this.clickedData.area;
 
     let html = `
       <div style="max-height: 300px; overflow-y: auto;">
         <table class="table table-bordered text-start">
           <tr><th>Id</th><td>${a.id}</td></tr>
-          <tr><th>Id Campo formación</th><td>${a.idCampoFormacion}</td></tr>`;
+
+           <tr><th>Id Campo de Formación</th><td>
+              <a href="/bubble-chart/areas-formacion?idCampoFormacion=${encodeURIComponent(a.idCampoFormacion)}">
+                ${a.idCampoFormacion}
+              </a></td>
+            </tr>`;
 
           if(this.urlParams().nombreCampoFormacion !== '') {
-            html += `<tr><th>Campo de formación al que pertenece</th><td>${this.urlParams()?.nombreCampoFormacion}</td></tr>`
+            html += `
+            <tr><th>Campo de Formación</th><td>
+              <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(this.urlParams()?.nombreCampoFormacion)}">
+                ${this.urlParams()?.nombreCampoFormacion}
+              </a></td>
+            </tr>
+            `
           }
 
           html += `<tr><th>Color</th><td> <span style="display: inline-block; width: 15px; height: 15px; background-color: ${a.colorHtml}; border: 1px solid #000;"></span></td></tr>
@@ -320,7 +333,7 @@ export class AreasFormacionBubbleChartComponent {
       `;
 
     Swal.fire({
-      title: this.areaFormacion().nombre,
+      title: a.nombre,
       html: html
     });
   }
