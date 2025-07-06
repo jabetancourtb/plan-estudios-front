@@ -22,14 +22,13 @@
     "@angular/forms": "^20.0.0",
     "@angular/platform-browser": "^20.0.0",
     "@angular/router": "^20.0.0",
-    "angular-highcharts": "^17.0.1",
     "d3-hierarchy": "^3.1.2",
     "echarts": "^5.6.0",
     "highcharts": "^12.3.0",
     "highcharts-angular": "^5.1.0",
     "ngx-echarts": "^20.0.0",
     "rxjs": "~7.8.0",
-    "sweetalert2": "^11.22.2",
+    "sweetalert2": "^11.6.13",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
