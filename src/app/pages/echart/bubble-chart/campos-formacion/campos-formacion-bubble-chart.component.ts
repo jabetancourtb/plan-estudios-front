@@ -58,6 +58,7 @@ export class CamposFormacionBubbleChartComponent {
 
   contextualMenuOptions = {
     verDetalles: '🔍 Ver detalles',
+    irAreasFormacion: '➡️ Ir a áreas de formación',
   }
 
   contextualMenuAction = '';
@@ -156,11 +157,12 @@ export class CamposFormacionBubbleChartComponent {
 
 
   clickEvents() {
-    // Redirige con click izquierdo
+    // Muestra detalles con click izquierdo
     this.chartInstance.on('click', (params: any) => {
       if (params.data) {
         this.clickedData = params.data;
-        this.router.navigate(['/bubble-chart/areas-formacion'], { queryParams: { idCampoFormacion: params.data.id, nombreCampoFormacion: params.data.name } });
+        this.showSwalCampoFormacionDetalles();
+        //this.router.navigate(['/bubble-chart/areas-formacion'], { queryParams: { idCampoFormacion: params.data.id, nombreCampoFormacion: params.data.name } });
       }
     });
 
@@ -250,6 +252,9 @@ export class CamposFormacionBubbleChartComponent {
       case this.contextualMenuOptions.verDetalles:
         this.showSwalCampoFormacionDetalles();
         break;
+      case this.contextualMenuOptions.irAreasFormacion:
+        this.router.navigate(['/bubble-chart/areas-formacion'], { queryParams: { idCampoFormacion: this.clickedData.id, nombreCampoFormacion: this.clickedData.name } });
+        break;
       default:
     }
 
@@ -278,6 +283,13 @@ export class CamposFormacionBubbleChartComponent {
           </tr>
           <tr><th>Cantidad áreas de formación</th><td>${a.cantidadAreasFormacion}</td></tr>
           <tr><th>Cantidad de asignaturas</th><td>${a.cantidadAsignaturas}</td></tr>
+
+          <tr><th>Ver áreas de formación de ${a.nombre}</th><td>
+            <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
+              Áreas de formación
+            </a>
+          </td></tr>
+
         </table>
       </div>
       `;
