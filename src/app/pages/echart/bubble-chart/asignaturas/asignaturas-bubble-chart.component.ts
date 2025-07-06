@@ -211,7 +211,7 @@ export class AsignaturasBubbleChartComponent {
       }
     });
 
-    // evita múltiples listeners
+    // Evita múltiples listeners
     this.chartInstance.off('contextmenu');
 
     // Abre menú contextual click derecho
@@ -352,7 +352,6 @@ export class AsignaturasBubbleChartComponent {
   }
 
 
-
   showSwalAsignaturaJustificacion() {
     const a =  this.clickedData.subject;
 
@@ -366,7 +365,7 @@ export class AsignaturasBubbleChartComponent {
     }
 
     Swal.fire({
-      title:  this.clickedData.subject.nombre,
+      title:  a.nombre,
       width: '800px',
       html: `
       <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
