@@ -22,7 +22,7 @@
   background-color: #eee;
 }
 
-.buuble-chart-container {
+.bubble-chart-container {
   display: block;
   width: 100%;
   height: 600px; /* Cambia si quieres más */
@@ -31,8 +31,12 @@
 }
 
 @media (max-width: 768px) {
-  .buuble-chart-container {
-    width: 100%; 
+  .bubble-chart-container {
+    width: 100%;
     height: 200px;
+  }
+
+  .external-categories h2 {
+    font-size: 17px;
   }
 }

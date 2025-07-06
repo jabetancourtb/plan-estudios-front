@@ -234,6 +234,7 @@ export class AreasFormacionBubbleChartComponent {
   handleClickOutside(event: MouseEvent) {
     if (this.menuVisible && this.contextMenuRef && !this.contextMenuRef.nativeElement.contains(event.target)) {
       this.menuVisible = false;
+      this.clickedData = null;
     }
   }
 
