@@ -249,51 +249,6 @@ export class AsignaturasBubbleChartComponent {
   }
 
 
-  /*
-  // Menú contextual con click derecho o largo
-  // Se activa con click derecho o manteniendo presionado el botón del mouse/touch
-  @HostListener('mousedown', ['$event'])
-  @HostListener('touchstart', ['$event'])
-  onHoldStart(event: MouseEvent | TouchEvent) {
-    this.holdTimer = setTimeout(() => {
-      this.onLongClick(event);
-    }, 500);
-  }
-
-
-  @HostListener('mouseup')
-  @HostListener('mouseleave')
-  @HostListener('touchend')
-  @HostListener('touchcancel')
-  onHoldEnd() {
-    clearTimeout(this.holdTimer);
-  }
-
-
-  holdTimer: any;
-
-
-  onLongClick(event: any) {
-    let clientX = 0;
-    let clientY = 0;
-
-    if (event instanceof MouseEvent) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-      event.preventDefault(); // evita menú por defecto
-    }
-    else if (event instanceof TouchEvent && event.touches.length > 0) {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    }
-
-    this.menuX = clientX;
-    this.menuY = clientY;
-    this.menuVisible = true;
-  }
-  */
-
-
   onGlobalContextMenu(event: MouseEvent) {
     event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
     if(this.menuX !== 0 && this.menuY !== 0) {
@@ -343,43 +298,58 @@ export class AsignaturasBubbleChartComponent {
             <tr><th>Carrera</th><td>${a.carrera}</td></tr>
             <tr><th>Semestre</th><td>${a.semestre_asignatura}</td></tr>
 
-            <tr><th>Campo de Formación</th><td>
-              <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(a.campo_formacion)}">
-                ${a.campo_formacion}
-              </a>
-            </td></tr>
+            <tr>
+              <th>Campo de Formación</th>
+              <td>
+                Ver las áreas de formación asociadas:
+                <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(a.campo_formacion)}">
+                  ${a.campo_formacion}
+                </a>
+              </td>
+            </tr>
 
-            <tr><th>Área de Formación</th><td>
-              <a href="/bubble-chart/asignaturas?nombreAreaFormacion=${encodeURIComponent(a.area_formacion)}">
-                ${a.area_formacion}
-              </a>
-            </td></tr>
+            <tr>
+              <th>Área de Formación</th>
+              <td>
+                Ver las asignaturas asociadas:
+                <a href="/bubble-chart/asignaturas?nombreAreaFormacion=${encodeURIComponent(a.area_formacion)}">
+                  ${a.area_formacion}
+                </a>
+              </td>
+            </tr>
 
+            <tr>
+              <th>Ver syllabus</th>
+              <td>
+                <a href="${this.clickedData.syllabusURL}" target="_blank">
+                  ${this.clickedData.syllabusURL}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver objetos de estudio</th>
+              <td>
+                <a href="${this.clickedData.studyObjectsURL}" target="_blank">
+                  ${this.clickedData.studyObjectsURL}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver verbos</th>
+              <td>
+                <a href="${this.clickedData.verbsURL}" target="_blank">
+                  ${this.clickedData.verbsURL}
+                </a>
+              </td>
+            </tr>
 
             <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
             <tr><th>Número de Créditos</th><td>${a.numero_creditos}</td></tr>
             <tr><th>HTD</th><td>${a.HTD}</td></tr>
             <tr><th>HTC</th><td>${a.HTC}</td></tr>
             <tr><th>HTA</th><td>${a.HTA}</td></tr>
-
-            <tr><th>Ver syllabus</th><td>
-              <a href="${this.clickedData.syllabusURL}" target="_blank">
-                ${this.clickedData.syllabusURL}
-              </a>
-            </td></tr>
-
-            <tr><th>Ver objetos de estudio</th><td>
-              <a href="${this.clickedData.studyObjectsURL}" target="_blank">
-                ${this.clickedData.studyObjectsURL}
-              </a>
-            </td></tr>
-
-            <tr><th>Ver verbos</th><td>
-              <a href="${this.clickedData.verbsURL}" target="_blank">
-                ${this.clickedData.verbsURL}
-              </a>
-            </td></tr>
-
           </table>
         </div>
       `
