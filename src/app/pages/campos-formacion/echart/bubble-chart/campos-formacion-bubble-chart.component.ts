@@ -209,7 +209,7 @@ export class CamposFormacionBubbleChartComponent {
         this.showSwalCampoFormacionDetalles();
         break;
       case this.contextualMenuOptions.irAreasFormacion:
-        this.router.navigate(['/bubble-chart/areas-formacion'], { queryParams: { idCampoFormacion: this.clickedData.id, nombreCampoFormacion: this.clickedData.name } });
+        this.router.navigate(['/areas-formacion/echart/bubble-chart'], { queryParams: { idCampoFormacion: this.clickedData.id, nombreCampoFormacion: this.clickedData.name } });
         break;
       default:
     }
@@ -243,7 +243,7 @@ export class CamposFormacionBubbleChartComponent {
           <tr>
             <th>Ver áreas de formación asociadas</th>
             <td>
-              <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
+              <a href="/areas-formacion/echart/bubble-chart?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
                 Áreas de formación
               </a>
             </td>
