@@ -9,6 +9,7 @@ import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { LoaderService } from '../../../../services/loader.service';
 import { AsignaturaService } from '../../../../services/asignatura.service';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
+import { APP_CONSTANTS } from '../../../../utils/app-constants';
 
 
 @Component({
@@ -301,7 +302,7 @@ export class AsignaturasBubbleChartComponent {
               <th>Campo de Formación</th>
               <td>
                 Ver las áreas de formación asociadas:
-                <a href="/areas-formacion/echart/bubble-chart?nombreCampoFormacion=${encodeURIComponent(a.campo_formacion)}">
+                <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.campo_formacion)}">
                   ${a.campo_formacion}
                 </a>
               </td>
@@ -311,7 +312,7 @@ export class AsignaturasBubbleChartComponent {
               <th>Área de Formación</th>
               <td>
                 Ver las asignaturas asociadas:
-                <a href="/asignaturas/echart/bubble-chart?nombreAreaFormacion=${encodeURIComponent(a.area_formacion)}">
+                <a href="${APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart}?nombreAreaFormacion=${encodeURIComponent(a.area_formacion)}">
                   ${a.area_formacion}
                 </a>
               </td>

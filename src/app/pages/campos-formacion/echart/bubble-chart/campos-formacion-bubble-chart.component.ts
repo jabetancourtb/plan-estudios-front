@@ -9,6 +9,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
 import Swal from 'sweetalert2';
 import { URLParamsDTO } from '../../../../dto/url-params.model';
+import { APP_CONSTANTS } from '../../../../utils/app-constants';
 
 
 @Component({
@@ -209,7 +210,7 @@ export class CamposFormacionBubbleChartComponent {
         this.showSwalCampoFormacionDetalles();
         break;
       case this.contextualMenuOptions.irAreasFormacion:
-        this.router.navigate(['/areas-formacion/echart/bubble-chart'], { queryParams: { idCampoFormacion: this.clickedData.id, nombreCampoFormacion: this.clickedData.name } });
+        this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart], { queryParams: { idCampoFormacion: this.clickedData.id, nombreCampoFormacion: this.clickedData.name } });
         break;
       default:
     }
@@ -243,7 +244,7 @@ export class CamposFormacionBubbleChartComponent {
           <tr>
             <th>Ver áreas de formación asociadas</th>
             <td>
-              <a href="/areas-formacion/echart/bubble-chart?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
+              <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
                 Áreas de formación
               </a>
             </td>

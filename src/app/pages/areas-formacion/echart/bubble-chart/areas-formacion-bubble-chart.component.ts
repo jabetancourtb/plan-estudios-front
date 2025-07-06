@@ -9,6 +9,7 @@ import { AreaFormacionService } from '../../../../services/area-formacion.servic
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
 import Swal from 'sweetalert2';
+import { APP_CONSTANTS } from '../../../../utils/app-constants';
 
 
 @Component({
@@ -253,10 +254,10 @@ export class AreasFormacionBubbleChartComponent {
         break;
       case this.contextualMenuOptions.irAsignaturas:
         if(this.urlParams()?.nombreCampoFormacion) {
-          this.router.navigate(['/asignaturas/echart/bubble-chart'], {  queryParams: { nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: this.clickedData.name } });
+          this.router.navigate([APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart], {  queryParams: { nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: this.clickedData.name } });
         }
         else {
-          this.router.navigate(['/asignaturas/echart/bubble-chart'], {  queryParams: { nombreAreaFormacion: this.clickedData.name } });
+          this.router.navigate([APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart], {  queryParams: { nombreAreaFormacion: this.clickedData.name } });
         }
         break;
       default:
@@ -278,7 +279,7 @@ export class AreasFormacionBubbleChartComponent {
             <th>Id Campo de Formación</th>
             <td>
               Ver las áreas de formación asociadas al campo de formación con id:
-              <a href="/areas-formacion/echart/bubble-chart?idCampoFormacion=${encodeURIComponent(a.idCampoFormacion)}">
+              <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?idCampoFormacion=${encodeURIComponent(a.idCampoFormacion)}">
                 ${a.idCampoFormacion}
               </a>
             </td>
@@ -290,7 +291,7 @@ export class AreasFormacionBubbleChartComponent {
               <th>Campo de Formación</th>
               <td>
                 Ver las áreas de formación asociadas:
-                <a href="/areas-formacion/echart/bubble-chart?nombreCampoFormacion=${encodeURIComponent(this.urlParams()?.nombreCampoFormacion)}">
+                <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(this.urlParams()?.nombreCampoFormacion)}">
                   ${this.urlParams()?.nombreCampoFormacion}
                 </a>
               </td>
@@ -306,7 +307,7 @@ export class AreasFormacionBubbleChartComponent {
             <tr>
               <th>Ver asignaturas asociadas</th>
               <td>
-                <a href="/asignaturas/echart/bubble-chart?nombreCampoFormacion=${encodeURIComponent(this.urlParams().nombreCampoFormacion)}&nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
+                <a href="${APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(this.urlParams().nombreCampoFormacion)}&nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
                   Asignaturas
                 </a>
               </td>
@@ -317,7 +318,7 @@ export class AreasFormacionBubbleChartComponent {
             <tr>
               <th>Ver asignaturas asociadas</th>
               <td>
-                <a href="/asignaturas/echart/bubble-chart?nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
+                <a href="${APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart}?nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
                   Asignaturas
                 </a>
               </td>
