@@ -95,7 +95,7 @@ export class PlanEstudiosCirclePackingComponent {
 
   private consultarAsignaturas(page: number, pageSize: number, field: string, asc: boolean) {
     this.loaderService.show();
-    this.asignaturaService.consultarAsignaturas(1, 100, 'codigo', true).subscribe({
+    this.asignaturaService.consultarAsignaturas(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.loadChart();
