@@ -6,11 +6,13 @@
     <br>
 
     @if(urlParams().nombreCampoFormacion) {
-      <h2>Campo de formación: {{ urlParams().nombreCampoFormacion }}</h2>
+      <div class="external-categories">
+        <h2>Campo de formación: {{ urlParams().nombreCampoFormacion }}</h2>
 
-      @if(urlParams().nombreAreaFormacion) {
-         <h2>Área de formación: {{ urlParams().nombreAreaFormacion }}</h2>
-      }
+        @if(urlParams().nombreAreaFormacion) {
+          <h2>Área de formación: {{ urlParams().nombreAreaFormacion }}</h2>
+        }
+      </div>
     }
 
 

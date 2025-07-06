@@ -212,7 +212,9 @@ export class AsignaturasBubbleChartComponent {
     });
 
     // Evita múltiples listeners
-    this.chartInstance.off('contextmenu');
+    this.chartInstance.off('contextmenu', (params: any) => {
+      this.clickedData = null;
+    });
 
     // Abre menú contextual click derecho
     this.chartInstance.on('contextmenu', (params: any) => {
@@ -232,6 +234,7 @@ export class AsignaturasBubbleChartComponent {
   handleClickOutside(event: MouseEvent) {
     if (this.menuVisible && this.contextMenuRef && !this.contextMenuRef.nativeElement.contains(event.target)) {
       this.menuVisible = false;
+      this.clickedData = null;
     }
   }
 
