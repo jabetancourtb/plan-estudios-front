@@ -129,8 +129,6 @@ export class CamposFormacionBubbleChartComponent {
           id: data.id,
           name: data.nombre,
           symbolSize: data.cantidadAsignaturas * 10,
-          link: 'https://example.com/sistemas',
-          ruta: `/detalle/${data.id}`,
           itemStyle: {
             color: data.colorHtml
           },
