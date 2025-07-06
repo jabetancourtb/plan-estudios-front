@@ -344,7 +344,7 @@ export class AreasFormacionBubbleChartComponent {
           html += `<tr><th>Color</th><td> <span style="display: inline-block; width: 15px; height: 15px; background-color: ${a.colorHtml}; border: 1px solid #000;"></span></td></tr>
           <tr><th>Cantidad de asignaturas</th><td>${a.cantidadAsignaturas}</td></tr>
 
-          <tr><th>Ver asignaturas de ${a.nombre}</th><td>
+          <tr><th>Ver asignaturas asociadas</th><td>
             <a href="/bubble-chart/asignaturas?nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
               Asignaturas
             </a></td>

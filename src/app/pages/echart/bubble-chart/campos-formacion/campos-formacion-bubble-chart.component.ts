@@ -284,7 +284,7 @@ export class CamposFormacionBubbleChartComponent {
           <tr><th>Cantidad áreas de formación</th><td>${a.cantidadAreasFormacion}</td></tr>
           <tr><th>Cantidad de asignaturas</th><td>${a.cantidadAsignaturas}</td></tr>
 
-          <tr><th>Ver áreas de formación de ${a.nombre}</th><td>
+          <tr><th>Ver áreas de formación asociadas</th><td>
             <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
               Áreas de formación
             </a>
