@@ -162,7 +162,6 @@ export class CamposFormacionBubbleChartComponent {
       if (params.data) {
         this.clickedData = params.data;
         this.showSwalCampoFormacionDetalles();
-        //this.router.navigate(['/bubble-chart/areas-formacion'], { queryParams: { idCampoFormacion: params.data.id, nombreCampoFormacion: params.data.name } });
       }
     });
 
@@ -191,48 +190,6 @@ export class CamposFormacionBubbleChartComponent {
       this.clickedData = null;
     }
   }
-
-
-  /*
-  // Menú contextual con click derecho o largo
-  // Se activa con click derecho o manteniendo presionado el botón del mouse/touch
-  @HostListener('mousedown', ['$event'])
-  @HostListener('touchstart', ['$event'])
-  onHoldStart(event: MouseEvent | TouchEvent) {
-    this.holdTimer = setTimeout(() => {
-      this.onLongClick(event);
-    }, 500);
-  }
-
-  @HostListener('mouseup')
-  @HostListener('mouseleave')
-  @HostListener('touchend')
-  @HostListener('touchcancel')
-  onHoldEnd() {
-    clearTimeout(this.holdTimer);
-  }
-
-  holdTimer: any;
-
-  onLongClick(event: any) {
-    let clientX = 0;
-    let clientY = 0;
-
-    if (event instanceof MouseEvent) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-      event.preventDefault(); // evita menú por defecto
-    }
-    else if (event instanceof TouchEvent && event.touches.length > 0) {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    }
-
-    this.menuX = clientX;
-    this.menuY = clientY;
-    this.menuVisible = true;
-  }
-  */
 
 
   onGlobalContextMenu(event: MouseEvent) {
@@ -284,11 +241,14 @@ export class CamposFormacionBubbleChartComponent {
           <tr><th>Cantidad áreas de formación</th><td>${a.cantidadAreasFormacion}</td></tr>
           <tr><th>Cantidad de asignaturas</th><td>${a.cantidadAsignaturas}</td></tr>
 
-          <tr><th>Ver áreas de formación asociadas</th><td>
-            <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
-              Áreas de formación
-            </a>
-          </td></tr>
+          <tr>
+            <th>Ver áreas de formación asociadas</th>
+            <td>
+              <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
+                Áreas de formación
+              </a>
+            </td>
+          </tr>
 
         </table>
       </div>
