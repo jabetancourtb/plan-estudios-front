@@ -1,11 +1,15 @@
 <app-navbar>
 
+  <div style="overflow-x: auto; overflow-y: auto;">
 
-  <echarts
-    [options]="chartOption"
-    (chartInit)="onChartInit($event)"
-    style="height: 1000px; width: 100%; display: block;">
-  </echarts>
+    <echarts
+      class="echarts-circle-packing"
+      [options]="chartOption"
+      (chartInit)="onChartInit($event)"
+      style="height: 1500px; width: 100%; display: block;">
+    </echarts>
+
+  </div>
 
   <app-footer/>
 
