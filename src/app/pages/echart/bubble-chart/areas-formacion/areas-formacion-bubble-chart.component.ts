@@ -57,6 +57,7 @@ export class AreasFormacionBubbleChartComponent {
 
   contextualMenuOptions = {
     verDetalles: '🔍 Ver detalles',
+    irAsignaturas: '➡️ Ir a asignaturas',
   }
 
   contextualMenuAction = '';
@@ -199,16 +200,19 @@ export class AreasFormacionBubbleChartComponent {
 
 
   clickEvents() {
-    // Redirige con click izquierdo
+    // Muestra detalles con click izquierdo
     this.chartInstance.on('click', (params: any) => {
       if (params.data) {
         this.clickedData = params.data;
+        this.showSwalAreaFormacionDetalles();
+        /*
         if(this.urlParams()?.nombreCampoFormacion) {
           this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: params.data.name } });
         }
         else {
           this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreAreaFormacion: params.data.name } });
         }
+          */
       }
     });
 
@@ -298,6 +302,14 @@ export class AreasFormacionBubbleChartComponent {
       case this.contextualMenuOptions.verDetalles:
         this.showSwalAreaFormacionDetalles();
         break;
+      case this.contextualMenuOptions.irAsignaturas:
+          if(this.urlParams()?.nombreCampoFormacion) {
+            this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: this.clickedData.name } });
+          }
+          else {
+            this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreAreaFormacion: this.clickedData.name } });
+          }
+        break;
       default:
     }
 
@@ -331,6 +343,13 @@ export class AreasFormacionBubbleChartComponent {
 
           html += `<tr><th>Color</th><td> <span style="display: inline-block; width: 15px; height: 15px; background-color: ${a.colorHtml}; border: 1px solid #000;"></span></td></tr>
           <tr><th>Cantidad de asignaturas</th><td>${a.cantidadAsignaturas}</td></tr>
+
+          <tr><th>Ver asignaturas de ${a.nombre}</th><td>
+            <a href="/bubble-chart/asignaturas?nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
+              Asignaturas
+            </a></td>
+          </tr>
+
         </table>
       </div>
       `;

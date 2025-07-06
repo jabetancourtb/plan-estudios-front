@@ -213,7 +213,7 @@ export class AsignaturasBubbleChartComponent {
 
 
   clickEvents() {
-    // Redirige con click izquierdo
+    // Muestra detalles con click izquierdo
     this.chartInstance.on('click', (params: any) => {
       if (params.data) {
         this.clickedData = params.data;
