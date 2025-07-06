@@ -30,14 +30,26 @@
                               <a (click)="goToAsignaturasBubbleChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Asignaturas</span> 1</a>
                             </li>
                             <li>
-                              <a [routerLink]="['/bubble-chart/asignaturas']" class="nav-link px-0"> <span class="d-none d-sm-inline">Prerrequisitos</span> 2</a>
+                              <a [routerLink]="['/bubble-chart/asignaturas']" class="nav-link px-0"> <span class="d-none d-sm-inline">Lista asignaturas</span> 2</a>
                             </li>
                         </ul>
                     </li>
                     <li>
                         <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
-                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Plan de estudios</span></a>
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Prerrequisitos</span></a>
                         <ul class="collapse show nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
+                            <li class="w-100">
+                                <a (click)="goToPrerrequisitosTreeChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
+                            </li>
+                            <li>
+                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+                            <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Plan de estudios</span></a>
+                        <ul class="collapse show nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
                             <li class="w-100">
                                 <a (click)="goToPlanEstudiosCirclePacking()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
                             </li>
@@ -47,9 +59,9 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="#submenu3" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                        <a href="#submenu4" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
                             <i class="fs-4 bi-grid"></i> <span class="ms-1 d-none d-sm-inline">Products</span> </a>
-                            <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
+                            <ul class="collapse nav flex-column ms-1" id="submenu4" data-bs-parent="#menu">
                             <li class="w-100">
                                 <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Product</span> 1</a>
                             </li>

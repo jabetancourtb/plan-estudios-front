@@ -9,6 +9,7 @@ export const APP_CONSTANTS = {
     areasFormacionEchartBubbleChart: '/areas-formacion/echart/bubble-chart',
     asignaturasEchartBubbleChart: '/asignaturas/echart/bubble-chart',
     planEstudiosEchartCirclePacking: '/plan-estudios/echart/circle-packing',
+    prerrequisitosTreegraphChart: '/prerrequisitos/echart/tree-chart',
   },
 
 };
