@@ -1,31 +1,111 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { NgZone } from '@angular/core';
-import { CampoFormacion } from '../../../models/campo-formacion.model';
-import { AreaFormacion } from '../../../models/area-formacion.model';
-import { Asignatura } from '../../../models/asignatura.model';
+import { CampoFormacion } from '../../../../models/campo-formacion.model';
+import { AreaFormacion } from '../../../../models/area-formacion.model';
+import { Asignatura } from '../../../../models/asignatura.model';
+import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
+import { FooterComponent } from "../../../../shared/components/footer/footer.component";
+import { AsignaturaService } from '../../../../services/asignatura.service';
+import { CampoFormacionService } from '../../../../services/campo-formacion.service';
+import { AreaFormacionService } from '../../../../services/area-formacion.service';
+import { ResponseListDTO } from '../../../../dto/response-list.model';
+import { LoaderService } from '../../../../services/loader.service';
 
 type EstructuraResultado = Record<string, any>;
 
 @Component({
-  selector: 'app-circle-packing',
-  imports: [NgxEchartsDirective],
-  templateUrl: './circle-packing.component.html',
-  styleUrl: './circle-packing.component.css',
+  selector: 'app-plan-estudios-circle-packing',
+  imports: [NgxEchartsDirective, NavbarComponent, FooterComponent],
+  templateUrl: './plan-estudios-circle-packing.component.html',
+  styleUrl: './plan-estudios-circle-packing.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CirclePackingComponent implements OnChanges {
+export class PlanEstudiosCirclePackingComponent {
 
-  @Input() camposFormacion: CampoFormacion[] = [];
-  @Input() areasFormacion: AreaFormacion[] = [];
-  @Input() asignaturas: Asignatura[] = [];
+  private loaderService: LoaderService = inject(LoaderService);
+  private asignaturaService: AsignaturaService = inject(AsignaturaService);
+  private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
+  private areaFormacionService: AreaFormacionService = inject(AreaFormacionService);
 
   chartInstance!: any;
   chartOption: any = {};
   currentSeriesData: any[] = [];
   displayRoot: any;
 
+
+  responseListAsignaturas = signal<ResponseListDTO<Asignatura>>({
+    recordCountPerPage: 0,
+    totalRecordCount: 0,
+    totalPages: 0,
+    content: []
+  });
+
+  responseListCamposFormacion = signal<ResponseListDTO<CampoFormacion>>({
+    recordCountPerPage: 0,
+    totalRecordCount: 0,
+    totalPages: 0,
+    content: []
+  });
+
+  responseListAreasFormacion = signal<ResponseListDTO<AreaFormacion>>({
+    recordCountPerPage: 0,
+    totalRecordCount: 0,
+    totalPages: 0,
+    content: []
+  });
+
   constructor(private ngZone: NgZone, private cdr: ChangeDetectorRef) {}
+
+
+  ngOnInit(): void {
+    this.consultarCamposFormacion(1, 100, undefined, true);
+  }
+
+
+  private consultarCamposFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) {
+    this.loaderService.show();
+    this.campoFormacionService.consultarCamposFormacion(page, pageSize, field, asc).subscribe({
+      next: (res) => {
+        this.responseListCamposFormacion.set(res);
+        this.consultarAreasFormacion(1, 100, undefined, true);
+        this.loaderService.hide();
+      },
+      error: (e) => {
+        this.loaderService.hide();
+      }
+    });
+  }
+
+
+  private consultarAreasFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) {
+    this.loaderService.show();
+    this.areaFormacionService.consultarAreasFormacion(page, pageSize, field, asc).subscribe({
+      next: (res) => {
+        this.responseListAreasFormacion.set(res);
+        this.consultarAsignaturas(1, 100, 'codigo', true);
+        this.loaderService.hide();
+      },
+      error: (e) => {
+        this.loaderService.hide();
+      }
+    });
+  }
+
+
+  private consultarAsignaturas(page: number, pageSize: number, field: string, asc: boolean) {
+    this.loaderService.show();
+    this.asignaturaService.consultarAsignaturas(1, 100, 'codigo', true).subscribe({
+      next: (res) => {
+        this.responseListAsignaturas.set(res);
+        this.loadChart();
+        this.loaderService.hide();
+      },
+      error: (e) => {
+        this.loaderService.hide();
+      }
+    });
+  }
 
 
   onChartInit(instance: any) {
@@ -49,11 +129,11 @@ export class CirclePackingComponent implements OnChanges {
   }
 
 
-  ngOnChanges(changes: SimpleChanges): void {
+  loadChart(): void {
     if (
-      this.camposFormacion?.length > 0 &&
-      this.areasFormacion?.length > 0 &&
-      this.asignaturas?.length > 0
+      this.responseListCamposFormacion()?.content.length > 0 &&
+      this.responseListAreasFormacion()?.content.length > 0 &&
+      this.responseListAsignaturas()?.content.length > 0
     ) {
       this.ngZone.runOutsideAngular(() => {
         setTimeout(async () => {
@@ -70,21 +150,21 @@ export class CirclePackingComponent implements OnChanges {
 
   loadAndConvertExternalData(): EstructuraResultado {
     const resultado: EstructuraResultado = {
-      $count: this.asignaturas.length,
+      $count: this.responseListAsignaturas().content.length,
       color: '#B41E1E'
     };
 
-    for (const campo of this.camposFormacion) {
+    for (const campo of this.responseListCamposFormacion().content) {
       const campoNombre = campo.nombre;
       resultado[campoNombre] = { $count: campo.cantidadAreasFormacion, color: campo.colorHtml };
 
-      const areasFiltradas = this.areasFormacion.filter(area => area.idCampoFormacion === campo.id);
+      const areasFiltradas = this.responseListAreasFormacion().content.filter(area => area.idCampoFormacion === campo.id);
 
       for (const area of areasFiltradas) {
         const areaNombre = area.nombre;
         resultado[campoNombre][areaNombre] = { $count: area.cantidadAsignaturas, color: area.colorHtml };
 
-        const asignaturasFiltradas = this.asignaturas.filter(
+        const asignaturasFiltradas = this.responseListAsignaturas().content.filter(
           asig =>
             asig.campo_formacion === campoNombre &&
             asig.area_formacion === areaNombre

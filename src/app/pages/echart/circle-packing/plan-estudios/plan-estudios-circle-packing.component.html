@@ -1,0 +1,13 @@
+<app-navbar>
+
+
+  <echarts
+    [options]="chartOption"
+    (chartInit)="onChartInit($event)"
+    style="height: 1000px; width: 100%; display: block;">
+  </echarts>
+
+  <app-footer/>
+
+</app-navbar>
+
