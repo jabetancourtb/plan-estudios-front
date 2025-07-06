@@ -5,18 +5,18 @@ import { CampoFormacion } from '../../../../models/campo-formacion.model';
 import { AreaFormacion } from '../../../../models/area-formacion.model';
 import { Asignatura } from '../../../../models/asignatura.model';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
-import { FooterComponent } from "../../../../shared/components/footer/footer.component";
 import { AsignaturaService } from '../../../../services/asignatura.service';
 import { CampoFormacionService } from '../../../../services/campo-formacion.service';
 import { AreaFormacionService } from '../../../../services/area-formacion.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { LoaderService } from '../../../../services/loader.service';
 
+
 type EstructuraResultado = Record<string, any>;
 
 @Component({
   selector: 'app-plan-estudios-circle-packing',
-  imports: [NgxEchartsDirective, NavbarComponent, FooterComponent],
+  imports: [NgxEchartsDirective, NavbarComponent],
   templateUrl: './plan-estudios-circle-packing.component.html',
   styleUrl: './plan-estudios-circle-packing.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -173,7 +173,7 @@ export class PlanEstudiosCirclePackingComponent {
         for (const asig of asignaturasFiltradas) {
           resultado[campoNombre][areaNombre][asig.nombre] = {
             $count: 1,
-            color: '#FFFFFF'
+            color: '#dbded1'
           };
         }
       }
@@ -256,7 +256,7 @@ export class PlanEstudiosCirclePackingComponent {
 
     this.ngZone.run(() => {
       this.chartOption = {
-        backgroundColor: '#b6cfe3',
+        //backgroundColor: '#b6cfe3',
         dataset: { source: seriesData },
         tooltip: {},
         visualMap: [{
