@@ -55,6 +55,16 @@ export class AsignaturasBubbleChartComponent {
   menuY = 0;
   clickedData: any = null;
 
+  contextualMenuOptions = {
+    verDetalles: '🔍 Ver detalles',
+    verJustificacion: 'Ver justificación',
+    irSyllabus: '🔗 Ir al syllabus',
+    irObjetosEstudio: '🔗 Ir a objetos de estudio',
+    irVerbos: '🔗 Ir a verbos de estudio',
+  }
+
+  contextualMenuAction = '';
+
 
   ngOnInit(): void {
     this.obtenerUrlParams();
@@ -91,22 +101,6 @@ export class AsignaturasBubbleChartComponent {
       this.consultarAsignaturasPorPaginacion(1, 100, 'codigo', true);
     }
   }
-
-
-  private consultarAsignaturaPorId(id: number) {
-    this.loaderService.show();
-    this.asignaturaService.consultarAsignaturaPorId(id,).subscribe({
-      next: (res) => {
-        this.asignatura.set(res);
-        this.showSwalEvent();
-        this.loaderService.hide();
-      },
-      error: (e) => {
-        this.loaderService.hide();
-      }
-    });
-  }
-
 
   private consultarAsignaturasPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
     this.loaderService.show();
@@ -174,20 +168,18 @@ export class AsignaturasBubbleChartComponent {
     let dataGraph : any[] = [];
 
     for(let data of this.responseListAsignaturas().content) {
-
-      let circleSize = 100;
-      let color = '#B0C4DE';
-
       dataGraph.push(
         {
           id: data.codigo,
           name: data.nombre,
-          symbolSize: circleSize,
-          link: 'https://example.com/sistemas',
-          ruta: `/detalle/${data.codigo}`,
+          symbolSize: 100,
+          syllabusURL: `https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${data.codigo}`,
+          studyObjectsURL: `https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${data.codigo}`,
+          verbsURL: `https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${data.nombre}`,
           itemStyle: {
-            color: color
-          }
+            color: '#B0C4DE'
+          },
+          subject: data
         },
       );
     }
@@ -213,18 +205,9 @@ export class AsignaturasBubbleChartComponent {
   clickEvents() {
     // Redirige con click izquierdo
     this.chartInstance.on('click', (params: any) => {
-      if (params.data?.ruta && params.data.ruta.startsWith('/')) {
-
-        if (params.data) {
-          //window.open(params.data.link, '_blank'); // navegación externa
-
-          //this.router.navigate(['/index']);
-          //this.router.navigate([params.data.ruta]); // navegación interna
-          //window.open(params.data.link, '_blank'); // navegación externa
-        }
-      }
-      else if (params.data?.link) {
-        window.open(params.data.link, '_blank'); // navegación externa
+      if (params.data) {
+        this.clickedData = params.data;
+        this.showSwalAsignaturaDetalles();
       }
     });
 
@@ -263,6 +246,7 @@ export class AsignaturasBubbleChartComponent {
     }, 500);
   }
 
+
   @HostListener('mouseup')
   @HostListener('mouseleave')
   @HostListener('touchend')
@@ -271,7 +255,9 @@ export class AsignaturasBubbleChartComponent {
     clearTimeout(this.holdTimer);
   }
 
+
   holdTimer: any;
+
 
   onLongClick(event: any) {
     let clientX = 0;
@@ -295,49 +281,97 @@ export class AsignaturasBubbleChartComponent {
 
   onGlobalContextMenu(event: MouseEvent) {
     event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
-    this.menuVisible = true;
+    if(this.menuX !== 0 && this.menuY !== 0) {
+      this.menuVisible = true;
+    }
   }
 
 
   onOptionSelected(action: string, event: any) {
     if (!this.clickedData) return;
 
-    if (action === 'ver') {
-      this.consultarAsignaturaPorId(this.clickedData.id);
-    }
-    else if (action === 'ir') {
-      const ruta = this.clickedData.ruta;
+    this.contextualMenuAction = action;
 
-      if (ruta?.startsWith('/')) {
-        this.router.navigate([ruta]); // ruta interna de Angular
-      }
-      else {
-        window.open(this.clickedData.link, '_blank'); // externo
-      }
+    switch (this.contextualMenuAction) {
+      case this.contextualMenuOptions.verDetalles:
+        this.showSwalAsignaturaDetalles();
+        break;
+      case this.contextualMenuOptions.verJustificacion:
+        this.showSwalAsignaturaJustificacion();
+        break;
+      case this.contextualMenuOptions.irSyllabus:
+        window.open(this.clickedData.syllabusURL, '_blank'); // externo
+        break;
+      case this.contextualMenuOptions.irObjetosEstudio:
+        window.open(this.clickedData.studyObjectsURL, '_blank'); // externo
+        break;
+      case this.contextualMenuOptions.irVerbos:
+        window.open(this.clickedData.verbsURL, '_blank'); // externo
+        break;
+      default:
     }
+
     this.menuVisible = false;
   }
 
 
-  showSwalEvent() {
-    const a = this.asignatura();
+  showSwalAsignaturaDetalles() {
+    const a = this.clickedData.subject;
+    Swal.fire({
+      title: this.clickedData.subject.nombre,
+      width: '800px',
+      html: `
+        <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
+          <table class="table table-bordered text-start">
+            <tr><th>Código</th><td>${a.codigo}</td></tr>
+            <tr><th>Carrera</th><td>${a.carrera}</td></tr>
+            <tr><th>Semestre</th><td>${a.semestre_asignatura}</td></tr>
+
+            <tr><th>Campo de Formación</th><td>
+              <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(a.campo_formacion)}">
+                ${a.campo_formacion}
+              </a>
+            </td></tr>
+
+            <tr><th>Área de Formación</th><td>
+              <a href="/bubble-chart/asignaturas?nombreAreaFormacion=${encodeURIComponent(a.area_formacion)}">
+                ${a.area_formacion}
+              </a>
+            </td></tr>
+
+
+            <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
+            <tr><th>Número de Créditos</th><td>${a.numero_creditos}</td></tr>
+            <tr><th>HTD</th><td>${a.HTD}</td></tr>
+            <tr><th>HTC</th><td>${a.HTC}</td></tr>
+            <tr><th>HTA</th><td>${a.HTA}</td></tr>
+          </table>
+        </div>
+      `
+    });
+  }
+
+
+
+  showSwalAsignaturaJustificacion() {
+    const a =  this.clickedData.subject;
+
+    if(!a.justificacion) {
+      Swal.fire({
+        title: 'Justificación no disponible',
+        text: 'No hay justificación disponible para esta asignatura.',
+        icon: 'info'
+      });
+      return;
+    }
 
     Swal.fire({
-      title: this.asignatura().nombre,
+      title:  this.clickedData.subject.nombre,
+      width: '800px',
       html: `
-      <div style="max-height: 300px; overflow-y: auto;">
-        <table class="table table-bordered text-start">
-          <tr><th>Código</th><td>${a.codigo}</td></tr>
-          <tr><th>Carrera</th><td>${a.carrera}</td></tr>
-          <tr><th>Semestre</th><td>${a.semestre_asignatura}</td></tr>
-          <tr><th>Campo de Formación</th><td>${a.campo_formacion}</td></tr>
-          <tr><th>Área de Formación</th><td>${a.area_formacion}</td></tr>
-          <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
-          <tr><th>Número de Créditos</th><td>${a.numero_creditos}</td></tr>
-          <tr><th>HTD</th><td>${a.HTD}</td></tr>
-          <tr><th>HTC</th><td>${a.HTC}</td></tr>
-          <tr><th>HTA</th><td>${a.HTA}</td></tr>
-          <tr><th>Justificación</th><td style="white-space: pre-line">${a.justificacion}</td></tr>
+      <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
+        <table class="table table-bordered text-start" style="table-layout: fixed; width: 100%;>
+          <tr><td style="white-space: pre-line">${a.justificacion}</td></tr>
         </table>
       </div>
       `
