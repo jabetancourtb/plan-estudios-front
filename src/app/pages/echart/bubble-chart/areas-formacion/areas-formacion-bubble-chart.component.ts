@@ -205,14 +205,6 @@ export class AreasFormacionBubbleChartComponent {
       if (params.data) {
         this.clickedData = params.data;
         this.showSwalAreaFormacionDetalles();
-        /*
-        if(this.urlParams()?.nombreCampoFormacion) {
-          this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: params.data.name } });
-        }
-        else {
-          this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreAreaFormacion: params.data.name } });
-        }
-          */
       }
     });
 
@@ -243,48 +235,6 @@ export class AreasFormacionBubbleChartComponent {
   }
 
 
-  /*
-  // Menú contextual con click derecho o largo
-  // Se activa con click derecho o manteniendo presionado el botón del mouse/touch
-  @HostListener('mousedown', ['$event'])
-  @HostListener('touchstart', ['$event'])
-  onHoldStart(event: MouseEvent | TouchEvent) {
-    this.holdTimer = setTimeout(() => {
-      this.onLongClick(event);
-    }, 500);
-  }
-
-  @HostListener('mouseup')
-  @HostListener('mouseleave')
-  @HostListener('touchend')
-  @HostListener('touchcancel')
-  onHoldEnd() {
-    clearTimeout(this.holdTimer);
-  }
-
-  holdTimer: any;
-
-  onLongClick(event: any) {
-    let clientX = 0;
-    let clientY = 0;
-
-    if (event instanceof MouseEvent) {
-      clientX = event.clientX;
-      clientY = event.clientY;
-      event.preventDefault(); // evita menú por defecto
-    }
-    else if (event instanceof TouchEvent && event.touches.length > 0) {
-      clientX = event.touches[0].clientX;
-      clientY = event.touches[0].clientY;
-    }
-
-    this.menuX = clientX;
-    this.menuY = clientY;
-    this.menuVisible = true;
-  }
-  */
-
-
   onGlobalContextMenu(event: MouseEvent) {
     event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
     if(this.menuX !== 0 && this.menuY !== 0) {
@@ -303,12 +253,12 @@ export class AreasFormacionBubbleChartComponent {
         this.showSwalAreaFormacionDetalles();
         break;
       case this.contextualMenuOptions.irAsignaturas:
-          if(this.urlParams()?.nombreCampoFormacion) {
-            this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: this.clickedData.name } });
-          }
-          else {
-            this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreAreaFormacion: this.clickedData.name } });
-          }
+        if(this.urlParams()?.nombreCampoFormacion) {
+          this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreCampoFormacion: this.urlParams()?.nombreCampoFormacion, nombreAreaFormacion: this.clickedData.name } });
+        }
+        else {
+          this.router.navigate(['/bubble-chart/asignaturas'], {  queryParams: { nombreAreaFormacion: this.clickedData.name } });
+        }
         break;
       default:
     }
@@ -325,32 +275,57 @@ export class AreasFormacionBubbleChartComponent {
         <table class="table table-bordered text-start">
           <tr><th>Id</th><td>${a.id}</td></tr>
 
-           <tr><th>Id Campo de Formación</th><td>
+          <tr>
+            <th>Id Campo de Formación</th>
+            <td>
+              Ver las áreas de formación asociadas al campo de formación con id:
               <a href="/bubble-chart/areas-formacion?idCampoFormacion=${encodeURIComponent(a.idCampoFormacion)}">
                 ${a.idCampoFormacion}
-              </a></td>
-            </tr>`;
+              </a>
+            </td>
+          </tr>`;
 
           if(this.urlParams().nombreCampoFormacion !== '') {
             html += `
-            <tr><th>Campo de Formación</th><td>
-              <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(this.urlParams()?.nombreCampoFormacion)}">
-                ${this.urlParams()?.nombreCampoFormacion}
-              </a></td>
+            <tr>
+              <th>Campo de Formación</th>
+              <td>
+                Ver las áreas de formación asociadas:
+                <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(this.urlParams()?.nombreCampoFormacion)}">
+                  ${this.urlParams()?.nombreCampoFormacion}
+                </a>
+              </td>
             </tr>
             `
           }
 
           html += `<tr><th>Color</th><td> <span style="display: inline-block; width: 15px; height: 15px; background-color: ${a.colorHtml}; border: 1px solid #000;"></span></td></tr>
-          <tr><th>Cantidad de asignaturas</th><td>${a.cantidadAsignaturas}</td></tr>
+          <tr><th>Cantidad de asignaturas</th><td>${a.cantidadAsignaturas}</td></tr>`
 
-          <tr><th>Ver asignaturas asociadas</th><td>
-            <a href="/bubble-chart/asignaturas?nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
-              Asignaturas
-            </a></td>
-          </tr>
+          if(this.urlParams().nombreCampoFormacion !== '') {
+            html += `
+            <tr>
+              <th>Ver asignaturas asociadas</th>
+              <td>
+                <a href="/bubble-chart/asignaturas?nombreCampoFormacion=${encodeURIComponent(this.urlParams().nombreCampoFormacion)}&nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
+                  Asignaturas
+                </a>
+              </td>
+            </tr>`
+          }
+          else {
+            html += `
+            <tr>
+              <th>Ver asignaturas asociadas</th>
+              <td>
+                <a href="/bubble-chart/asignaturas?nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
+                  Asignaturas
+                </a>
+              </td>
+            </tr>`
+          }
 
-        </table>
+        `</table>
       </div>
       `;
 
