@@ -43,4 +43,12 @@ export class NavbarComponent {
     });
   }
 
+
+   // Redirige a / luego redigecciona a la ruta deseada
+  goToPlanEstudiosBubbleChart() {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/circle-packing/plan-estudios']);
+    });
+  }
+
 }
