@@ -332,6 +332,7 @@ export class AsignaturasBubbleChartComponent {
 
   showSwalAsignaturaDetalles() {
     const a = this.clickedData.subject;
+
     Swal.fire({
       title: this.clickedData.subject.nombre,
       width: '800px',
@@ -360,6 +361,25 @@ export class AsignaturasBubbleChartComponent {
             <tr><th>HTD</th><td>${a.HTD}</td></tr>
             <tr><th>HTC</th><td>${a.HTC}</td></tr>
             <tr><th>HTA</th><td>${a.HTA}</td></tr>
+
+            <tr><th>Ver syllabus</th><td>
+              <a href="${this.clickedData.syllabusURL}" target="_blank">
+                ${this.clickedData.syllabusURL}
+              </a>
+            </td></tr>
+
+            <tr><th>Ver objetos de estudio</th><td>
+              <a href="${this.clickedData.studyObjectsURL}" target="_blank">
+                ${this.clickedData.studyObjectsURL}
+              </a>
+            </td></tr>
+
+            <tr><th>Ver verbos</th><td>
+              <a href="${this.clickedData.verbsURL}" target="_blank">
+                ${this.clickedData.verbsURL}
+              </a>
+            </td></tr>
+
           </table>
         </div>
       `
