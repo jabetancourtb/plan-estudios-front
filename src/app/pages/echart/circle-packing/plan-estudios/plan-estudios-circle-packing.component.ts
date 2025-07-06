@@ -256,7 +256,7 @@ export class PlanEstudiosCirclePackingComponent {
 
     this.ngZone.run(() => {
       this.chartOption = {
-        //backgroundColor: '#499bd1',
+        backgroundColor: '#b6cfe3',
         dataset: { source: seriesData },
         tooltip: {},
         visualMap: [{
