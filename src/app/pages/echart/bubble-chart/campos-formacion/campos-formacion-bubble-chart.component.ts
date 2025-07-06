@@ -191,6 +191,7 @@ export class CamposFormacionBubbleChartComponent {
   }
 
 
+  /*
   // Menú contextual con click derecho o largo
   // Se activa con click derecho o manteniendo presionado el botón del mouse/touch
   @HostListener('mousedown', ['$event'])
@@ -229,6 +230,7 @@ export class CamposFormacionBubbleChartComponent {
     this.menuY = clientY;
     this.menuVisible = true;
   }
+  */
 
 
   onGlobalContextMenu(event: MouseEvent) {
