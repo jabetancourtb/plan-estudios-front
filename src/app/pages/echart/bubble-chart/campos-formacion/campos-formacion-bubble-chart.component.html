@@ -11,11 +11,10 @@
             [style.left.px]="menuX"
             [style.top.px]="menuY"
             class="context-menu">
-            <li (click)="onOptionSelected('ver')">🔍 Ver detalles</li>
-            <li (click)="onOptionSelected('ir')">🔗 Ir al enlace</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.verDetalles)">{{contextualMenuOptions.verDetalles}}</li>
         </ul>
     }
 
     <app-footer></app-footer>
-    
+
 </app-navbar>

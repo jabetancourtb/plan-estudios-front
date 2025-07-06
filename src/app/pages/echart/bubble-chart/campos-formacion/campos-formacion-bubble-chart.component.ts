@@ -5,10 +5,11 @@ import { CampoFormacion } from '../../../../models/campo-formacion.model';
 import { CampoFormacionService } from '../../../../services/campo-formacion.service';
 import { LoaderService } from '../../../../services/loader.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
 import { FooterComponent } from "../../../../shared/components/footer/footer.component";
 import Swal from 'sweetalert2';
+import { URLParamsDTO } from '../../../../dto/url-params.model';
 
 
 @Component({
@@ -23,12 +24,22 @@ export class CamposFormacionBubbleChartComponent {
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
+  private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private loaderService: LoaderService = inject(LoaderService);
   private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
 
   chartInstance!: echarts.ECharts;
 
   router = inject(Router);
+
+  urlParams = signal<URLParamsDTO>({
+    "categoria": '',
+    "idCampoFormacion": 0,
+    "nombreCampoFormacion": '',
+    "idAreaFormacion": 0,
+    "nombreAreaFormacion": '',
+    "idAsignatura": 0
+  })
 
   campoFormacion = signal<CampoFormacion>({} as CampoFormacion);
 
@@ -45,28 +56,37 @@ export class CamposFormacionBubbleChartComponent {
   menuY = 0;
   clickedData: any = null;
 
+  contextualMenuOptions = {
+    verDetalles: '🔍 Ver detalles',
+  }
+
+  contextualMenuAction = '';
+
 
   ngOnInit(): void {
-    this.consultarCamposFormacion(1, 100, 'id', true);
+    this.consultarCamposFormacionPorPaginacion(1, 100, 'id', true);
   }
 
 
-  private consultarCampoFormacionPorId(id: number) {
-    this.loaderService.show();
-    this.campoFormacionService.consultarCamposFormacionPorId(id).subscribe({
-      next: (res) => {
-        this.campoFormacion.set(res);
-        this.showSwalEvent();
-        this.loaderService.hide();
-      },
-      error: (e) => {
-        this.loaderService.hide();
-      }
+  obtenerUrlParams() {
+    this.activatedRoute.paramMap.subscribe((params) => {
+      const tipoGrafico = params.get('tipoGrafico') ?? '';
+    });
+
+    this.activatedRoute.queryParamMap.subscribe((params) => {
+      this.urlParams.set({
+        categoria: params.get('categoria') ?? '',
+        idCampoFormacion: Number(params.get('idCampoFormacion')) ?? 0,
+        nombreCampoFormacion: params.get('nombreCampoFormacion') ?? '',
+        idAreaFormacion: Number(params.get('idAreaFormacion')) ?? 0,
+        nombreAreaFormacion: params.get('nombreAreaFormacion') ?? '',
+        idAsignatura: Number(params.get('idAsignatura')) ?? 0,
+      });
     });
   }
 
 
-  private consultarCamposFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) {
+  private consultarCamposFormacionPorPaginacion(page?: number, pageSize?: number, field?: string, asc?: boolean) {
     this.loaderService.show();
     this.campoFormacionService.consultarCamposFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
@@ -113,7 +133,8 @@ export class CamposFormacionBubbleChartComponent {
           ruta: `/detalle/${data.id}`,
           itemStyle: {
             color: data.colorHtml
-          }
+          },
+          field: data
         },
       );
     }
@@ -139,13 +160,9 @@ export class CamposFormacionBubbleChartComponent {
   clickEvents() {
     // Redirige con click izquierdo
     this.chartInstance.on('click', (params: any) => {
-      if (params.data?.ruta && params.data.ruta.startsWith('/')) {
-        if (params.data) {
-          this.router.navigate(['/bubble-chart/areas-formacion'], { queryParams: { idCampoFormacion: params.data.id, nombreCampoFormacion: params.data.name } });
-        }
-      }
-      else if (params.data?.link) {
-        window.open(params.data.link, '_blank'); // navegación externa
+      if (params.data) {
+        this.clickedData = params.data;
+        this.router.navigate(['/bubble-chart/areas-formacion'], { queryParams: { idCampoFormacion: params.data.id, nombreCampoFormacion: params.data.name } });
       }
     });
 
@@ -217,32 +234,30 @@ export class CamposFormacionBubbleChartComponent {
 
   onGlobalContextMenu(event: MouseEvent) {
     event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
-    this.menuVisible = true;
+    if(this.menuX !== 0 && this.menuY !== 0) {
+      this.menuVisible = true;
+    }
   }
 
 
   onOptionSelected(action: string) {
     if (!this.clickedData) return;
 
-    if (action === 'ver') {
-      this.consultarCampoFormacionPorId(this.clickedData.id);
-    }
-    else if (action === 'ir') {
-      const ruta = this.clickedData.ruta;
+    this.contextualMenuAction = action;
 
-      if (ruta?.startsWith('/')) {
-        this.router.navigate([ruta]); // ruta interna de Angular
-      }
-      else {
-        window.open(this.clickedData.link, '_blank'); // externo
-      }
+     switch (this.contextualMenuAction) {
+      case this.contextualMenuOptions.verDetalles:
+        this.showSwalCampoFormacionDetalles();
+        break;
+      default:
     }
+
     this.menuVisible = false;
   }
 
 
-  showSwalEvent() {
-    const a = this.campoFormacion();
+  showSwalCampoFormacionDetalles() {
+    const a = this.clickedData.field;
 
     let html = `
       <div style="max-height: 300px; overflow-y: auto;">
@@ -267,7 +282,7 @@ export class CamposFormacionBubbleChartComponent {
       `;
 
     Swal.fire({
-      title: this.campoFormacion().nombre,
+      title: a.nombre,
       html: html
     });
   }
