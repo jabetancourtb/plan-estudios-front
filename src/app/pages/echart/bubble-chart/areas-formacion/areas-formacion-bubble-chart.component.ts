@@ -8,13 +8,12 @@ import { LoaderService } from '../../../../services/loader.service';
 import { AreaFormacionService } from '../../../../services/area-formacion.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
-import { FooterComponent } from "../../../../shared/components/footer/footer.component";
 import Swal from 'sweetalert2';
 
 
 @Component({
   selector: 'app-areas-formacion-bubble-chart',
-  imports: [NavbarComponent, FooterComponent],
+  imports: [NavbarComponent],
   templateUrl: './areas-formacion-bubble-chart.component.html',
   styleUrl: './areas-formacion-bubble-chart.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

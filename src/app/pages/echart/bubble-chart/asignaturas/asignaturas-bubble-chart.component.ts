@@ -9,12 +9,11 @@ import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { LoaderService } from '../../../../services/loader.service';
 import { AsignaturaService } from '../../../../services/asignatura.service';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
-import { FooterComponent } from "../../../../shared/components/footer/footer.component";
 
 
 @Component({
   selector: 'app-asignaturas-bubble-chart',
-  imports: [NavbarComponent, FooterComponent],
+  imports: [NavbarComponent],
   templateUrl: './asignaturas-bubble-chart.component.html',
   styleUrl: './asignaturas-bubble-chart.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -7,14 +7,13 @@ import { LoaderService } from '../../../../services/loader.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
-import { FooterComponent } from "../../../../shared/components/footer/footer.component";
 import Swal from 'sweetalert2';
 import { URLParamsDTO } from '../../../../dto/url-params.model';
 
 
 @Component({
   selector: 'app-campos-formacion-bubble-chart',
-  imports: [NavbarComponent, FooterComponent],
+  imports: [NavbarComponent],
   templateUrl: './campos-formacion-bubble-chart.component.html',
   styleUrl: './campos-formacion-bubble-chart.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
