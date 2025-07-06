@@ -5,16 +5,16 @@
 
     <br>
 
-    @if(urlParams().nombreCampoFormacion) {
-      <div class="external-categories">
+
+    <div class="external-categories">
+      @if(urlParams().nombreCampoFormacion) {
         <h2>Campo de formación: {{ urlParams().nombreCampoFormacion }}</h2>
+      }
 
-        @if(urlParams().nombreAreaFormacion) {
-          <h2>Área de formación: {{ urlParams().nombreAreaFormacion }}</h2>
-        }
-      </div>
-    }
-
+      @if(urlParams().nombreAreaFormacion) {
+        <h2>Área de formación: {{ urlParams().nombreAreaFormacion }}</h2>
+      }
+    </div>
 
     <div #chartContainer class="bubble-chart-container" style="width: 100%; height: 950px;"  (contextmenu)="onGlobalContextMenu($event)"></div>
 
