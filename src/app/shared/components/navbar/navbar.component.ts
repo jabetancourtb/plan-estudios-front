@@ -46,9 +46,9 @@ export class NavbarComponent {
 
 
    // Redirige a / luego redigecciona a la ruta deseada
-  goToPlanEstudiosBubbleChart() {
+  goToPlanEstudiosCirclePacking() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/circle-packing/plan-estudios']);
+        this.router.navigate(['/plan-estudios/echart/circle-packing']);
     });
   }
 

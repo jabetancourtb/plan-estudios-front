@@ -3,7 +3,7 @@ import { IndexComponent } from './pages/index/index.component';
 import { AsignaturasBubbleChartComponent } from './pages/asignaturas/bubble-chart/echart/asignaturas-bubble-chart.component';
 import { CamposFormacionBubbleChartComponent } from './pages/campos-formacion/echart/bubble-chart/campos-formacion-bubble-chart.component';
 import { AreasFormacionBubbleChartComponent } from './pages/areas-formacion/echart/bubble-chart/areas-formacion-bubble-chart.component';
-import { PlanEstudiosCirclePackingComponent } from './pages/echart/circle-packing/plan-estudios/plan-estudios-circle-packing.component';
+import { PlanEstudiosCirclePackingComponent } from './pages/plan-estudios/echart/circle-packing/plan-estudios-circle-packing.component';
 
 export const routes: Routes = [
     {
@@ -28,7 +28,7 @@ export const routes: Routes = [
         component: AsignaturasBubbleChartComponent,
     },
     {
-        path: 'circle-packing/plan-estudios',
+        path: 'plan-estudios/echart/circle-packing',
         component: PlanEstudiosCirclePackingComponent,
     },
 
