@@ -301,7 +301,7 @@ export class AsignaturasBubbleChartComponent {
               <th>Campo de Formación</th>
               <td>
                 Ver las áreas de formación asociadas:
-                <a href="/bubble-chart/areas-formacion?nombreCampoFormacion=${encodeURIComponent(a.campo_formacion)}">
+                <a href="/areas-formacion/echart/bubble-chart?nombreCampoFormacion=${encodeURIComponent(a.campo_formacion)}">
                   ${a.campo_formacion}
                 </a>
               </td>
@@ -311,7 +311,7 @@ export class AsignaturasBubbleChartComponent {
               <th>Área de Formación</th>
               <td>
                 Ver las asignaturas asociadas:
-                <a href="/bubble-chart/asignaturas?nombreAreaFormacion=${encodeURIComponent(a.area_formacion)}">
+                <a href="/asignaturas/echart/bubble-chart?nombreAreaFormacion=${encodeURIComponent(a.area_formacion)}">
                   ${a.area_formacion}
                 </a>
               </td>
