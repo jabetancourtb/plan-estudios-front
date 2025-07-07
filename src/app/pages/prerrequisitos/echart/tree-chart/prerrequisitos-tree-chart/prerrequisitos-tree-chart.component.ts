@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
 import * as echarts from 'echarts';
 import { NavbarComponent } from "../../../../../shared/components/navbar/navbar.component";
 import { LoaderService } from '../../../../../services/loader.service';
@@ -7,17 +7,8 @@ import { PrerrequisitoService } from '../../../../../services/prerrequisito.serv
 import { ResponseListDTO } from '../../../../../dto/response-list.model';
 import { Asignatura } from '../../../../../models/asignatura.model';
 import { Prerrequisito } from '../../../../../models/prerrequisito.model';
-
-
-export interface EstructuraDataGraph {
-  name: string;
-  children: any[];
-}
-
-export interface AsignaturaDataGraph {
-  codigo: number;
-  nombre: string;
-}
+import Swal from 'sweetalert2';
+import { APP_CONSTANTS } from '../../../../../utils/app-constants';
 
 export interface PrerrequisitoDataGraph {
   id: number;
@@ -29,6 +20,7 @@ export interface PrerrequisitoDataGraph {
 
 export interface NodoFlare {
   name: string;
+  subject?: Asignatura | null;
   children: NodoFlare[];
 }
 
@@ -41,11 +33,12 @@ export interface NodoFlare {
 })
 export class PrerrequisitosTreeChartComponent {
 
+  @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
+  @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
+
   private loaderService: LoaderService = inject(LoaderService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
   private prerrequisitoService: PrerrequisitoService = inject(PrerrequisitoService);
-
-  @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
 
   responseListAsignaturas = signal<ResponseListDTO<Asignatura>>({
     recordCountPerPage: 0,
@@ -61,12 +54,28 @@ export class PrerrequisitosTreeChartComponent {
     content: []
   });
 
+  chartInstance!: echarts.ECharts;
+
+  menuVisible = false;
+  menuX = 0;
+  menuY = 0;
+  clickedData: any = null;
+
+  contextualMenuOptions = {
+    verDetalles: '🔍 Ver detalles',
+    verJustificacion: 'Ver justificación',
+    guardarImage: '💾 Guardar imagen',
+    copiarImagen: '📋 Copiar imagen',
+    irSyllabus: '🔗 Ir al syllabus',
+    irObjetosEstudio: '🔗 Ir a objetos de estudio',
+    irVerbos: '🔗 Ir a verbos de estudio',
+  }
+
+  contextualMenuAction = '';
+
 
   ngOnInit() {
     this.consultarAsignaturas(1, 200, 'semestreAsignatura', true);
-    //this.consultarAsignaturasPosterioresPorCodigoPrerrequisito(1, 1, 100, 'id', true);
-    //this.consultarAsignaturaPrerrequisitosPorCodigoAsignatura(1, 1, 100, 'id', true);
-    //this.consultarPrerrequisitosPorPagnacion(1, 100, 'id', true);
   }
 
 
@@ -100,74 +109,13 @@ export class PrerrequisitosTreeChartComponent {
   }
 
 
-  /*
   loadAndConvertExternalData() {
-    let resultado: EstructuraDataGraph[] = [];
-
-    const asignaturasMap = this.responseListAsignaturas().content.map(asignatura => ({
-      codigo: asignatura.codigo,
-      nombre: asignatura.nombre,
-      semestre: asignatura.semestre_asignatura,
-    }));
-
-    const prerrequisitos = this.responseListPrerrequisitos().content;
-
-    for(let i=0; i<asignaturasMap.length; i++) {
-
-      if(i==asignaturasMap.length) break;
-
-      let sourceElement: EstructuraDataGraph = {
-        name: '',
-        children: []
-      };
-
-      sourceElement['name'] = asignaturasMap[i].nombre;
-
-      const asignaturasPosterioresMap = prerrequisitos
-        .filter(pr => pr.prerrequisitoCodigo === asignaturasMap[i].codigo)
-        .map(asignatura => ({
-            codigo: asignatura.asignaturaCodigo,
-            nombre: asignatura.asignatura,
-            semestre: asignatura.asignaturaSemestre,
-        }));
-
-
-      for(let j=0; j<asignaturasPosterioresMap.length; j++) {
-
-        if (!sourceElement['children']) {
-          sourceElement['children'] = [];
-        }
-
-        sourceElement['children'].push({
-          name: asignaturasPosterioresMap[j].nombre,
-          children: []
-        });
-      }
-
-      resultado.push(sourceElement);
-    }
-
-    console.log('Resultado:', resultado);
-
-    this.loadChart(resultado);
-  }
-  */
-
-
-  loadAndConvertExternalData() {
-
-    const asignaturasMap = this.responseListAsignaturas().content.map(asignatura => ({
-      codigo: asignatura.codigo,
-      nombre: asignatura.nombre,
-      semestre: asignatura.semestre_asignatura,
-    }));
-
-    let data = construirArbol(asignaturasMap, this.responseListPrerrequisitos().content);
+    let data = construirArbol(this.responseListAsignaturas().content, this.responseListPrerrequisitos().content);
 
     this.loadChart(data);
 
     function construirArbol(
-        asignaturas: AsignaturaDataGraph[],
+        asignaturas: Asignatura[],
         prerrequisitos: PrerrequisitoDataGraph[]
       ): NodoFlare {
       const mapaNodos: Map<number, NodoFlare> = new Map();
@@ -175,7 +123,7 @@ export class PrerrequisitosTreeChartComponent {
 
       // Crear nodos individuales para cada asignatura
       asignaturas.forEach(asig => {
-        mapaNodos.set(asig.codigo, { name: asig.nombre, children: [] });
+        mapaNodos.set(asig.codigo, { name: asig.nombre, subject: asig, children: [] });
       });
 
       // Crear relaciones padre-hijo a partir de los prerrequisitos
@@ -204,16 +152,10 @@ export class PrerrequisitosTreeChartComponent {
 
 
   loadChart(data: any): void {
-    const chart = echarts.init(this.chartContainer.nativeElement);
-    chart.showLoading();
+    this.chartInstance = echarts.init(this.chartContainer.nativeElement);
+    this.chartInstance.showLoading();
 
-    chart.hideLoading();
-
-    /*
-    data.children.forEach((datum: any, index: number) => {
-      if (index % 2 === 0) datum.collapsed = true;
-    });
-    */
+    this.chartInstance.hideLoading();
 
     const option: echarts.EChartsOption = {
       tooltip: {
@@ -253,7 +195,227 @@ export class PrerrequisitosTreeChartComponent {
       ]
     };
 
-    chart.setOption(option);
+    this.chartInstance.setOption(option);
+
+    this.clickEvents();
+  }
+
+
+  saveImage(): void {
+    const base64 = this.chartInstance.getDataURL({
+      type: 'png',
+      pixelRatio: 2,
+      backgroundColor: '#fff'
+    });
+
+    const link = document.createElement('a');
+    link.href = base64;
+    link.download = 'grafico-prerrequisitos.png';
+    link.click();
+  }
+
+
+  async copyImage(): Promise<void> {
+    const base64 = this.chartInstance.getDataURL({
+      type: 'png',
+      pixelRatio: 2,
+      backgroundColor: '#fff'
+    });
+
+    try {
+      const blob = await fetch(base64).then(res => res.blob());
+      const item = new ClipboardItem({ [blob.type]: blob });
+      await navigator.clipboard.write([item]);
+
+      Swal.fire('Copiado', 'La imagen fue copiada al portapapeles.', 'success');
+    } catch (err) {
+      Swal.fire('Error', 'No se pudo copiar la imagen.', 'error');
+    }
+  }
+
+
+  // Ocultar el menú contextual cuando se da click por fuera.
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: MouseEvent) {
+    if (this.menuVisible && this.contextMenuRef && !this.contextMenuRef.nativeElement.contains(event.target)) {
+      this.menuVisible = false;
+      this.clickedData = null;
+    }
+  }
+
+
+  clickEvents() {
+    // Evita múltiples listeners
+    this.chartInstance.off('contextmenu', (params: any) => {
+      this.clickedData = null;
+    });
+
+    // Abre menú contextual click derecho
+    this.chartInstance.on('contextmenu', (params: any) => {
+      if (params.data) {
+        this.clickedData = params.data;
+        this.menuX = params.event.event.pageX;
+        this.menuY = params.event.event.pageY;
+        this.menuVisible = true;
+        params.event.event.preventDefault();
+      }
+    });
+  }
+
+
+  onGlobalContextMenu(event: MouseEvent) {
+    event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
+    if(this.menuX !== 0 && this.menuY !== 0) {
+      this.menuVisible = true;
+    }
+  }
+
+
+  onOptionSelected(action: string, event: any) {
+    if (!this.clickedData) return;
+
+    this.contextualMenuAction = action;
+
+    switch (this.contextualMenuAction) {
+      case this.contextualMenuOptions.verDetalles:
+        this.showSwalAsignaturaDetalles();
+        break;
+      case this.contextualMenuOptions.verJustificacion:
+        this.showSwalAsignaturaJustificacion();
+        break;
+      case this.contextualMenuOptions.guardarImage:
+        this.saveImage();
+        break;
+      case this.contextualMenuOptions.copiarImagen:
+        this.copyImage();
+        break;
+      case this.contextualMenuOptions.irSyllabus:
+        window.open(`https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${this.clickedData.subject.codigo}`, '_blank'); // externo
+        break;
+      case this.contextualMenuOptions.irObjetosEstudio:
+        window.open(`https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${this.clickedData.subject.codigo}`, '_blank'); // externo
+        break;
+      case this.contextualMenuOptions.irVerbos:
+        window.open(`https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${this.clickedData.subject.codigo}`, '_blank'); // externo
+        break;
+      default:
+    }
+
+    this.menuVisible = false;
+  }
+
+
+  showSwalAsignaturaDetalles() {
+    const a = this.clickedData.subject;
+
+    Swal.fire({
+      title: this.clickedData.subject.nombre,
+      width: '800px',
+      html: `
+        <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
+          <table class="table table-bordered text-start">
+            <tr><th>Código</th><td>${a.codigo}</td></tr>
+            <tr><th>Carrera</th><td>${a.carrera}</td></tr>
+            <tr><th>Semestre</th><td>${a.semestre_asignatura}</td></tr>
+
+            <tr>
+              <th>Campo de Formación</th>
+              <td>
+                Ver las áreas de formación asociadas:
+                <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.campo_formacion)}">
+                  ${a.campo_formacion}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Área de Formación</th>
+              <td>
+                Ver las asignaturas asociadas:
+                <a href="${APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart}?nombreAreaFormacion=${encodeURIComponent(a.area_formacion)}">
+                  ${a.area_formacion}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver syllabus</th>
+              <td>
+                <a href="https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${a.codigo}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${a.codigo}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver objetos de estudio</th>
+              <td>
+                <a href="https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${a.codigo}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${a.codigo}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver verbos</th>
+              <td>
+                <a href="https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${a.nombre}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${a.nombre}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Justificación</th>
+              <td>
+                <button type="button" id="btnJustificacion" class="btn btn-primary">Ver</button>
+              </td>
+            </tr>
+
+            <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
+            <tr><th>Número de Créditos</th><td>${a.numero_creditos}</td></tr>
+            <tr><th>HTD</th><td>${a.HTD}</td></tr>
+            <tr><th>HTC</th><td>${a.HTC}</td></tr>
+            <tr><th>HTA</th><td>${a.HTA}</td></tr>
+          </table>
+        </div>
+      `,
+      didOpen: () => {
+        const btn = document.getElementById('btnJustificacion');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            this.showSwalAsignaturaJustificacion(); // ✅ Abre el otro swal
+          });
+        }
+      }
+    });
+
+  }
+
+
+  showSwalAsignaturaJustificacion() {
+    const a =  this.clickedData.subject;
+
+    if(!a.justificacion) {
+      Swal.fire({
+        title: 'Justificación no disponible',
+        text: 'No hay justificación disponible para esta asignatura.',
+        icon: 'info'
+      });
+      return;
+    }
+
+    Swal.fire({
+      title:  a.nombre,
+      width: '800px',
+      html: `
+      <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
+        <table class="table table-bordered text-start" style="table-layout: fixed; width: 100%;>
+          <tr><td style="white-space: pre-line">${a.justificacion}</td></tr>
+        </table>
+      </div>
+      `
+    });
   }
 
 
