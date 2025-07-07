@@ -6,14 +6,16 @@
     <div #chartContainer class="bubble-chart-container" style="width: 100%; height: 1000px;" (contextmenu)="onGlobalContextMenu($event)"></div>
 
     @if(menuVisible) {
-        <ul
-            #contextMenuRef
-            [style.left.px]="menuX"
-            [style.top.px]="menuY"
-            class="context-menu">
-            <li (click)="onOptionSelected(contextualMenuOptions.verDetalles)">{{contextualMenuOptions.verDetalles}}</li>
-            <li (click)="onOptionSelected(contextualMenuOptions.irAreasFormacion)">{{contextualMenuOptions.irAreasFormacion}}</li>
-        </ul>
+      <ul
+        #contextMenuRef
+        [style.left.px]="menuX"
+        [style.top.px]="menuY"
+        class="context-menu">
+        <li (click)="onOptionSelected(contextualMenuOptions.verDetalles)">{{contextualMenuOptions.verDetalles}}</li>
+        <li (click)="onOptionSelected(contextualMenuOptions.irAreasFormacion)">{{contextualMenuOptions.irAreasFormacion}}</li>
+        <li (click)="onOptionSelected(contextualMenuOptions.guardarImage)">{{ contextualMenuOptions.guardarImage }}</li>
+        <li (click)="onOptionSelected(contextualMenuOptions.copiarImagen)">{{ contextualMenuOptions.copiarImagen }}</li>
+      </ul>
     }
 
 </app-navbar>

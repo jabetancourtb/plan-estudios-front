@@ -58,6 +58,8 @@ export class AreasFormacionBubbleChartComponent {
   contextualMenuOptions = {
     verDetalles: '🔍 Ver detalles',
     irAsignaturas: '➡️ Ir a asignaturas',
+    guardarImage: '💾 Guardar imagen',
+    copiarImagen: '📋 Copiar imagen',
   }
 
   contextualMenuAction = '';
@@ -199,6 +201,39 @@ export class AreasFormacionBubbleChartComponent {
   }
 
 
+  saveImage(): void {
+    const base64 = this.chartInstance.getDataURL({
+      type: 'png',
+      pixelRatio: 2,
+      backgroundColor: '#fff'
+    });
+
+    const link = document.createElement('a');
+    link.href = base64;
+    link.download = 'grafico-areas-formacion.png';
+    link.click();
+  }
+
+
+  async copyImage(): Promise<void> {
+    const base64 = this.chartInstance.getDataURL({
+      type: 'png',
+      pixelRatio: 2,
+      backgroundColor: '#fff'
+    });
+
+    try {
+      const blob = await fetch(base64).then(res => res.blob());
+      const item = new ClipboardItem({ [blob.type]: blob });
+      await navigator.clipboard.write([item]);
+
+      Swal.fire('Copiado', 'La imagen fue copiada al portapapeles.', 'success');
+    } catch (err) {
+      Swal.fire('Error', 'No se pudo copiar la imagen.', 'error');
+    }
+  }
+
+
   clickEvents() {
     // Muestra detalles con click izquierdo
     this.chartInstance.on('click', (params: any) => {
@@ -251,6 +286,12 @@ export class AreasFormacionBubbleChartComponent {
      switch (this.contextualMenuAction) {
       case this.contextualMenuOptions.verDetalles:
         this.showSwalAreaFormacionDetalles();
+        break;
+      case this.contextualMenuOptions.guardarImage:
+        this.saveImage();
+        break;
+      case this.contextualMenuOptions.copiarImagen:
+        this.copyImage();
         break;
       case this.contextualMenuOptions.irAsignaturas:
         if(this.urlParams()?.nombreCampoFormacion) {
