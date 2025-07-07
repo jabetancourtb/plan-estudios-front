@@ -243,7 +243,7 @@ export class PlanEstudiosCirclePackingComponent {
           type: 'text',
           style: {
             text: nodeName,
-            fontSize: node.r / 3,
+            fontSize: node.r / 5,
             fontFamily: 'Arial',
             width: node.r * 1.3,
             overflow: 'truncate'
