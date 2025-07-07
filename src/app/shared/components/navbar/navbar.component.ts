@@ -45,6 +45,13 @@ export class NavbarComponent {
     });
   }
 
+  // Redirige a / luego redigecciona a la ruta deseada
+  goToAsignaturasLista() {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([APP_CONSTANTS.ROUTES.asignaturasLista]);
+    });
+  }
+
 
   // Redirige a / luego redigecciona a la ruta deseada
   goToPrerrequisitosTreeChart() {

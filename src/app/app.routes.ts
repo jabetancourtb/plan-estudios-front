@@ -5,6 +5,7 @@ import { CamposFormacionBubbleChartComponent } from './pages/campos-formacion/ec
 import { AreasFormacionBubbleChartComponent } from './pages/areas-formacion/echart/bubble-chart/areas-formacion-bubble-chart.component';
 import { PlanEstudiosCirclePackingComponent } from './pages/plan-estudios/echart/circle-packing/plan-estudios-circle-packing.component';
 import { PrerrequisitosTreeChartComponent } from './pages/prerrequisitos/echart/tree-chart/prerrequisitos-tree-chart/prerrequisitos-tree-chart.component';
+import { AsignaturasListaComponent } from './pages/asignaturas/lista/asignaturas-lista/asignaturas-lista.component';
 
 export const routes: Routes = [
     {
@@ -27,6 +28,10 @@ export const routes: Routes = [
     {
       path: 'asignaturas/echart/bubble-chart',
       component: AsignaturasBubbleChartComponent,
+    },
+    {
+      path: 'asignaturas/lista',
+      component: AsignaturasListaComponent,
     },
     {
     path: 'plan-estudios/echart/circle-packing',
