@@ -286,8 +286,8 @@ export class AsignaturasBubbleChartComponent {
 
 
   onGlobalContextMenu(event: MouseEvent) {
-    event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
-    if(this.menuX !== 0 && this.menuY !== 0) {
+    //event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
+    if(this.menuX !== 0 && this.menuY !== 0 && this.clickedData != null) {
       this.menuVisible = true;
     }
   }
