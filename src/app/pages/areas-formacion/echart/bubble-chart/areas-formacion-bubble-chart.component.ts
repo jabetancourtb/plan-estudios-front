@@ -331,7 +331,7 @@ export class AreasFormacionBubbleChartComponent {
             <tr>
               <th>Campo de Formación</th>
               <td>
-                Ver las áreas de formación asociadas:
+                Ver las áreas de formación asociadas a:
                 <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(this.urlParams()?.nombreCampoFormacion)}">
                   ${this.urlParams()?.nombreCampoFormacion}
                 </a>
