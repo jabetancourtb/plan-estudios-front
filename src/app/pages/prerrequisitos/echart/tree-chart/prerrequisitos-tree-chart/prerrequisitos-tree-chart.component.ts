@@ -176,7 +176,7 @@ export class PrerrequisitosTreeChartComponent {
             position: 'left',
             verticalAlign: 'middle',
             align: 'right',
-            fontSize: 9
+            fontSize: 11
           },
           leaves: {
             label: {
@@ -264,7 +264,7 @@ export class PrerrequisitosTreeChartComponent {
 
 
   onGlobalContextMenu(event: MouseEvent) {
-    event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
+    //event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
     if(this.menuX !== 0 && this.menuY !== 0) {
       this.menuVisible = true;
     }
