@@ -17,7 +17,7 @@ export class AsignaturaService extends BaseService<any> {
 
   protected headers = new HttpHeaders({ [this.apiPlanEstudiosUDistritalApiKeyRequestHeader] : this.apiPlanEstudiosUDistritalApiKeyRequestValue });
 
-  
+
   constructor() {
     super();
     this.apiUrl = this.apiPlanEstudiosUDistrital;
@@ -102,9 +102,9 @@ export class AsignaturaService extends BaseService<any> {
   }
 
 
-  consultarAsignaturaPorId(idAsignatura: number) : Observable<Asignatura> {
+  consultarAsignaturaPorCodigo(codigo: number) : Observable<Asignatura> {
     this.resource = "/asignaturas";
-    return this.executeGet(`/${idAsignatura}`, { headers: this.headers });
+    return this.executeGet(`/${codigo}`, { headers: this.headers });
   }
 
 

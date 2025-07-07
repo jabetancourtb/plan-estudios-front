@@ -26,7 +26,7 @@ export class AsignaturasBubbleChartComponent {
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private loaderService: LoaderService = inject(LoaderService);
-  private asignaturaService: AsignaturaService= inject(AsignaturaService);
+  private asignaturaService: AsignaturaService = inject(AsignaturaService);
 
   chartInstance!: echarts.ECharts;
 
