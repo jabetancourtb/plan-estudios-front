@@ -15,3 +15,13 @@ table thead th {
   background-color: #007bff;
   border-color: #007bff;
 }
+
+.pagination-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pagination {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { LoaderService } from '../../../../services/loader.service';
 import { AsignaturaService } from '../../../../services/asignatura.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
@@ -9,7 +10,7 @@ import { NavbarComponent } from "../../../../shared/components/navbar/navbar.com
 
 @Component({
   selector: 'app-asignaturas-lista',
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, FormsModule],
   templateUrl: './asignaturas-lista.component.html',
   styleUrl: './asignaturas-lista.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,14 +34,13 @@ export class AsignaturasListaComponent {
   currentPage = 1;
   pageSize = 10;
   totalPages: number[] = [];
+  pageSizeOptions = [5, 10, 25, 50, 100];
 
 
   ngOnInit() {
     this.currentPage = 1;
     this.consultarAsignaturasPorPaginacion(this.currentPage, this.pageSize, 'codigo', true);
   }
-
-
 
 
   consultarQueryParams() {
@@ -93,6 +93,11 @@ export class AsignaturasListaComponent {
   updatePageInformation(page: number): void {
     this.totalPages = Array.from({ length: this.responseListAsignaturas().totalPages }, (_, i) => i + 1);
     this.currentPage = page
+  }
+
+
+  updatePageSize(): void {
+    this.consultarAsignaturasPorPaginacion(1, this.pageSize, 'codigo', true);
   }
 
 
