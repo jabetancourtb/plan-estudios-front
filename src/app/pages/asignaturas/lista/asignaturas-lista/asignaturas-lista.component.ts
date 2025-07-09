@@ -34,7 +34,7 @@ export class AsignaturasListaComponent {
   currentPage = 1;
   pageSize = 10;
   totalPages: number[] = [];
-  pageSizeOptions = [5, 10, 25, 50, 100];
+  pageSizeOptions = [10, 25, 50, 100];
 
 
   ngOnInit() {
