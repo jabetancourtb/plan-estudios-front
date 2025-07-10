@@ -338,14 +338,14 @@ export class AsignaturasBubbleChartComponent {
           <table class="table table-bordered text-start">
             <tr><th>Código</th><td>${a.codigo}</td></tr>
             <tr><th>Carrera</th><td>${a.carrera}</td></tr>
-            <tr><th>Semestre</th><td>${a.semestre_asignatura}</td></tr>
+            <tr><th>Semestre</th><td>${a.semestreAsignatura}</td></tr>
 
             <tr>
               <th>Campo de Formación</th>
               <td>
                 Ver las áreas de formación asociadas:
-                <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.campo_formacion)}">
-                  ${a.campo_formacion}
+                <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.campoFormacion)}">
+                  ${a.campoFormacion}
                 </a>
               </td>
             </tr>
@@ -354,8 +354,8 @@ export class AsignaturasBubbleChartComponent {
               <th>Área de Formación</th>
               <td>
                 Ver las asignaturas asociadas:
-                <a href="${APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart}?nombreAreaFormacion=${encodeURIComponent(a.area_formacion)}">
-                  ${a.area_formacion}
+                <a href="${APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart}?nombreAreaFormacion=${encodeURIComponent(a.areaFormacion)}">
+                  ${a.areaFormacion}
                 </a>
               </td>
             </tr>
@@ -395,7 +395,7 @@ export class AsignaturasBubbleChartComponent {
             </tr>
 
             <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
-            <tr><th>Número de Créditos</th><td>${a.numero_creditos}</td></tr>
+            <tr><th>Número de Créditos</th><td>${a.numeroCreditos}</td></tr>
             <tr><th>HTD</th><td>${a.HTD}</td></tr>
             <tr><th>HTC</th><td>${a.HTC}</td></tr>
             <tr><th>HTA</th><td>${a.HTA}</td></tr>
