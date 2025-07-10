@@ -41,7 +41,6 @@ export class AsignaturasListaComponent {
   ngOnInit() {
     this.currentPage = 1;
     this.consultarQueryParams();
-    this.consultarAsignaturasPorPaginacion(this.currentPage, this.pageSize, 'codigo', true);
   }
 
 
@@ -51,7 +50,7 @@ export class AsignaturasListaComponent {
       this.currentPage = params['page'] ? +params['page'] : 1;
       this.pageSize = params['pageSize'] ? +params['pageSize'] : 10;
       const field = params['field'] || 'codigo';
-      const asc = params['asc'] === 'true';
+      const asc = params['asc'] || true ;
       this.searchTerm = params['searchTerm'] || '';
 
       this.consultarAsignaturasPorPaginacion(this.currentPage, this.pageSize, field, asc);
@@ -65,20 +64,6 @@ export class AsignaturasListaComponent {
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.updatePageInformation(page);
-        this.loaderService.hide();
-      },
-      error: (e) => {
-        this.loaderService.hide();
-      }
-    });
-  }
-
-
-  private consultarAsignaturaPorCodigo(codigo: number) {
-    this.loaderService.show();
-    this.asignaturaService.consultarAsignaturaPorCodigo(codigo).subscribe({
-      next: (res) => {
-        this.asignatura.set(res);
         this.loaderService.hide();
       },
       error: (e) => {
