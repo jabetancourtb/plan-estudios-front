@@ -39,7 +39,22 @@ export class AsignaturasListaComponent {
   pageSize = 10;
   totalPages: number[] = [];
   pageSizeOptions = [10, 25, 50, 100];
-  fieldsOptions: string[] = [];
+
+  fieldsOptions = [
+    { value: 'codigo', label: 'Código' },
+    { value: 'nombre', label: 'Nombre' },
+    { value: 'semestreAsignatura', label: 'Semestre' },
+    { value: 'carrera', label: 'Carrera' },
+    { value: 'campoFormacion', label: 'Campo de Formación' },
+    { value: 'areaFormacion', label: 'Área de Formación' },
+    { value: 'codigoCondor', label: 'Código Condor' },
+    { value: 'numeroCreditos', label: 'Créditos' },
+    { value: 'HTD', label: 'HTD' },
+    { value: 'HTC', label: 'HTC' },
+    { value: 'HTA', label: 'HTA' },
+    { value: 'tipo', label: 'Tipo' }
+  ];
+
   ascendingOptions = [
     { value: true, label: 'Ascendente' },
     { value: false, label: 'Descendente' }
@@ -104,17 +119,22 @@ export class AsignaturasListaComponent {
 
 
   loadOptions() {
-    this.fieldsOptions = [];
-
     if(this.responseListAsignaturas().content.length > 0) {
       this.totalPages = Array.from({ length: this.responseListAsignaturas().totalPages }, (_, i) => i + 1);
-      const objectKeys = Object.keys(this.responseListAsignaturas().content[0]);
-      this.fieldsOptions.push(...objectKeys);
     }
   }
 
 
   updateFilters(): void {
+    this.consultarAsignaturasPorPaginacion(1, this.pageSize, this.field, this.ascending);
+  }
+
+
+  cleanFilters() {
+    this.pageSize = 10;
+    this.field = 'codigo';
+    this.ascending = true;
+    this.searchTerm = '';
     this.consultarAsignaturasPorPaginacion(1, this.pageSize, this.field, this.ascending);
   }
 

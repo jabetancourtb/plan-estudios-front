@@ -22,7 +22,7 @@
           <div class="col-md-3">
              <select id="field" [(ngModel)]="field" class="form-select" (change)="updateFilters()">
               @for (option of fieldsOptions; track option) {
-                <option [value]="option">{{ option }}</option>
+                <option [value]="option.value">{{ option.label }}</option>
               }
             </select>
           </div>
@@ -47,24 +47,21 @@
 
         </div>
 
+        <div class="mb-3 row">
+          <div class="col-md-10"></div>
+          <div class="col-md-2">
+            <button class="btn btn-primary mb-3" (click)="cleanFilters()">Limpiar filtros</button>
+          </div>
+        </div>
 
 
         <div class="table-responsive" style="max-height: 100vh; max-width: 200vh; overflow: auto;">
           <table class="table table-bordered table-striped">
             <thead class="table-dark">
               <tr>
-                <th>Código</th>
-                <th>Nombre</th>
-                <th>Semestre</th>
-                <th>Carrera</th>
-                <th>Campo de Formación</th>
-                <th>Área de Formación</th>
-                <th>Código Condor</th>
-                <th>Créditos</th>
-                <th>HTD</th>
-                <th>HTC</th>
-                <th>HTA</th>
-                <th>Tipo</th>
+                @for(label of fieldsOptions; track label) {
+                  <th>{{ label.label }}</th>
+                }
               </tr>
             </thead>
             <tbody>
