@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoaderService } from '../../../../services/loader.service';
 import { CampoFormacionService } from '../../../../services/campo-formacion.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
@@ -18,6 +18,7 @@ import { NgStyle } from '@angular/common';
 })
 export class CamposFormacionListaComponent {
 
+  private router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private loaderService: LoaderService = inject(LoaderService);
   private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
@@ -33,15 +34,19 @@ export class CamposFormacionListaComponent {
 
   searchTerm = '';
   field = 'id';
-  asc = true;
+  ascending = true;
   currentPage = 1;
   pageSize = 10;
   totalPages: number[] = [];
   pageSizeOptions = [10, 25, 50, 100];
+  fieldsOptions: string[] = [];
+  ascendingOptions = [
+    { value: true, label: 'Ascendente' },
+    { value: false, label: 'Descendente' }
+  ];
 
 
   ngOnInit() {
-    this.currentPage = 1;
     this.consultarQueryParams();
   }
 
@@ -52,10 +57,10 @@ export class CamposFormacionListaComponent {
       this.currentPage = params['page'] ? +params['page'] : 1;
       this.pageSize = params['pageSize'] ? +params['pageSize'] : 10;
       this.field = params['field'] || 'id';
-      this.asc = params['asc'] || true ;
+      this.ascending = params['ascending'] || true ;
       this.searchTerm = params['searchTerm'] || '';
 
-      this.consultarCamposformacionPorPaginacion(this.currentPage, this.pageSize, this.field, this.asc);
+      this.consultarCamposformacionPorPaginacion(this.currentPage, this.pageSize, this.field, this.ascending);
     });
   }
 
@@ -69,6 +74,7 @@ export class CamposFormacionListaComponent {
         this.loaderService.hide();
       },
       error: (e) => {
+        this.updatePageInformation(page);
         this.loaderService.hide();
       }
     });
@@ -76,13 +82,40 @@ export class CamposFormacionListaComponent {
 
 
   updatePageInformation(page: number): void {
-    this.totalPages = Array.from({ length: this.responseListCamposFormacion().totalPages }, (_, i) => i + 1);
-    this.currentPage = page
+    this.currentPage = page;
+    this.setQueryParams();
+    this.loadOptions();
   }
 
 
-  updatePageSize(): void {
-    //this.consultarCamposformacionPorPaginacion(1, this.pageSize, 'id', true);
+  setQueryParams() {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      queryParams: {
+        page: this.currentPage,
+        pageSize: this.pageSize,
+        field: this.field,
+        ascending: this.ascending,
+        searchTerm: this.searchTerm
+      },
+      queryParamsHandling: 'merge' // para mantener otros parámetros existentes
+    });
+  }
+
+
+  loadOptions() {
+    this.fieldsOptions = [];
+
+    if(this.responseListCamposFormacion().content.length > 0) {
+      this.totalPages = Array.from({ length: this.responseListCamposFormacion().totalPages }, (_, i) => i + 1);
+      const objectKeys = Object.keys(this.responseListCamposFormacion().content[0]);
+      this.fieldsOptions.push(...objectKeys);
+    }
+  }
+
+
+  updateFilters(): void {
+    this.consultarCamposformacionPorPaginacion(1, this.pageSize, this.field, true);
   }
 
 
@@ -91,7 +124,7 @@ export class CamposFormacionListaComponent {
       return;
     }
 
-    this.consultarCamposformacionPorPaginacion(page, this.pageSize, this.field, this.asc);
+    this.consultarCamposformacionPorPaginacion(page, this.pageSize, this.field, this.ascending);
   }
 
 
@@ -100,12 +133,12 @@ export class CamposFormacionListaComponent {
       return;
     }
 
-    this.consultarCamposformacionPorPaginacion(page, this.pageSize, this.field, this.asc);
+    this.consultarCamposformacionPorPaginacion(page, this.pageSize, this.field, this.ascending);
   }
 
 
   goToPage(page: number) {
-    this.consultarCamposformacionPorPaginacion(page, this.pageSize, this.field, this.asc);
+    this.consultarCamposformacionPorPaginacion(page, this.pageSize, this.field, this.ascending);
   }
 
 }
