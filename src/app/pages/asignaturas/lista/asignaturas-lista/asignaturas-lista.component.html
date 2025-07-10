@@ -29,19 +29,18 @@
 
         </div>
 
-
         <div class="mb-3 row">
 
-          <div class="col-md-3"><label for="asc" class="form-label">Orden:</label></div>
+          <div class="col-md-3"><label for="ascending" class="form-label">Orden:</label></div>
           <div class="col-md-3">
-             <select id="asc" [(ngModel)]="ascending" class="form-select" (change)="updateFilters()">
+             <select id="ascending" [(ngModel)]="ascending" class="form-select" (change)="updateFilters()">
               @for (option of ascendingOptions; track option.value) {
                 <option [value]="option.value">{{ option.label }}</option>
               }
             </select>
           </div>
 
-          <div class="col-md-3"><label for="asc" class="form-label">Buscar:</label></div>
+          <div class="col-md-3"><label for="buscar" class="form-label">Buscar:</label></div>
           <div class="col-md-3">
             <input type="text" [(ngModel)]="searchTerm" class="form-control mb-3" placeholder="Buscar...">
           </div>

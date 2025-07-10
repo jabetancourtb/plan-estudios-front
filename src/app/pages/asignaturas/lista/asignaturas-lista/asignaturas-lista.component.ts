@@ -18,8 +18,8 @@ import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
 })
 export class AsignaturasListaComponent {
 
-  private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
+  private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private loaderService: LoaderService = inject(LoaderService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
 
@@ -74,32 +74,17 @@ export class AsignaturasListaComponent {
         this.loaderService.hide();
       },
       error: (e) => {
-        this.loaderService.hide();
         this.updatePageInformation(page);
+        this.loaderService.hide();
       }
     });
   }
 
 
-  loadOptions() {
-    this.fieldsOptions = [];
-    if(this.responseListAsignaturas().content.length > 0) {
-      this.totalPages = Array.from({ length: this.responseListAsignaturas().totalPages }, (_, i) => i + 1);
-      const key = Object.keys(this.responseListAsignaturas().content[0]);
-      this.fieldsOptions.push(...key);
-    }
-  }
-
-
   updatePageInformation(page: number): void {
     this.currentPage = page;
-    this.loadOptions();
     this.setQueryParams();
-  }
-
-
-  updateFilters(): void {
-    this.consultarAsignaturasPorPaginacion(1, this.pageSize, this.field, this.ascending);
+    this.loadOptions();
   }
 
 
@@ -115,6 +100,22 @@ export class AsignaturasListaComponent {
       },
       queryParamsHandling: 'merge' // para mantener otros parámetros existentes
     });
+  }
+
+
+  loadOptions() {
+    this.fieldsOptions = [];
+
+    if(this.responseListAsignaturas().content.length > 0) {
+      this.totalPages = Array.from({ length: this.responseListAsignaturas().totalPages }, (_, i) => i + 1);
+      const objectKeys = Object.keys(this.responseListAsignaturas().content[0]);
+      this.fieldsOptions.push(...objectKeys);
+    }
+  }
+
+
+  updateFilters(): void {
+    this.consultarAsignaturasPorPaginacion(1, this.pageSize, this.field, this.ascending);
   }
 
 
