@@ -6,7 +6,9 @@ export const APP_CONSTANTS = {
   ROUTES: {
     index: '/index',
     camposFormacionEchartBubbleChart: '/campos-formacion/echart/bubble-chart',
+    camposFormacionLista: '/campos-formacion/lista',
     areasFormacionEchartBubbleChart: '/areas-formacion/echart/bubble-chart',
+    areasFormacionLista: '/areas-formacion/lista',
     asignaturasEchartBubbleChart: '/asignaturas/echart/bubble-chart',
     asignaturasLista: '/asignaturas/lista',
     planEstudiosEchartCirclePacking: '/plan-estudios/echart/circle-packing',

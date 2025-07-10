@@ -31,9 +31,25 @@ export class NavbarComponent {
 
 
   // Redirige a / luego redigecciona a la ruta deseada
+  goToCamposFormacionLista() {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([APP_CONSTANTS.ROUTES.camposFormacionLista]);
+    });
+  }
+
+
+  // Redirige a / luego redigecciona a la ruta deseada
   goToAreasFormacionBubbleChart() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
         this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart]);
+    });
+  }
+
+
+  // Redirige a / luego redigecciona a la ruta deseada
+  goToAreasFormacionLista() {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionLista]);
     });
   }
 
