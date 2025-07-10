@@ -33,7 +33,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (areaFormacion of responseListAreasFormacion().content | filterAllFields:searchTerm; track areaFormacion.codigo ) {
+              @for (areaFormacion of responseListAreasFormacion().content | filterAllFields:searchTerm; track areaFormacion.id ) {
                 <tr>
                   <td>{{ areaFormacion.id }}</td>
                   <td>{{ areaFormacion.idCampoFormacion }}</td>
