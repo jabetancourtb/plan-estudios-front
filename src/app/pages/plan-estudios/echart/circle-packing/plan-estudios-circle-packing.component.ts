@@ -166,8 +166,8 @@ export class PlanEstudiosCirclePackingComponent {
 
         const asignaturasFiltradas = this.responseListAsignaturas().content.filter(
           asig =>
-            asig.campo_formacion === campoNombre &&
-            asig.area_formacion === areaNombre
+            asig.campoFormacion === campoNombre &&
+            asig.areaFormacion === areaNombre
         );
 
         for (const asig of asignaturasFiltradas) {
