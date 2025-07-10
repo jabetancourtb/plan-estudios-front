@@ -1,0 +1,94 @@
+<app-navbar>
+
+  <div class="container">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Lista de campos de formación</h4>
+      </div>
+      <div class="card-body" >
+
+        <div class="mb-3 row">
+          <div class="col-2"><label for="pageSize" class="form-label">Registros por página:</label></div>
+          <div class="col-2">
+             <select id="pageSize" [(ngModel)]="pageSize" class="form-select" (change)="updatePageSize()">
+              @for (option of pageSizeOptions; track option) {
+                <option [value]="option">{{ option }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-8"></div>
+        </div>
+
+        <input type="text" [(ngModel)]="searchTerm" class="form-control mb-3" placeholder="Buscar...">
+
+        <div class="table-responsive" style="max-height: 100vh; max-width: 200vh; overflow: auto;">
+          <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+              <tr>
+                <th>Id</th>
+                <th>nombre</th>
+                <th>Color</th>
+                <th>Cantidad de áreas de Formación</th>
+                <th>Cantidad de asignaturas</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (campoFormacion of responseListCamposFormacion().content | filterAllFields:searchTerm; track campoFormacion.codigo ) {
+                <tr>
+                  <td>{{ campoFormacion.id }}</td>
+                  <td>{{ campoFormacion.nombre }}</td>
+                  <td>
+                    <span
+                      [ngStyle]="{
+                        display: 'inline-block',
+                        width: 0,
+                        height: 0,
+                        'border-top': '10px solid transparent',
+                        'border-bottom': '10px solid transparent',
+                        'border-left': '15px solid ' + campoFormacion.colorHtml
+                      }">
+                    </span>
+                  </td>
+                  <td>{{ campoFormacion.cantidadAreasFormacion }}</td>
+                  <td>{{ campoFormacion.cantidadAsignaturas }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div>
+          Mostrando {{ (currentPage * pageSize) - (pageSize - 1) }} a
+          @if(currentPage < totalPages.length) {
+            {{ (currentPage * pageSize) }}
+          }
+          @else if(currentPage === totalPages.length) {
+            {{ responseListCamposFormacion().totalRecordCount }}
+          }
+          de {{ responseListCamposFormacion().totalRecordCount }} registros
+        </div>
+
+        <!-- Paginación -->
+        <nav class="mt-3">
+          <div class="pagination-wrapper">
+            <ul class="pagination justify-content-center flex-nowrap">
+              <li class="page-item">
+                <a class="page-link" href="#" (click)="goToPreviousPage(currentPage - 1); $event.preventDefault()">Anterior</a>
+              </li>
+              @for (page of totalPages; track page; let i = $index) {
+                <li class="page-item" [class.active]="page === currentPage">
+                  <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
+                </li>
+              }
+              <li class="page-item">
+                <a class="page-link" href="#" (click)="goToNextPage(currentPage + 1); $event.preventDefault()">Siguiente</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+      </div>
+    </div>
+  </div>
+
+</app-navbar>

@@ -1,0 +1,33 @@
+:host {
+  display: block;
+}
+
+.container {
+  margin-top: 2rem;
+}
+
+table thead th {
+  background-color: #343a40;
+  color: white;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.pagination-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.pagination {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+@media (max-width: 960px) {
+  .col-2 {
+    width: 50%;
+  }
+}
