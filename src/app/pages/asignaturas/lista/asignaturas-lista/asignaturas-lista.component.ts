@@ -40,25 +40,22 @@ export class AsignaturasListaComponent {
 
   ngOnInit() {
     this.currentPage = 1;
+    this.consultarQueryParams();
     this.consultarAsignaturasPorPaginacion(this.currentPage, this.pageSize, 'codigo', true);
   }
 
 
   consultarQueryParams() {
     this.activatedRoute.queryParams.subscribe(params => {
-      const page = params['page'] ? +params['page'] : 1;
-      const pageSize = params['pageSize'] ? +params['pageSize'] : 10;
+
+      this.currentPage = params['page'] ? +params['page'] : 1;
+      this.pageSize = params['pageSize'] ? +params['pageSize'] : 10;
       const field = params['field'] || 'codigo';
       const asc = params['asc'] === 'true';
+      this.searchTerm = params['searchTerm'] || '';
 
-      this.consultarAsignaturasPorPaginacion(page, pageSize, field, asc);
+      this.consultarAsignaturasPorPaginacion(this.currentPage, this.pageSize, field, asc);
     });
-
-    // Si se pasa un código de asignatura, se consulta
-    if (this.activatedRoute.snapshot.queryParams['codigo']) {
-      const codigo = +this.activatedRoute.snapshot.queryParams['codigo'];
-      this.consultarAsignaturaPorCodigo(codigo);
-    }
   }
 
 
