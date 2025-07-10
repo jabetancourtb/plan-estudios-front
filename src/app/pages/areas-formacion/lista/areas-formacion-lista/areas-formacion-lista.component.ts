@@ -32,6 +32,8 @@ export class AreasFormacionListaComponent {
   areaFormacion = signal<AreaFormacion>({} as AreaFormacion);
 
   searchTerm = '';
+  field = 'id';
+  asc = true;
   currentPage = 1;
   pageSize = 10;
   totalPages: number[] = [];
@@ -49,11 +51,11 @@ export class AreasFormacionListaComponent {
 
       this.currentPage = params['page'] ? +params['page'] : 1;
       this.pageSize = params['pageSize'] ? +params['pageSize'] : 10;
-      const field = params['field'] || 'id';
-      const asc = params['asc'] || true ;
+      this.field = params['field'] || 'id';
+      this.asc = params['asc'] || true ;
       this.searchTerm = params['searchTerm'] || '';
 
-      this.consultarAreasformacionPorPaginacion(this.currentPage, this.pageSize, field, asc);
+      this.consultarAreasformacionPorPaginacion(this.currentPage, this.pageSize, this.field, this.asc);
     });
   }
 
@@ -80,7 +82,7 @@ export class AreasFormacionListaComponent {
 
 
   updatePageSize(): void {
-    this.consultarAreasformacionPorPaginacion(1, this.pageSize, 'id', true);
+    this.consultarAreasformacionPorPaginacion(1, this.pageSize, this.field, this.asc);
   }
 
 
@@ -89,7 +91,7 @@ export class AreasFormacionListaComponent {
       return;
     }
 
-    this.consultarAreasformacionPorPaginacion(page, this.pageSize, 'id', true);
+    this.consultarAreasformacionPorPaginacion(page, this.pageSize, this.field, this.asc);
   }
 
 
@@ -98,11 +100,11 @@ export class AreasFormacionListaComponent {
       return;
     }
 
-    this.consultarAreasformacionPorPaginacion(page, this.pageSize, 'id', true);
+    this.consultarAreasformacionPorPaginacion(page, this.pageSize, this.field, this.asc);
   }
 
 
   goToPage(page: number) {
-    this.consultarAreasformacionPorPaginacion(page, this.pageSize, 'id', true);
+    this.consultarAreasformacionPorPaginacion(page, this.pageSize, this.field, this.asc);
   }
 }

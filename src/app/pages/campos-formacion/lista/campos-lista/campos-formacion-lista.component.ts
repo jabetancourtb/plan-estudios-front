@@ -32,6 +32,8 @@ export class CamposFormacionListaComponent {
   campoFormacion = signal<CampoFormacion>({} as CampoFormacion);
 
   searchTerm = '';
+  field = 'id';
+  asc = true;
   currentPage = 1;
   pageSize = 10;
   totalPages: number[] = [];
@@ -49,11 +51,11 @@ export class CamposFormacionListaComponent {
 
       this.currentPage = params['page'] ? +params['page'] : 1;
       this.pageSize = params['pageSize'] ? +params['pageSize'] : 10;
-      const field = params['field'] || 'id';
-      const asc = params['asc'] || true ;
+      this.field = params['field'] || 'id';
+      this.asc = params['asc'] || true ;
       this.searchTerm = params['searchTerm'] || '';
 
-      this.consultarCamposformacionPorPaginacion(this.currentPage, this.pageSize, field, asc);
+      this.consultarCamposformacionPorPaginacion(this.currentPage, this.pageSize, this.field, this.asc);
     });
   }
 
@@ -89,7 +91,7 @@ export class CamposFormacionListaComponent {
       return;
     }
 
-    this.consultarCamposformacionPorPaginacion(page, this.pageSize, 'id', true);
+    this.consultarCamposformacionPorPaginacion(page, this.pageSize, this.field, this.asc);
   }
 
 
@@ -98,12 +100,12 @@ export class CamposFormacionListaComponent {
       return;
     }
 
-    this.consultarCamposformacionPorPaginacion(page, this.pageSize, 'id', true);
+    this.consultarCamposformacionPorPaginacion(page, this.pageSize, this.field, this.asc);
   }
 
 
   goToPage(page: number) {
-    this.consultarCamposformacionPorPaginacion(page, this.pageSize, 'id', true);
+    this.consultarCamposformacionPorPaginacion(page, this.pageSize, this.field, this.asc);
   }
 
 }
