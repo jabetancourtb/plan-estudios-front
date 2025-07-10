@@ -39,7 +39,15 @@ export class CamposFormacionListaComponent {
   pageSize = 10;
   totalPages: number[] = [];
   pageSizeOptions = [10, 25, 50, 100];
-  fieldsOptions: string[] = [];
+
+  fieldsOptions = [
+    { value: 'id', label: 'Id' },
+    { value: 'nombre', label: 'Nombre' },
+    { value: 'color', label: 'Color' },
+    { value: 'cantidadAreasFormacion', label: 'Cantidad de áreas de Formación' },
+    { value: 'cantidadAsignaturas', label: 'Cantidad de asignaturas' }
+  ];
+
   ascendingOptions = [
     { value: true, label: 'Ascendente' },
     { value: false, label: 'Descendente' }
@@ -104,18 +112,23 @@ export class CamposFormacionListaComponent {
 
 
   loadOptions() {
-    this.fieldsOptions = [];
-
     if(this.responseListCamposFormacion().content.length > 0) {
       this.totalPages = Array.from({ length: this.responseListCamposFormacion().totalPages }, (_, i) => i + 1);
-      const objectKeys = Object.keys(this.responseListCamposFormacion().content[0]);
-      this.fieldsOptions.push(...objectKeys);
     }
   }
 
 
   updateFilters(): void {
     this.consultarCamposformacionPorPaginacion(1, this.pageSize, this.field, true);
+  }
+
+
+  cleanFilters() {
+    this.pageSize = 10;
+    this.field = 'id';
+    this.ascending = true;
+    this.searchTerm = '';
+    this.consultarCamposformacionPorPaginacion(1, this.pageSize, this.field, this.ascending);
   }
 
 
