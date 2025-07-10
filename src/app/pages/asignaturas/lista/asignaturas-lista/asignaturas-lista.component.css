@@ -25,3 +25,9 @@ table thead th {
   flex-wrap: nowrap;
   white-space: nowrap;
 }
+
+@media (max-width: 960px) {
+  .col-2 {
+    width: 50%;
+  }
+}

@@ -7,13 +7,16 @@
       </div>
       <div class="card-body" >
 
-        <div class="mb-3">
-          <label for="pageSize" class="form-label">Registros por página:</label>
-          <select id="pageSize" [(ngModel)]="pageSize" class="form-select" (change)="updatePageSize()">
-            @for (option of pageSizeOptions; track option) {
-              <option [value]="option">{{ option }}</option>
-            }
-          </select>
+        <div class="mb-3 row">
+          <div class="col-2"><label for="pageSize" class="form-label">Registros por página:</label></div>
+          <div class="col-2">
+             <select id="pageSize" [(ngModel)]="pageSize" class="form-select" (change)="updatePageSize()">
+              @for (option of pageSizeOptions; track option) {
+                <option [value]="option">{{ option }}</option>
+              }
+            </select>
+          </div>
+          <div class="col-8"></div>
         </div>
 
         <input type="text" [(ngModel)]="searchTerm" class="form-control mb-3" placeholder="Buscar...">
@@ -36,7 +39,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (asignatura of responseListAsignaturas().content; track asignatura.codigo) {
+              @for (asignatura of responseListAsignaturas().content | filterAllFields:searchTerm; track asignatura.codigo ) {
                 <tr>
                   <td>{{ asignatura.codigo }}</td>
                   <td>{{ asignatura.carrera }}</td>

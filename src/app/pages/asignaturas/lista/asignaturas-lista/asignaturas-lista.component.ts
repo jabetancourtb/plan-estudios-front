@@ -6,11 +6,12 @@ import { AsignaturaService } from '../../../../services/asignatura.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { Asignatura } from '../../../../models/asignatura.model';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
+import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
 
 
 @Component({
   selector: 'app-asignaturas-lista',
-  imports: [NavbarComponent, FormsModule],
+  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe],
   templateUrl: './asignaturas-lista.component.html',
   styleUrl: './asignaturas-lista.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
