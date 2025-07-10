@@ -8,28 +8,59 @@
       <div class="card-body" >
 
         <div class="mb-3 row">
-          <div class="col-2"><label for="pageSize" class="form-label">Registros por página:</label></div>
-          <div class="col-2">
-             <select id="pageSize" [(ngModel)]="pageSize" class="form-select" (change)="updatePageSize()">
+
+          <div class="col-md-3"><label for="pageSize" class="form-label">Registros por página:</label></div>
+          <div class="col-md-3">
+             <select id="pageSize" [(ngModel)]="pageSize" class="form-select" (change)="updateFilters()">
               @for (option of pageSizeOptions; track option) {
                 <option [value]="option">{{ option }}</option>
               }
             </select>
           </div>
-          <div class="col-8"></div>
+
+          <div class="col-md-3"><label for="field" class="form-label">Filtrar por campo:</label></div>
+          <div class="col-md-3">
+             <select id="field" [(ngModel)]="field" class="form-select" (change)="updateFilters()">
+              @for (option of fieldsOptions; track option) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+
         </div>
 
-        <input type="text" [(ngModel)]="searchTerm" class="form-control mb-3" placeholder="Buscar...">
+        <div class="mb-3 row">
+
+          <div class="col-md-3"><label for="ascending" class="form-label">Orden:</label></div>
+          <div class="col-md-3">
+             <select id="ascending" [(ngModel)]="ascending" class="form-select" (change)="updateFilters()">
+              @for (option of ascendingOptions; track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="col-md-3"><label for="buscar" class="form-label">Buscar:</label></div>
+          <div class="col-md-3">
+            <input type="text" [(ngModel)]="searchTerm" class="form-control mb-3" placeholder="Buscar...">
+          </div>
+
+        </div>
+
+        <div class="mb-3 row">
+          <div class="col-md-10"></div>
+          <div class="col-md-2">
+            <button class="btn btn-primary mb-3" (click)="cleanFilters()">Limpiar filtros</button>
+          </div>
+        </div>
 
         <div class="table-responsive" style="max-height: 100vh; max-width: 200vh; overflow: auto;">
           <table class="table table-bordered table-striped">
             <thead class="table-dark">
               <tr>
-                <th>Id</th>
-                <th>Id campo de formación</th>
-                <th>nombre</th>
-                <th>Color</th>
-                <th>Cantidad de asignaturas</th>
+                @for(label of fieldsOptions; track label) {
+                  <th>{{ label.label }}</th>
+                }
               </tr>
             </thead>
             <tbody>
