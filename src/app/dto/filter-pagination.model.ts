@@ -2,6 +2,7 @@ export class FilterPaginationDTO {
   currentPage: number = 1;
   pages: number[] = [];
   pageSize: number = 10;
+  totalItems: number = 0;
 
   pageSizeOptions: number[] = [10, 25, 50, 100];
   field: string  = '';

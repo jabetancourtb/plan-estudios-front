@@ -1,0 +1,34 @@
+<!-- Paginación -->
+        <div class="row">
+          <div class="col-md-4">
+            Mostrando {{ (filterPaginationDTO().currentPage  * filterPaginationDTO().pageSize) - (filterPaginationDTO().pageSize - 1) }} a
+            @if(filterPaginationDTO().currentPage < filterPaginationDTO().pages.length) {
+              {{ (filterPaginationDTO().currentPage  * filterPaginationDTO().pageSize) }}
+            }
+            @else if(filterPaginationDTO().currentPage === filterPaginationDTO().pages.length) {
+              {{ filterPaginationDTO().totalItems }}
+            }
+            de {{ filterPaginationDTO().totalItems }} registros
+          </div>
+          <div class="col-md-2"></div>
+          <div class="col-md-6 text-center">
+            <nav class="mt-3">
+              <div class="pagination-wrapper">
+                <ul class="pagination justify-content-center flex-nowrap">
+                  <li class="page-item">
+                    <a class="page-link" href="#" (click)="goToPreviousPage(); $event.preventDefault()">Anterior</a>
+                  </li>
+                  @for (page of filterPaginationDTO().pages; track page; let i = $index) {
+                    <li class="page-item" [class.active]="page === filterPaginationDTO().currentPage">
+                      <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
+                    </li>
+                  }
+                  <li class="page-item">
+                    <a class="page-link" href="#" (click)="goToNextPage(); $event.preventDefault()">Siguiente</a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </div>
+        <!-- Paginación -->
