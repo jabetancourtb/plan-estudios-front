@@ -28,9 +28,6 @@ export class FilterPaginationComponent {
   });
 
 
-  formInitialized = false; // 🔴 para evitar emitir cambios antes de que el formulario esté listo
-
-
   ngOnChanges(changes: SimpleChanges): void {
     if(changes['filterPaginationDTO']){
       const dto = this.filterPaginationDTO();
@@ -57,7 +54,7 @@ export class FilterPaginationComponent {
 
   clearFilters() {
     this.filterForm.get('pageSize')?.setValue(10);
-    this.filterForm.get('field')?.setValue('');
+    this.filterForm.get('field')?.setValue(this.filterPaginationDTO().fieldsOptions[0].value);
     this.filterForm.get('ascending')?.setValue(true);
     this.filterForm.get('searchTerm')?.setValue('');
 
