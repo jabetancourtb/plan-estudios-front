@@ -9,7 +9,7 @@
             <div class="form-group">
                 <label>Registros por página</label>
                 <select id="pageSize" formControlName="pageSize" class="form-select" (change)="updateFilters(filterForm.value)">
-                  @for (option of filterRequest().pageSizeOptions; track option) {
+                  @for (option of filterPaginationDTO().pageSizeOptions; track option) {
                     <option [value]="option">{{ option }}</option>
                   }
                 </select>
@@ -17,7 +17,7 @@
             <div class="form-group">
                 <label>Filtrar por campo</label>
                 <select id="field" formControlName="field" class="form-select" (change)="updateFilters(filterForm.value)">
-                  @for (option of filterRequest().fieldsOptions; track option.value) {
+                  @for (option of filterPaginationDTO().fieldsOptions; track option.value) {
                     <option [value]="option.value">{{ option.label }}</option>
                   }
                 </select>
@@ -25,7 +25,7 @@
             <div class="form-group">
                 <label>Orden</label>
                 <select id="ascending" formControlName="ascending" class="form-select" (change)="updateFilters(filterForm.value)">
-                  @for (option of filterRequest().ascendingOptions; track option.value) {
+                  @for (option of filterPaginationDTO().ascendingOptions; track option.value) {
                     <option [value]="option.value">{{ option.label }}</option>
                   }
                 </select>

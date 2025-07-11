@@ -1,9 +1,20 @@
-export interface FilterPaginationDTO {
-    pageSize: number,
-    pageSizeOptions: number[],
-    field: string,
-    fieldsOptions: any[],
-    ascending: boolean,
-    ascendingOptions: any[],
-    searchTerm: string
+export class FilterPaginationDTO {
+  currentPage: number = 1;
+  pages: number[] = [];
+  pageSize: number = 10;
+
+  pageSizeOptions: number[] = [10, 25, 50, 100];
+  field: string  = '';
+  fieldsOptions: any[] = [];
+  ascending: boolean = true;
+  ascendingOptions: any[] = [
+    { value: true, label: 'Ascendente' },
+    { value: false, label: 'Descendente' }
+  ];
+  searchTerm: string = '';
+
+  constructor(init?: Partial<FilterPaginationDTO>) {
+    Object.assign(this, init);
+  }
+
 }
