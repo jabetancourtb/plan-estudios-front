@@ -10,10 +10,11 @@ import { AreaFormacion } from '../../../../models/area-formacion.model';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
 import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination.component";
+import { PaginationComponent } from "../../../../shared/components/pagination/pagination.component";
 
 @Component({
   selector: 'app-areas-formacion-lista',
-  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, NgStyle, FilterPaginationComponent],
+  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, NgStyle, FilterPaginationComponent, PaginationComponent],
   templateUrl: './areas-formacion-lista.component.html',
   styleUrl: './areas-formacion-lista.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -95,6 +96,7 @@ export class AreasFormacionListaComponent {
    if(this.responseListAreasFormacion().content.length > 0) {
       this.filterPaginationDTO.set(new FilterPaginationDTO({
         ...this.filterPaginationDTO(),
+        totalItems: this.responseListAreasFormacion().totalRecordCount,
         pages: Array.from({ length: this.responseListAreasFormacion().totalPages }, (_, i) => i + 1),
       }));
     }
@@ -128,26 +130,6 @@ export class AreasFormacionListaComponent {
       return;
     }
 
-    this.setQueryParams();
-  }
-
-
-  goToPreviousPage(page: number) {
-    if(page == 0) {
-      return;
-    }
-
-    this.filterPaginationDTO().currentPage = page;
-    this.setQueryParams();
-  }
-
-
-  goToNextPage(page: number) {
-    if(page > this.responseListAreasFormacion().totalPages) {
-      return;
-    }
-
-    this.filterPaginationDTO().currentPage = page;
     this.setQueryParams();
   }
 
