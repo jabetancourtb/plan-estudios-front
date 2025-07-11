@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, inject, input, Output, SimpleChanges, effect  } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
+import { FilterPaginationDTO } from '../../../dto/filter-pagination.model';
 
 
 @Component({

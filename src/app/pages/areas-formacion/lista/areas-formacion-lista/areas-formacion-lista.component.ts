@@ -9,7 +9,7 @@ import { AreaFormacionService } from '../../../../services/area-formacion.servic
 import { AreaFormacion } from '../../../../models/area-formacion.model';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
-import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination/filter-pagination.component";
+import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination.component";
 
 @Component({
   selector: 'app-areas-formacion-lista',

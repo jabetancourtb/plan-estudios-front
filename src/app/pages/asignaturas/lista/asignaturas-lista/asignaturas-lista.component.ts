@@ -7,7 +7,7 @@ import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { Asignatura } from '../../../../models/asignatura.model';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
 import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
-import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination/filter-pagination.component";
+import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination.component";
 import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
 
 

@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
 import { NgStyle } from '@angular/common';
 import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
-import { FilterPaginationComponent } from '../../../../shared/components/filter-pagination/filter-pagination/filter-pagination.component';
+import { FilterPaginationComponent } from '../../../../shared/components/filter-pagination/filter-pagination.component';
 
 @Component({
   selector: 'app-campos-formacion-lista',
