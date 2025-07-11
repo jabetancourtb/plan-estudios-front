@@ -9,12 +9,13 @@ import { NavbarComponent } from "../../../../shared/components/navbar/navbar.com
 import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
 import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination.component";
 import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
+import { PaginationComponent } from "../../../../shared/components/pagination/pagination.component";
 
 
 
 @Component({
   selector: 'app-asignaturas-lista',
-  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, FilterPaginationComponent],
+  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, FilterPaginationComponent, PaginationComponent],
   templateUrl: './asignaturas-lista.component.html',
   styleUrl: './asignaturas-lista.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -103,6 +104,7 @@ export class AsignaturasListaComponent {
     if(this.responseListAsignaturas().content.length > 0) {
       this.filterPaginationDTO.set(new FilterPaginationDTO({
         ...this.filterPaginationDTO(),
+        totalItems: this.responseListAsignaturas().totalRecordCount,
         pages: Array.from({ length: this.responseListAsignaturas().totalPages }, (_, i) => i + 1),
       }));
     }
@@ -141,30 +143,9 @@ export class AsignaturasListaComponent {
   }
 
 
-  goToPreviousPage(page: number) {
-    if(page == 0) {
-      return;
-    }
-
-    this.filterPaginationDTO().currentPage = page;
-    this.setQueryParams();
-  }
-
-
-  goToNextPage(page: number) {
-    if(page > this.responseListAsignaturas().totalPages) {
-      return;
-    }
-
-    this.filterPaginationDTO().currentPage = page;
-    this.setQueryParams();
-  }
-
-
   goToPage(page: number) {
     this.filterPaginationDTO().currentPage = page;
     this.setQueryParams();
   }
-
 
 }
