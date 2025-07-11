@@ -28,7 +28,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (asignatura of responseListAsignaturas().content | filterAllFields:filterPaginationDTO().searchTerm || ''; track asignatura.codigo ) {
+              @for (asignatura of responseListAsignaturas().content | filterAllFields:filterPaginationDTO().searchTerm; track asignatura.codigo ) {
                 <tr>
                   <td>{{ asignatura.codigo }}</td>
                   <td>{{ asignatura.nombre }}</td>
