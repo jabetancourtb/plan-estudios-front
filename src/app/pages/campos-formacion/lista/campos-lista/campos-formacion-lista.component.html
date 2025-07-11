@@ -7,55 +7,72 @@
       </div>
       <div class="card-body" >
 
-        <div class="row mb-3" >
-          <div class="col-xl-6"></div>
-          <div class="col-xl-5"></div>
-          <div class="col-xl-1">
-            <app-filter-pagination
-              [filterPaginationDTO]="filterPaginationDTO()"
-              (filterResponse)="filterQuery($event)"
-            />
+        @if(responseListCamposFormacion()) {
+
+          <div class="row mb-3" >
+            <div class="col-xl-6"></div>
+            <div class="col-xl-5"></div>
+            <div class="col-xl-1">
+              <app-filter-pagination
+                [filterPaginationDTO]="filterPaginationDTO()"
+                (filterResponse)="filterQuery($event)"
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="table-responsive" style="max-height: 100vh; max-width: 200vh; overflow: auto;">
-          <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-              <tr>
-                @for(label of fieldsOptions; track label) {
-                  <th>{{ label.label }}</th>
-                }
-              </tr>
-            </thead>
-            <tbody>
-              @for (campoFormacion of responseListCamposFormacion().content | filterAllFields:filterPaginationDTO().searchTerm; track campoFormacion.id ) {
+          <div class="table-responsive" style="max-height: 100vh; max-width: 200vh; overflow: auto;">
+            <table class="table table-bordered table-striped" style="text-align: center;">
+              <thead class="table-dark">
                 <tr>
-                  <td>{{ campoFormacion.id }}</td>
-                  <td>{{ campoFormacion.nombre }}</td>
-                  <td>
-                    <span
-                      [ngStyle]="{
-                        display: 'inline-block',
-                        width: 0,
-                        height: 0,
-                        'border-top': '10px solid transparent',
-                        'border-bottom': '10px solid transparent',
-                        'border-left': '15px solid ' + campoFormacion.colorHtml
-                      }">
-                    </span>
-                  </td>
-                  <td>{{ campoFormacion.cantidadAreasFormacion }}</td>
-                  <td>{{ campoFormacion.cantidadAsignaturas }}</td>
+                  @for(label of fieldsOptions; track label) {
+                    <th>{{ label.label }}</th>
+                  }
                 </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                @for (campoFormacion of responseListCamposFormacion().content | filterAllFields:filterPaginationDTO().searchTerm; track campoFormacion.id ) {
+                  <tr>
+                    <td>{{ campoFormacion.id }}</td>
+                    <td>{{ campoFormacion.nombre }}</td>
+                    <td>
+                      <span
+                        [ngStyle]="{
+                          display: 'inline-block',
+                          width: 0,
+                          height: 0,
+                          'border-top': '10px solid transparent',
+                          'border-bottom': '10px solid transparent',
+                          'border-left': '15px solid ' + campoFormacion.colorHtml
+                        }">
+                      </span>
+                    </td>
+                    <td>{{ campoFormacion.cantidadAreasFormacion }}</td>
+                    <td>{{ campoFormacion.cantidadAsignaturas }}</td>
 
-        <app-pagination
-          [filterPaginationDTO]="filterPaginationDTO()"
-          (pageChange)="goToPage($event)"
-        />
+                    <td>
+                      <button type="button" class="btn btn-primary" (click)="consultarAreasFormacionPorCampoFormacion(campoFormacion)">
+                        <span class="bi bi-list-ol"></span>
+                      </button>
+                    </td>
+
+                    <td>
+                      <button type="button" class="btn btn-primary" (click)="consultarAsignaturasPorCampoFormacion(campoFormacion)">
+                        <span class="bi bi-list-ol"></span>
+                      </button>
+                    </td>
+
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          <app-pagination
+            [filterPaginationDTO]="filterPaginationDTO()"
+            (pageChange)="goToPage($event)"
+          />
+
+        }
 
       </div>
     </div>
