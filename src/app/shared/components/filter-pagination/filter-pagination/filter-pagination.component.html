@@ -1,0 +1,51 @@
+<div ngbDropdown class="d-inline-block">
+
+    <button class="btn btn-primary" id="dropdown" ngbDropdownToggle>Filtrar</button>
+
+    <div ngbDropdownMenu aria-labelledby="dropdown" style="padding: 15px;">
+
+
+        <form class="ml-3 mr-4" [formGroup]="filterForm">
+            <div class="form-group">
+                <label>Registros por página</label>
+                <select id="pageSize" formControlName="pageSize" class="form-select" (change)="updateFilters(filterForm.value)">
+                  @for (option of filterRequest().pageSizeOptions; track option) {
+                    <option [value]="option">{{ option }}</option>
+                  }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Filtrar por campo</label>
+                <select id="field" formControlName="field" class="form-select" (change)="updateFilters(filterForm.value)">
+                  @for (option of filterRequest().fieldsOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Orden</label>
+                <select id="ascending" formControlName="ascending" class="form-select" (change)="updateFilters(filterForm.value)">
+                  @for (option of filterRequest().ascendingOptions; track option.value) {
+                    <option [value]="option.value">{{ option.label }}</option>
+                  }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Buscar</label>
+                <input type="text" formControlName="searchTerm" class="form-control mb-3" placeholder="Buscar..." (input)="updateFilters(filterForm.value)">
+            </div>
+        </form>
+
+        <div class="form-group">
+            <div class="btn-group float-right">
+                <button type="button" class="btn btn-sm" style="background-color: #1f1a33; color: white" (click)="clearFilters()">Limpiar</button> &nbsp;
+                <!--<button type="submit" class="btn btn-sm" style="background-color: #1f1a33; color: white" (click)="onSubmit(filterForm.value)">Filtrar</button>-->
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+
