@@ -10,6 +10,8 @@ import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
 import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination.component";
 import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
 import { PaginationComponent } from "../../../../shared/components/pagination/pagination.component";
+import Swal from 'sweetalert2';
+import { APP_CONSTANTS } from '../../../../utils/app-constants';
 
 
 
@@ -43,14 +45,10 @@ export class AsignaturasListaComponent {
     { value: 'nombre', label: 'Nombre' },
     { value: 'semestreAsignatura', label: 'Semestre' },
     { value: 'carrera', label: 'Carrera' },
-    { value: 'campoFormacion', label: 'Campo de Formación' },
-    { value: 'areaFormacion', label: 'Área de Formación' },
     { value: 'codigoCondor', label: 'Código Condor' },
-    { value: 'numeroCreditos', label: 'Créditos' },
-    { value: 'HTD', label: 'HTD' },
-    { value: 'HTC', label: 'HTC' },
-    { value: 'HTA', label: 'HTA' },
-    { value: 'tipo', label: 'Tipo' }
+    { value: 'numeroCreditos', label: 'Número de Créditos' },
+    { value: 'justificacion', label: 'Justificación' },
+    { value: 'verDetalles', label: 'Ver más detalles' },
   ];
 
 
@@ -133,6 +131,10 @@ export class AsignaturasListaComponent {
     this.filterPaginationDTO().field = event.field;
     this.filterPaginationDTO().ascending = event.ascending;
 
+    if(event.action == 'clear') {
+      this.filterPaginationDTO().searchTerm = event.searchTerm;
+    }
+
     // Evita ejecutar el servicio de consulta ya que se usa el pipe de filtrado
     if(event.searchTerm != this.filterPaginationDTO().searchTerm) {
       this.filterPaginationDTO().searchTerm = event.searchTerm;
@@ -147,5 +149,97 @@ export class AsignaturasListaComponent {
     this.filterPaginationDTO().currentPage = page;
     this.setQueryParams();
   }
+
+
+  showSwalAsignaturaJustificacion(asignatura: Asignatura) {
+    if(!asignatura.justificacion) {
+      Swal.fire({
+        title: 'Justificación no disponible',
+        text: 'No hay justificación disponible para esta asignatura.',
+        icon: 'info'
+      });
+      return;
+    }
+
+    Swal.fire({
+      title:  asignatura.nombre,
+      width: '800px',
+      html: `
+      <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
+        <table class="table table-bordered text-start" style="table-layout: fixed; width: 100%;>
+          <tr><td style="white-space: pre-line">${asignatura.justificacion}</td></tr>
+        </table>
+      </div>
+      `
+    });
+  }
+
+
+  showSwalAsignaturaDetalles(asignatura: Asignatura) {
+    Swal.fire({
+      title: asignatura.nombre,
+      width: '800px',
+      html: `
+        <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
+          <table class="table table-bordered text-start">
+
+            <tr>
+              <th>Campo de Formación</th>
+              <td>
+                Ver las áreas de formación asociadas:
+                <a href="${APP_CONSTANTS.ROUTES.camposFormacionLista}?searchTerm=${encodeURIComponent(asignatura.campoFormacion)}">
+                  ${asignatura.campoFormacion}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Área de Formación</th>
+              <td>
+                Ver las asignaturas asociadas:
+                <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=25&searchTerm=${encodeURIComponent(asignatura.areaFormacion)}">
+                  ${asignatura.areaFormacion}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver syllabus</th>
+              <td>
+                <a href="https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${asignatura.codigo}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${asignatura.codigo}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver objetos de estudio</th>
+              <td>
+                <a href="https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${asignatura.codigo}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${asignatura.codigo}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver verbos</th>
+              <td>
+                <a href="https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${asignatura.nombre}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${asignatura.nombre}
+                </a>
+              </td>
+            </tr>
+
+            <tr><th>Tipo</th><td>${asignatura.Tipo}</td></tr>
+            <tr><th>HTD</th><td>${asignatura.HTD}</td></tr>
+            <tr><th>HTC</th><td>${asignatura.HTC}</td></tr>
+            <tr><th>HTA</th><td>${asignatura.HTA}</td></tr>
+          </table>
+        </div>
+      `
+    });
+
+  }
+
 
 }

@@ -34,14 +34,10 @@
                   <td>{{ asignatura.nombre }}</td>
                   <td>{{ asignatura.semestreAsignatura }}</td>
                   <td>{{ asignatura.carrera }}</td>
-                  <td>{{ asignatura.campoFormacion }}</td>
-                  <td>{{ asignatura.areaFormacion }}</td>
                   <td>{{ asignatura.codigoCondor }}</td>
                   <td>{{ asignatura.numeroCreditos }}</td>
-                  <td>{{ asignatura.HTD }}</td>
-                  <td>{{ asignatura.HTC }}</td>
-                  <td>{{ asignatura.HTA }}</td>
-                  <td>{{ asignatura.Tipo }}</td>
+                  <td><button type="button" class="btn btn-primary" (click)="showSwalAsignaturaJustificacion(asignatura)">Ver</button></td>
+                  <td><button type="button" class="btn btn-primary" (click)="showSwalAsignaturaDetalles(asignatura)">Ver</button></td>
                 </tr>
               }
             </tbody>
