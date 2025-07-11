@@ -7,55 +7,63 @@
       </div>
       <div class="card-body" >
 
-       <div class="row mb-3" >
-          <div class="col-xl-6"></div>
-          <div class="col-xl-5"></div>
-          <div class="col-xl-1">
-            <app-filter-pagination
-              [filterPaginationDTO]="filterPaginationDTO()"
-              (filterResponse)="filterQuery($event)"
-            />
+        @if(responseListAreasFormacion()) {
+
+        <div class="row mb-3" >
+            <div class="col-xl-6"></div>
+            <div class="col-xl-5"></div>
+            <div class="col-xl-1">
+              <app-filter-pagination
+                [filterPaginationDTO]="filterPaginationDTO()"
+                (filterResponse)="filterQuery($event)"
+              />
+            </div>
           </div>
-        </div>
 
-        <div class="table-responsive" style="max-height: 100vh; max-width: 200vh; overflow: auto;">
-          <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-              <tr>
-                @for(label of fieldsOptions; track label) {
-                  <th>{{ label.label }}</th>
-                }
-              </tr>
-            </thead>
-            <tbody>
-              @for (areaFormacion of responseListAreasFormacion().content | filterAllFields:filterPaginationDTO().searchTerm; track areaFormacion.id ) {
+          <div class="table-responsive" style="max-height: 100vh; max-width: 200vh; overflow: auto;">
+            <table class="table table-bordered table-striped" style="text-align: center;">
+              <thead class="table-dark">
                 <tr>
-                  <td>{{ areaFormacion.id }}</td>
-                  <td>{{ areaFormacion.idCampoFormacion }}</td>
-                  <td>{{ areaFormacion.nombre }}</td>
-                  <td>
-                    <span
-                      [ngStyle]="{
-                        display: 'inline-block',
-                        width: '15px',
-                        height: '15px',
-                        'border': '1px solid #000',
-                        'background-color': areaFormacion.colorHtml
-                      }">
-                    </span>
-                  </td>
-                  <td>{{ areaFormacion.cantidadAsignaturas }}</td>
+                  @for(label of fieldsOptions; track label) {
+                    <th>{{ label.label }}</th>
+                  }
                 </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                @for (areaFormacion of responseListAreasFormacion().content | filterAllFields:filterPaginationDTO().searchTerm; track areaFormacion.id ) {
+                  <tr>
+                    <td>{{ areaFormacion.id }}</td>
+                    <td>{{ areaFormacion.idCampoFormacion }}</td>
+                    <td>{{ areaFormacion.nombre }}</td>
+                    <td>
+                      <span
+                        [ngStyle]="{
+                          display: 'inline-block',
+                          width: '15px',
+                          height: '15px',
+                          'border': '1px solid #000',
+                          'background-color': areaFormacion.colorHtml
+                        }">
+                      </span>
+                    </td>
+                    <td>{{ areaFormacion.cantidadAsignaturas }}</td>
 
-        <app-pagination
-          [filterPaginationDTO]="filterPaginationDTO()"
-          (pageChange)="goToPage($event)"
-        />
+                    <td>
+                      <button type="button" class="btn btn-primary" (click)="consultarAsignaturasPorAreaFormacion(areaFormacion)">
+                        <span class="bi bi-list-ol"></span>
+                      </button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
 
+          <app-pagination
+            [filterPaginationDTO]="filterPaginationDTO()"
+            (pageChange)="goToPage($event)"
+          />
+        }
       </div>
     </div>
   </div>
