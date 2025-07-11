@@ -124,6 +124,10 @@ export class CamposFormacionListaComponent {
     this.filterPaginationDTO().field = event.field;
     this.filterPaginationDTO().ascending = event.ascending;
 
+    if(event.action == 'clear') {
+      this.filterPaginationDTO().searchTerm = event.searchTerm;
+    }
+
     // Evita ejecutar el servicio de consulta ya que se usa el pipe de filtrado
     if(event.searchTerm != this.filterPaginationDTO().searchTerm) {
       this.filterPaginationDTO().searchTerm = event.searchTerm;
