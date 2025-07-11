@@ -9,6 +9,9 @@ import { AsignaturasListaComponent } from './pages/asignaturas/lista/asignaturas
 import { CamposFormacionListaComponent } from './pages/campos-formacion/lista/campos-lista/campos-formacion-lista.component';
 import { AreasFormacionListaComponent } from './pages/areas-formacion/lista/areas-formacion-lista/areas-formacion-lista.component';
 
+
+// Si se editan las rutas o se adicionan,
+// !IMPORTANTE! hacerlo también en src/app/utils/app-constants.ts en la sección de ROUTES
 export const routes: Routes = [
     {
       path: '',
