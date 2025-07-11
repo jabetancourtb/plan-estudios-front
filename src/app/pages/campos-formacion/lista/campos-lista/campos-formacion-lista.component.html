@@ -7,50 +7,14 @@
       </div>
       <div class="card-body" >
 
-        <div class="mb-3 row">
-
-          <div class="col-md-3"><label for="pageSize" class="form-label">Registros por página:</label></div>
-          <div class="col-md-3">
-             <select id="pageSize" [(ngModel)]="pageSize" class="form-select" (change)="updateFilters()">
-              @for (option of pageSizeOptions; track option) {
-                <option [value]="option">{{ option }}</option>
-              }
-            </select>
-          </div>
-
-          <div class="col-md-3"><label for="field" class="form-label">Filtrar por campo:</label></div>
-          <div class="col-md-3">
-             <select id="field" [(ngModel)]="field" class="form-select" (change)="updateFilters()">
-              @for (option of fieldsOptions; track option) {
-                <option [value]="option.value">{{ option.label }}</option>
-              }
-            </select>
-          </div>
-
-        </div>
-
-        <div class="mb-3 row">
-
-          <div class="col-md-3"><label for="ascending" class="form-label">Orden:</label></div>
-          <div class="col-md-3">
-             <select id="ascending" [(ngModel)]="ascending" class="form-select" (change)="updateFilters()">
-              @for (option of ascendingOptions; track option.value) {
-                <option [value]="option.value">{{ option.label }}</option>
-              }
-            </select>
-          </div>
-
-          <div class="col-md-3"><label for="buscar" class="form-label">Buscar:</label></div>
-          <div class="col-md-3">
-            <input type="text" [(ngModel)]="searchTerm" class="form-control mb-3" placeholder="Buscar...">
-          </div>
-
-        </div>
-
-        <div class="mb-3 row">
-          <div class="col-md-10"></div>
-          <div class="col-md-2">
-            <button class="btn btn-primary mb-3" (click)="cleanFilters()">Limpiar filtros</button>
+        <div class="row mb-3" >
+          <div class="col-xl-6"></div>
+          <div class="col-xl-5"></div>
+          <div class="col-xl-1">
+            <app-filter-pagination
+              [filterPaginationDTO]="filterPaginationDTO()"
+              (filterResponse)="filterQuery($event)"
+            />
           </div>
         </div>
 
@@ -64,7 +28,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (campoFormacion of responseListCamposFormacion().content | filterAllFields:searchTerm; track campoFormacion.id ) {
+              @for (campoFormacion of responseListCamposFormacion().content | filterAllFields:filterPaginationDTO().searchTerm; track campoFormacion.id ) {
                 <tr>
                   <td>{{ campoFormacion.id }}</td>
                   <td>{{ campoFormacion.nombre }}</td>
@@ -88,35 +52,42 @@
           </table>
         </div>
 
-        <div>
-          Mostrando {{ (currentPage * pageSize) - (pageSize - 1) }} a
-          @if(currentPage < totalPages.length) {
-            {{ (currentPage * pageSize) }}
-          }
-          @else if(currentPage === totalPages.length) {
-            {{ responseListCamposFormacion().totalRecordCount }}
-          }
-          de {{ responseListCamposFormacion().totalRecordCount }} registros
-        </div>
 
         <!-- Paginación -->
-        <nav class="mt-3">
-          <div class="pagination-wrapper">
-            <ul class="pagination justify-content-center flex-nowrap">
-              <li class="page-item">
-                <a class="page-link" href="#" (click)="goToPreviousPage(currentPage - 1); $event.preventDefault()">Anterior</a>
-              </li>
-              @for (page of totalPages; track page; let i = $index) {
-                <li class="page-item" [class.active]="page === currentPage">
-                  <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
-                </li>
-              }
-              <li class="page-item">
-                <a class="page-link" href="#" (click)="goToNextPage(currentPage + 1); $event.preventDefault()">Siguiente</a>
-              </li>
-            </ul>
+        <div class="row">
+          <div class="col-md-4">
+            Mostrando {{ (filterPaginationDTO().currentPage  * filterPaginationDTO().pageSize) - (filterPaginationDTO().pageSize - 1) }} a
+            @if(filterPaginationDTO().currentPage < filterPaginationDTO().pages.length) {
+              {{ (filterPaginationDTO().currentPage  * filterPaginationDTO().pageSize) }}
+            }
+            @else if(filterPaginationDTO().currentPage === filterPaginationDTO().pages.length) {
+              {{ responseListCamposFormacion().totalRecordCount }}
+            }
+            de {{ responseListCamposFormacion().totalRecordCount }} registros
           </div>
-        </nav>
+          <div class="col-md-2"></div>
+          <div class="col-md-6 text-center">
+            <nav class="mt-3">
+              <div class="pagination-wrapper">
+                <ul class="pagination justify-content-center flex-nowrap">
+                  <li class="page-item">
+                    <a class="page-link" href="#" (click)="goToPreviousPage((filterPaginationDTO().currentPage || 1) - 1); $event.preventDefault()">Anterior</a>
+                  </li>
+                  @for (page of filterPaginationDTO().pages; track page; let i = $index) {
+                    <li class="page-item" [class.active]="page === filterPaginationDTO().currentPage">
+                      <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
+                    </li>
+                  }
+                  <li class="page-item">
+                    <a class="page-link" href="#" (click)="goToNextPage((filterPaginationDTO().currentPage || 1) + 1); $event.preventDefault()">Siguiente</a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </div>
+        </div>
+        <!-- Paginación -->
+
 
       </div>
     </div>
