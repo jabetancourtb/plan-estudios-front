@@ -10,10 +10,11 @@ import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
 import { NgStyle } from '@angular/common';
 import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
 import { FilterPaginationComponent } from '../../../../shared/components/filter-pagination/filter-pagination.component';
+import { PaginationComponent } from "../../../../shared/components/pagination/pagination.component";
 
 @Component({
   selector: 'app-campos-formacion-lista',
-  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, NgStyle, FilterPaginationComponent],
+  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, NgStyle, FilterPaginationComponent, PaginationComponent],
   templateUrl: './campos-formacion-lista.component.html',
   styleUrl: './campos-formacion-lista.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -95,6 +96,7 @@ export class CamposFormacionListaComponent {
     if(this.responseListCamposFormacion().content.length > 0) {
       this.filterPaginationDTO.set(new FilterPaginationDTO({
         ...this.filterPaginationDTO(),
+        totalItems: this.responseListCamposFormacion().totalRecordCount,
         pages: Array.from({ length: this.responseListCamposFormacion().totalPages }, (_, i) => i + 1),
       }));
     }
@@ -128,26 +130,6 @@ export class CamposFormacionListaComponent {
       return;
     }
 
-    this.setQueryParams();
-  }
-
-
-  goToPreviousPage(page: number) {
-    if(page == 0) {
-      return;
-    }
-
-    this.filterPaginationDTO().currentPage = page;
-    this.setQueryParams();
-  }
-
-
-  goToNextPage(page: number) {
-    if(page > this.responseListCamposFormacion().totalPages) {
-      return;
-    }
-
-    this.filterPaginationDTO().currentPage = page;
     this.setQueryParams();
   }
 
