@@ -99,7 +99,7 @@ export class AsignaturasListaComponent {
 
 
   updatePageInformation(): void {
-    if(this.responseListAsignaturas().content.length > 0) {
+    if(this.responseListAsignaturas() && this.responseListAsignaturas().content.length > 0) {
       this.filterPaginationDTO.set(new FilterPaginationDTO({
         ...this.filterPaginationDTO(),
         totalItems: this.responseListAsignaturas().totalRecordCount,
@@ -197,7 +197,7 @@ export class AsignaturasListaComponent {
               <th>Área de Formación</th>
               <td>
                 Ver las asignaturas asociadas:
-                <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=25&searchTerm=${encodeURIComponent(asignatura.areaFormacion)}">
+                <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=50&searchTerm=${encodeURIComponent(asignatura.areaFormacion)}">
                   ${asignatura.areaFormacion}
                 </a>
               </td>
