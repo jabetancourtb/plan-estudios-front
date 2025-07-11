@@ -7,11 +7,14 @@ import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { Asignatura } from '../../../../models/asignatura.model';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
 import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
+import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination/filter-pagination.component";
+import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
+
 
 
 @Component({
   selector: 'app-asignaturas-lista',
-  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe],
+  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, FilterPaginationComponent],
   templateUrl: './asignaturas-lista.component.html',
   styleUrl: './asignaturas-lista.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,11 +35,11 @@ export class AsignaturasListaComponent {
 
   asignatura = signal<Asignatura>({} as Asignatura);
 
-  searchTerm = '';
-  field = 'codigo';
-  ascending = true;
   currentPage = 1;
   pageSize = 10;
+  field = 'codigo';
+  ascending = true;
+  searchTerm = '';
   totalPages: number[] = [];
   pageSizeOptions = [10, 25, 50, 100];
 
@@ -60,6 +63,16 @@ export class AsignaturasListaComponent {
     { value: false, label: 'Descendente' }
   ];
 
+  filterRequest = signal<FilterPaginationDTO>({
+    pageSize: this.pageSize,
+    pageSizeOptions: this.pageSizeOptions,
+    field: this.field,
+    fieldsOptions: this.fieldsOptions,
+    ascending: this.ascending,
+    ascendingOptions: this.ascendingOptions,
+    searchTerm: this.searchTerm
+  });
+
 
   ngOnInit() {
     this.consultarQueryParams();
@@ -74,6 +87,16 @@ export class AsignaturasListaComponent {
       this.field = params['field'] || 'codigo';
       this.ascending = params['ascending'] || true ;
       this.searchTerm = params['searchTerm'] || '';
+
+      this.filterRequest.set({
+        pageSize: this.pageSize,
+        pageSizeOptions: this.pageSizeOptions,
+        field: this.field,
+        fieldsOptions: this.fieldsOptions,
+        ascending: this.ascending,
+        ascendingOptions: this.ascendingOptions,
+        searchTerm: this.searchTerm
+      });
 
       this.consultarAsignaturasPorPaginacion(this.currentPage, this.pageSize, this.field, this.ascending);
     });
@@ -98,7 +121,6 @@ export class AsignaturasListaComponent {
 
   updatePageInformation(page: number): void {
     this.currentPage = page;
-    this.setQueryParams();
     this.loadOptions();
   }
 
@@ -125,17 +147,19 @@ export class AsignaturasListaComponent {
   }
 
 
-  updateFilters(): void {
-    this.consultarAsignaturasPorPaginacion(1, this.pageSize, this.field, this.ascending);
-  }
+  filterQuery(event: any): void {
+    this.currentPage = 1;
+    this.pageSize = event.pageSize;
+    this.field = event.field;
+    this.ascending = event.ascending;
 
+    // Evita ejecutar el servicio de consulta ya que se usa el pipe de filtrado
+    if(event.searchTerm != this.searchTerm) {
+      this.searchTerm = event.searchTerm;
+      return;
+    }
 
-  cleanFilters() {
-    this.pageSize = 10;
-    this.field = 'codigo';
-    this.ascending = true;
-    this.searchTerm = '';
-    this.consultarAsignaturasPorPaginacion(1, this.pageSize, this.field, this.ascending);
+    this.setQueryParams();
   }
 
 
