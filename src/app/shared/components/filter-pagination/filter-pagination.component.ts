@@ -47,7 +47,8 @@ export class FilterPaginationComponent {
       pageSize: filterForm.pageSize,
       field: filterForm.field,
       ascending: filterForm.ascending,
-      searchTerm: filterForm.searchTerm
+      searchTerm: filterForm.searchTerm,
+      action: 'filter'
     });
   }
 
@@ -62,7 +63,8 @@ export class FilterPaginationComponent {
       pageSize: this.filterForm.get('pageSize')?.value,
       field: this.filterForm.get('field')?.value,
       ascending:  this.filterForm.get('ascending')?.value,
-      searchTerm: this.filterForm.get('searchTerm')?.value
+      searchTerm: this.filterForm.get('searchTerm')?.value,
+      action: 'clear'
     });
   }
 
