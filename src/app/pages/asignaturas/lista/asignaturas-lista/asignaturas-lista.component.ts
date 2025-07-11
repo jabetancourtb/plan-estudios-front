@@ -35,13 +35,7 @@ export class AsignaturasListaComponent {
 
   asignatura = signal<Asignatura>({} as Asignatura);
 
-  currentPage = 1;
-  pageSize = 10;
-  field = 'codigo';
-  ascending = true;
-  searchTerm = '';
-  totalPages: number[] = [];
-  pageSizeOptions = [10, 25, 50, 100];
+  filterPaginationDTO = signal<FilterPaginationDTO>(new FilterPaginationDTO());
 
   fieldsOptions = [
     { value: 'codigo', label: 'Código' },
@@ -58,47 +52,33 @@ export class AsignaturasListaComponent {
     { value: 'tipo', label: 'Tipo' }
   ];
 
-  ascendingOptions = [
-    { value: true, label: 'Ascendente' },
-    { value: false, label: 'Descendente' }
-  ];
-
-  filterRequest = signal<FilterPaginationDTO>({
-    pageSize: this.pageSize,
-    pageSizeOptions: this.pageSizeOptions,
-    field: this.field,
-    fieldsOptions: this.fieldsOptions,
-    ascending: this.ascending,
-    ascendingOptions: this.ascendingOptions,
-    searchTerm: this.searchTerm
-  });
-
 
   ngOnInit() {
     this.consultarQueryParams();
   }
 
 
+  // Consulta los query params de la URL
+  // incluso cuando estos cambian.
+  // Se ejecuta siempre después de this.setQueryParams()
   consultarQueryParams() {
     this.activatedRoute.queryParams.subscribe(params => {
 
-      this.currentPage = params['page'] ? +params['page'] : 1;
-      this.pageSize = params['pageSize'] ? +params['pageSize'] : 10;
-      this.field = params['field'] || 'codigo';
-      this.ascending = params['ascending'] || true ;
-      this.searchTerm = params['searchTerm'] || '';
-
-      this.filterRequest.set({
-        pageSize: this.pageSize,
-        pageSizeOptions: this.pageSizeOptions,
-        field: this.field,
+      this.filterPaginationDTO.set(new FilterPaginationDTO({
+        currentPage: params['page'] ? +params['page'] : 1,
+        pageSize: params['pageSize'] ? +params['pageSize'] : 10,
+        field: params['field'] || 'codigo',
         fieldsOptions: this.fieldsOptions,
-        ascending: this.ascending,
-        ascendingOptions: this.ascendingOptions,
-        searchTerm: this.searchTerm
-      });
+        ascending: params['ascending'] || true ,
+        searchTerm: params['searchTerm'] || ''
+      }));
 
-      this.consultarAsignaturasPorPaginacion(this.currentPage, this.pageSize, this.field, this.ascending);
+      this.consultarAsignaturasPorPaginacion(
+        this.filterPaginationDTO().currentPage,
+        this.filterPaginationDTO().pageSize,
+        this.filterPaginationDTO().field ,
+        this.filterPaginationDTO().ascending
+      );
     });
   }
 
@@ -108,54 +88,52 @@ export class AsignaturasListaComponent {
     this.asignaturaService.consultarAsignaturas(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
-        this.updatePageInformation(page);
+        this.updatePageInformation();
         this.loaderService.hide();
       },
       error: (e) => {
-        this.updatePageInformation(page);
+        this.updatePageInformation();
         this.loaderService.hide();
       }
     });
   }
 
 
-  updatePageInformation(page: number): void {
-    this.currentPage = page;
-    this.loadOptions();
+  updatePageInformation(): void {
+    if(this.responseListAsignaturas().content.length > 0) {
+      this.filterPaginationDTO.set(new FilterPaginationDTO({
+        ...this.filterPaginationDTO(),
+        pages: Array.from({ length: this.responseListAsignaturas().totalPages }, (_, i) => i + 1),
+      }));
+    }
   }
 
 
+  // Asigna los query params a la URL
   setQueryParams() {
     this.router.navigate([], {
       relativeTo: this.activatedRoute,
       queryParams: {
-        page: this.currentPage,
-        pageSize: this.pageSize,
-        field: this.field,
-        ascending: this.ascending,
-        searchTerm: this.searchTerm
+        page: this.filterPaginationDTO().currentPage,
+        pageSize: this.filterPaginationDTO().pageSize,
+        field: this.filterPaginationDTO().field,
+        ascending: this.filterPaginationDTO().ascending,
+        searchTerm: this.filterPaginationDTO().searchTerm
       },
       queryParamsHandling: 'merge' // para mantener otros parámetros existentes
     });
   }
 
 
-  loadOptions() {
-    if(this.responseListAsignaturas().content.length > 0) {
-      this.totalPages = Array.from({ length: this.responseListAsignaturas().totalPages }, (_, i) => i + 1);
-    }
-  }
-
-
   filterQuery(event: any): void {
-    this.currentPage = 1;
-    this.pageSize = event.pageSize;
-    this.field = event.field;
-    this.ascending = event.ascending;
+    this.filterPaginationDTO().currentPage = 1,
+    this.filterPaginationDTO().pageSize = event.pageSize;
+    this.filterPaginationDTO().field = event.field;
+    this.filterPaginationDTO().ascending = event.ascending;
 
     // Evita ejecutar el servicio de consulta ya que se usa el pipe de filtrado
-    if(event.searchTerm != this.searchTerm) {
-      this.searchTerm = event.searchTerm;
+    if(event.searchTerm != this.filterPaginationDTO().searchTerm) {
+      this.filterPaginationDTO().searchTerm = event.searchTerm;
       return;
     }
 
@@ -168,7 +146,8 @@ export class AsignaturasListaComponent {
       return;
     }
 
-    this.consultarAsignaturasPorPaginacion(page, this.pageSize, this.field, this.ascending);
+    this.filterPaginationDTO().currentPage = page;
+    this.setQueryParams();
   }
 
 
@@ -177,12 +156,14 @@ export class AsignaturasListaComponent {
       return;
     }
 
-    this.consultarAsignaturasPorPaginacion(page, this.pageSize, this.field, this.ascending);
+    this.filterPaginationDTO().currentPage = page;
+    this.setQueryParams();
   }
 
 
   goToPage(page: number) {
-    this.consultarAsignaturasPorPaginacion(page, this.pageSize, this.field, this.ascending);
+    this.filterPaginationDTO().currentPage = page;
+    this.setQueryParams();
   }
 
 

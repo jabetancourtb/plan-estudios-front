@@ -12,7 +12,7 @@
           <div class="col-xl-5"></div>
           <div class="col-xl-1">
             <app-filter-pagination
-              [filterRequest]="filterRequest()"
+              [filterPaginationDTO]="filterPaginationDTO()"
               (filterResponse)="filterQuery($event)"
             />
           </div>
@@ -28,7 +28,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (asignatura of responseListAsignaturas().content | filterAllFields:searchTerm; track asignatura.codigo ) {
+              @for (asignatura of responseListAsignaturas().content | filterAllFields:filterPaginationDTO().searchTerm || ''; track asignatura.codigo ) {
                 <tr>
                   <td>{{ asignatura.codigo }}</td>
                   <td>{{ asignatura.nombre }}</td>
@@ -49,15 +49,14 @@
         </div>
 
 
-
         <!-- Paginación -->
         <div class="row">
           <div class="col-md-4">
-            Mostrando {{ (currentPage * pageSize) - (pageSize - 1) }} a
-            @if(currentPage < totalPages.length) {
-              {{ (currentPage * pageSize) }}
+            Mostrando {{ (filterPaginationDTO().currentPage  * filterPaginationDTO().pageSize) - (filterPaginationDTO().pageSize - 1) }} a
+            @if(filterPaginationDTO().currentPage < filterPaginationDTO().pages.length) {
+              {{ (filterPaginationDTO().currentPage  * filterPaginationDTO().pageSize) }}
             }
-            @else if(currentPage === totalPages.length) {
+            @else if(filterPaginationDTO().currentPage === filterPaginationDTO().pages.length) {
               {{ responseListAsignaturas().totalRecordCount }}
             }
             de {{ responseListAsignaturas().totalRecordCount }} registros
@@ -68,22 +67,22 @@
               <div class="pagination-wrapper">
                 <ul class="pagination justify-content-center flex-nowrap">
                   <li class="page-item">
-                    <a class="page-link" href="#" (click)="goToPreviousPage(currentPage - 1); $event.preventDefault()">Anterior</a>
+                    <a class="page-link" href="#" (click)="goToPreviousPage(filterPaginationDTO().currentPage - 1); $event.preventDefault()">Anterior</a>
                   </li>
-                  @for (page of totalPages; track page; let i = $index) {
-                    <li class="page-item" [class.active]="page === currentPage">
+                  @for (page of filterPaginationDTO().pages; track page; let i = $index) {
+                    <li class="page-item" [class.active]="page === filterPaginationDTO().currentPage">
                       <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">{{ page }}</a>
                     </li>
                   }
                   <li class="page-item">
-                    <a class="page-link" href="#" (click)="goToNextPage(currentPage + 1); $event.preventDefault()">Siguiente</a>
+                    <a class="page-link" href="#" (click)="goToNextPage(filterPaginationDTO().currentPage + 1); $event.preventDefault()">Siguiente</a>
                   </li>
                 </ul>
               </div>
             </nav>
           </div>
-
         </div>
+        <!-- Paginación -->
 
 
       </div>
