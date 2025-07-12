@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { URLParamsDTO } from '../../../../dto/url-params.model';
 import { Asignatura } from '../../../../models/asignatura.model';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
-import { LoaderService } from '../../../../services/loader.service';
 import { AsignaturaService } from '../../../../services/asignatura.service';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
 import { APP_CONSTANTS } from '../../../../utils/app-constants';
@@ -25,8 +24,9 @@ export class AsignaturasBubbleChartComponent {
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private loaderService: LoaderService = inject(LoaderService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
+
+  asignaturasBubbleGraphIsLoading = signal(false);
 
   chartInstance!: echarts.ECharts;
 
@@ -105,45 +105,45 @@ export class AsignaturasBubbleChartComponent {
   }
 
   private consultarAsignaturasPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
+    this.asignaturasBubbleGraphIsLoading.set(true);
     this.asignaturaService.consultarAsignaturas(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.loadChart();
-        this.loaderService.hide();
+        this.asignaturasBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.asignaturasBubbleGraphIsLoading.set(false);
       }
     });
   }
 
 
   private consultarAsignaturasPorCampoFormacionYAreaFormacion(camporFormacion:string, areaFormacion: string, page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
+    this.asignaturasBubbleGraphIsLoading.set(true);
     this.asignaturaService.consultarAsignaturasPorCampoFormacionYAreaFormacion(camporFormacion, areaFormacion, page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.loadChart();
-        this.loaderService.hide();
+        this.asignaturasBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.asignaturasBubbleGraphIsLoading.set(false);
       }
     });
   }
 
 
   private consultarAsignaturasPorAreaFormacion(areaFormacion: string, page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
+    this.asignaturasBubbleGraphIsLoading.set(true);
     this.asignaturaService.consultarAsignaturasPorAreaFormacion(areaFormacion, page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.loadChart();
-        this.loaderService.hide();
+        this.asignaturasBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.asignaturasBubbleGraphIsLoading.set(false);
       }
     });
   }
