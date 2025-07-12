@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoaderService } from '../../../../services/loader.service';
 import { CampoFormacionService } from '../../../../services/campo-formacion.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { CampoFormacion } from '../../../../models/campo-formacion.model';
@@ -18,6 +17,7 @@ import { Asignatura } from '../../../../models/asignatura.model';
 import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../../utils/app-constants';
 
+
 @Component({
   selector: 'app-campos-formacion-lista',
   imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, NgStyle, FilterPaginationComponent, PaginationComponent],
@@ -29,10 +29,13 @@ export class CamposFormacionListaComponent {
 
   private router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private loaderService: LoaderService = inject(LoaderService);
   private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
   private areaFormacionService: AreaFormacionService = inject(AreaFormacionService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
+
+  camposFormacionTableIsLoading = signal(false);
+  areasFormacionSwalIsLoading = signal(false);
+  asignaturasSwalIsLoading = signal(false);
 
   responseListCamposFormacion = signal<ResponseListDTO<CampoFormacion>>({
     recordCountPerPage: 0,
@@ -101,16 +104,16 @@ export class CamposFormacionListaComponent {
 
 
   private consultarCamposformacionPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
+    this.camposFormacionTableIsLoading.set(true);
     this.campoFormacionService.consultarCamposFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListCamposFormacion.set(res);
         this.updatePageInformation();
-        this.loaderService.hide();
+        this.camposFormacionTableIsLoading.set(false);
       },
       error: (e) => {
         this.updatePageInformation();
-        this.loaderService.hide();
+        this.camposFormacionTableIsLoading.set(false);
       }
     });
   }
@@ -169,15 +172,15 @@ export class CamposFormacionListaComponent {
 
 
   consultarAreasFormacionPorCampoFormacion(campoFormacion: CampoFormacion) {
-    this.loaderService.show();
+    this.areasFormacionSwalIsLoading.set(true);
     this.areaFormacionService.consultarAreasFormacionPorIdCampoFormacion(campoFormacion.id, 1, 100, 'id', true).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
+        this.areasFormacionSwalIsLoading.set(false);
         this.showSwalAreasFormacionAsignadas(campoFormacion, this.responseListAreasFormacion().content);
-        this.loaderService.hide();
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.areasFormacionSwalIsLoading.set(false);
       }
     });
   }
@@ -189,14 +192,24 @@ export class CamposFormacionListaComponent {
         <ul style='list-style: none; padding-left: 0;'>
     `;
 
-    for (let areaFormacion of areasFormacion) {
-      html += `
-        <li class='mb-3'>
-          <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=50&searchTerm=${encodeURIComponent(areaFormacion.nombre)}">
-            ${areaFormacion.nombre}
-          </a>
-        </li>
-      `;
+    if(this.areasFormacionSwalIsLoading()) {
+      html = `
+        <div class="spinner-container">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>`;
+    }
+    else {
+       for (let areaFormacion of areasFormacion) {
+          html += `
+            <li class='mb-3'>
+              <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=50&searchTerm=${encodeURIComponent(areaFormacion.nombre)}">
+                ${areaFormacion.nombre}
+              </a>
+            </li>
+          `;
+        }
     }
 
     html += `
@@ -212,15 +225,15 @@ export class CamposFormacionListaComponent {
 
 
   consultarAsignaturasPorCampoFormacion(campoFormacion: CampoFormacion) {
-    this.loaderService.show();
+    this.asignaturasSwalIsLoading.set(true);
     this.asignaturaService.consultarAsignaturasPorCampoFormacion(campoFormacion.nombre, 1, 100, 'codigo', true).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
+        this.asignaturasSwalIsLoading.set(false);
         this.showSwalAsignaturasAsignadas(campoFormacion, this.responseListAsignaturas().content);
-        this.loaderService.hide();
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.asignaturasSwalIsLoading.set(false);
       }
     });
   }
@@ -232,14 +245,24 @@ export class CamposFormacionListaComponent {
         <ul style='list-style: none; padding-left: 0;'>
     `;
 
-    for (let asignatura of asignaturas) {
-      html += `
-        <li class='mb-3'>
-          <a href="${APP_CONSTANTS.ROUTES.asignaturasLista}?pageSize=200&searchTerm=${encodeURIComponent(asignatura.nombre)}">
-            ${asignatura.nombre}
-          </a>
-        </li>
-      `;
+    if(this.asignaturasSwalIsLoading()) {
+      html = `
+        <div class="spinner-container">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>`;
+    }
+    else {
+      for (let asignatura of asignaturas) {
+        html += `
+          <li class='mb-3'>
+            <a href="${APP_CONSTANTS.ROUTES.asignaturasLista}?pageSize=200&searchTerm=${encodeURIComponent(asignatura.nombre)}">
+              ${asignatura.nombre}
+            </a>
+          </li>
+        `;
+      }
     }
 
     html += `
