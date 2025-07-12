@@ -214,6 +214,51 @@ export class AsignaturasBubbleChartComponent {
   }
 
 
+  clickEvents() {
+    // Muestra detalles con click izquierdo
+    this.chartInstance.on('click', (params: any) => {
+      if (params.data) {
+        this.clickedData = params.data;
+        this.showSwalAsignaturaDetalles();
+      }
+    });
+
+    // Evita múltiples listeners
+    this.chartInstance.off('contextmenu', (params: any) => {
+      this.clickedData = null;
+    });
+
+    // Abre menú contextual click derecho
+    this.chartInstance.on('contextmenu', (params: any) => {
+      if (params.data) {
+        this.clickedData = params.data;
+        this.menuX = params.event.offsetX;
+        this.menuY = params.event.offsetY;
+        this.menuVisible = true;
+        params.event.event.preventDefault();
+      }
+    });
+  }
+
+
+  // Ocultar el menú contextual cuando se da click por fuera.
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: MouseEvent) {
+    if (this.menuVisible && this.contextMenuRef && !this.contextMenuRef.nativeElement.contains(event.target)) {
+      this.menuVisible = false;
+      this.clickedData = null;
+    }
+  }
+
+
+  onGlobalContextMenu(event: MouseEvent) {
+    //event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
+    if(this.menuX !== 0 && this.menuY !== 0 && this.clickedData != null) {
+      this.menuVisible = true;
+    }
+  }
+
+
   saveImage(): void {
     const base64 = this.chartInstance.getDataURL({
       type: 'png',
@@ -243,52 +288,6 @@ export class AsignaturasBubbleChartComponent {
       Swal.fire('Copiado', 'La imagen fue copiada al portapapeles.', 'success');
     } catch (err) {
       Swal.fire('Error', 'No se pudo copiar la imagen.', 'error');
-    }
-  }
-
-
-
-  clickEvents() {
-    // Muestra detalles con click izquierdo
-    this.chartInstance.on('click', (params: any) => {
-      if (params.data) {
-        this.clickedData = params.data;
-        this.showSwalAsignaturaDetalles();
-      }
-    });
-
-    // Evita múltiples listeners
-    this.chartInstance.off('contextmenu', (params: any) => {
-      this.clickedData = null;
-    });
-
-    // Abre menú contextual click derecho
-    this.chartInstance.on('contextmenu', (params: any) => {
-      if (params.data) {
-        this.clickedData = params.data;
-        this.menuX = params.event.event.pageX;
-        this.menuY = params.event.event.pageY;
-        this.menuVisible = true;
-        params.event.event.preventDefault();
-      }
-    });
-  }
-
-
-  // Ocultar el menú contextual cuando se da click por fuera.
-  @HostListener('document:click', ['$event'])
-  handleClickOutside(event: MouseEvent) {
-    if (this.menuVisible && this.contextMenuRef && !this.contextMenuRef.nativeElement.contains(event.target)) {
-      this.menuVisible = false;
-      this.clickedData = null;
-    }
-  }
-
-
-  onGlobalContextMenu(event: MouseEvent) {
-    //event.preventDefault(); // Evita menú del navegador si no se hace en burbuja
-    if(this.menuX !== 0 && this.menuY !== 0 && this.clickedData != null) {
-      this.menuVisible = true;
     }
   }
 
