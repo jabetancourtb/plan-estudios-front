@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 import { IndexComponent } from './pages/index/index.component';
 import { CamposFormacionBubbleChartComponent } from './pages/campos-formacion/bubble-chart/campos-formacion-bubble-chart.component';
-import { CamposFormacionListaComponent } from './pages/campos-formacion/campos-formacion-lista/campos-formacion-lista.component';
+import { CamposFormacionListaComponent } from './pages/campos-formacion/lista/campos-formacion-lista.component';
 import { AreasFormacionBubbleChartComponent } from './pages/areas-formacion/bubble-chart/areas-formacion-bubble-chart.component';
-import { AreasFormacionListaComponent } from './pages/areas-formacion/areas-formacion-lista/areas-formacion-lista.component';
+import { AreasFormacionListaComponent } from './pages/areas-formacion/lista/areas-formacion-lista.component';
 import { AsignaturasBubbleChartComponent } from './pages/asignaturas/bubble-chart/asignaturas-bubble-chart.component';
-import { AsignaturasListaComponent } from './pages/asignaturas/asignaturas-lista/asignaturas-lista.component';
+import { AsignaturasListaComponent } from './pages/asignaturas/lista/asignaturas-lista.component';
 import { PlanEstudiosCirclePackingComponent } from './pages/plan-estudios/circle-packing/plan-estudios-circle-packing.component';
 import { PrerrequisitosTreeChartComponent } from './pages/prerrequisitos/tree-chart/prerrequisitos-tree-chart.component';
 
