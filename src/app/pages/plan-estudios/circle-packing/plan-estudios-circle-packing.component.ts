@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { NgxEchartsDirective } from 'ngx-echarts';
 import { NgZone } from '@angular/core';
-import { CampoFormacion } from '../../../../models/campo-formacion.model';
-import { AreaFormacion } from '../../../../models/area-formacion.model';
-import { Asignatura } from '../../../../models/asignatura.model';
-import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
-import { AsignaturaService } from '../../../../services/asignatura.service';
-import { CampoFormacionService } from '../../../../services/campo-formacion.service';
-import { AreaFormacionService } from '../../../../services/area-formacion.service';
-import { ResponseListDTO } from '../../../../dto/response-list.model';
+import { CampoFormacion } from '../../../models/campo-formacion.model';
+import { AreaFormacion } from '../../../models/area-formacion.model';
+import { Asignatura } from '../../../models/asignatura.model';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { AsignaturaService } from '../../../services/asignatura.service';
+import { CampoFormacionService } from '../../../services/campo-formacion.service';
+import { AreaFormacionService } from '../../../services/area-formacion.service';
+import { ResponseListDTO } from '../../../dto/response-list.model';
 
 
 type EstructuraResultado = Record<string, any>;

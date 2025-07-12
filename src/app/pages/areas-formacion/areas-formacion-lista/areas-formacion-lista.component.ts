@@ -1,19 +1,20 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { NavbarComponent } from '../../../../shared/components/navbar/navbar.component';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
-import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
+import { FilterAllFieldsPipe } from '../../../pipes/filter-all-fields.pipe';
 import { NgStyle } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AreaFormacionService } from '../../../../services/area-formacion.service';
-import { AreaFormacion } from '../../../../models/area-formacion.model';
-import { ResponseListDTO } from '../../../../dto/response-list.model';
-import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
-import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination.component";
-import { PaginationComponent } from "../../../../shared/components/pagination/pagination.component";
-import { AsignaturaService } from '../../../../services/asignatura.service';
-import { Asignatura } from '../../../../models/asignatura.model';
+import { AreaFormacionService } from '../../../services/area-formacion.service';
+import { AreaFormacion } from '../../../models/area-formacion.model';
+import { ResponseListDTO } from '../../../dto/response-list.model';
+import { FilterPaginationDTO } from '../../../dto/filter-pagination.model';
+import { FilterPaginationComponent } from '../../../shared/components/filter-pagination/filter-pagination.component';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { AsignaturaService } from '../../../services/asignatura.service';
+import { Asignatura } from '../../../models/asignatura.model';
 import Swal from 'sweetalert2';
-import { APP_CONSTANTS } from '../../../../utils/app-constants';
+import { APP_CONSTANTS } from '../../../utils/app-constants';
+
 
 @Component({
   selector: 'app-areas-formacion-lista',

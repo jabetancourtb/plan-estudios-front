@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
 import * as echarts from 'echarts';
-import { NavbarComponent } from "../../../../../shared/components/navbar/navbar.component";
-import { AsignaturaService } from '../../../../../services/asignatura.service';
-import { PrerrequisitoService } from '../../../../../services/prerrequisito.service';
-import { ResponseListDTO } from '../../../../../dto/response-list.model';
-import { Asignatura } from '../../../../../models/asignatura.model';
-import { Prerrequisito } from '../../../../../models/prerrequisito.model';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { AsignaturaService } from '../../../services/asignatura.service';
+import { PrerrequisitoService } from '../../../services/prerrequisito.service';
+import { ResponseListDTO } from '../../../dto/response-list.model';
+import { Asignatura } from '../../../models/asignatura.model';
+import { Prerrequisito } from '../../../models/prerrequisito.model';
 import Swal from 'sweetalert2';
-import { APP_CONSTANTS } from '../../../../../utils/app-constants';
+import { APP_CONSTANTS } from '../../../utils/app-constants';
 
 export interface PrerrequisitoDataGraph {
   id: number;

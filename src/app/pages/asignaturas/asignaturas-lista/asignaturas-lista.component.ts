@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { AsignaturaService } from '../../../../services/asignatura.service';
-import { ResponseListDTO } from '../../../../dto/response-list.model';
-import { Asignatura } from '../../../../models/asignatura.model';
-import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
-import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
-import { FilterPaginationComponent } from "../../../../shared/components/filter-pagination/filter-pagination.component";
-import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
-import { PaginationComponent } from "../../../../shared/components/pagination/pagination.component";
+import { AsignaturaService } from '../../../services/asignatura.service';
+import { ResponseListDTO } from '../../../dto/response-list.model';
+import { Asignatura } from '../../../models/asignatura.model';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { FilterAllFieldsPipe } from '../../../pipes/filter-all-fields.pipe';
+import { FilterPaginationComponent } from '../../../shared/components/filter-pagination/filter-pagination.component';
+import { FilterPaginationDTO } from '../../../dto/filter-pagination.model';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import Swal from 'sweetalert2';
-import { APP_CONSTANTS } from '../../../../utils/app-constants';
+import { APP_CONSTANTS } from '../../../utils/app-constants';
 
 
 

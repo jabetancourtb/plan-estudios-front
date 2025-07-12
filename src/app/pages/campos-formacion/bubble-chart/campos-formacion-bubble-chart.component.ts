@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import * as echarts from 'echarts';
 import { HostListener } from '@angular/core';
-import { CampoFormacion } from '../../../../models/campo-formacion.model';
-import { CampoFormacionService } from '../../../../services/campo-formacion.service';
-import { ResponseListDTO } from '../../../../dto/response-list.model';
+import { CampoFormacion } from '../../../models/campo-formacion.model';
+import { CampoFormacionService } from '../../../services/campo-formacion.service';
+import { ResponseListDTO } from '../../../dto/response-list.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import Swal from 'sweetalert2';
-import { URLParamsDTO } from '../../../../dto/url-params.model';
-import { APP_CONSTANTS } from '../../../../utils/app-constants';
+import { URLParamsDTO } from '../../../dto/url-params.model';
+import { APP_CONSTANTS } from '../../../utils/app-constants';
 
 
 @Component({

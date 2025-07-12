@@ -1,14 +1,14 @@
-import { AreaFormacion } from '../../../../models/area-formacion.model';
+import { AreaFormacion } from '../../../models/area-formacion.model';
 import { ChangeDetectionStrategy, Component, ElementRef, inject, Input, input, signal, SimpleChanges, ViewChild } from '@angular/core';
 import * as echarts from 'echarts';
 import { HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { URLParamsDTO } from '../../../../dto/url-params.model';
-import { AreaFormacionService } from '../../../../services/area-formacion.service';
-import { ResponseListDTO } from '../../../../dto/response-list.model';
-import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
+import { URLParamsDTO } from '../../../dto/url-params.model';
+import { AreaFormacionService } from '../../../services/area-formacion.service';
+import { ResponseListDTO } from '../../../dto/response-list.model';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import Swal from 'sweetalert2';
-import { APP_CONSTANTS } from '../../../../utils/app-constants';
+import { APP_CONSTANTS } from '../../../utils/app-constants';
 
 
 @Component({

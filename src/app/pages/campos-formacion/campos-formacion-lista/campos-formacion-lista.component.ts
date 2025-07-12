@@ -1,21 +1,21 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CampoFormacionService } from '../../../../services/campo-formacion.service';
-import { ResponseListDTO } from '../../../../dto/response-list.model';
-import { CampoFormacion } from '../../../../models/campo-formacion.model';
-import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
+import { CampoFormacionService } from '../../../services/campo-formacion.service';
+import { ResponseListDTO } from '../../../dto/response-list.model';
+import { CampoFormacion } from '../../../models/campo-formacion.model';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
-import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
+import { FilterAllFieldsPipe } from '../../../pipes/filter-all-fields.pipe';
 import { NgStyle } from '@angular/common';
-import { FilterPaginationDTO } from '../../../../dto/filter-pagination.model';
-import { FilterPaginationComponent } from '../../../../shared/components/filter-pagination/filter-pagination.component';
-import { PaginationComponent } from "../../../../shared/components/pagination/pagination.component";
-import { AreaFormacionService } from '../../../../services/area-formacion.service';
-import { AsignaturaService } from '../../../../services/asignatura.service';
-import { AreaFormacion } from '../../../../models/area-formacion.model';
-import { Asignatura } from '../../../../models/asignatura.model';
+import { FilterPaginationDTO } from '../../../dto/filter-pagination.model';
+import { FilterPaginationComponent } from '../../../shared/components/filter-pagination/filter-pagination.component';
+import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
+import { AreaFormacionService } from '../../../services/area-formacion.service';
+import { AsignaturaService } from '../../../services/asignatura.service';
+import { AreaFormacion } from '../../../models/area-formacion.model';
+import { Asignatura } from '../../../models/asignatura.model';
 import Swal from 'sweetalert2';
-import { APP_CONSTANTS } from '../../../../utils/app-constants';
+import { APP_CONSTANTS } from '../../../utils/app-constants';
 
 
 @Component({

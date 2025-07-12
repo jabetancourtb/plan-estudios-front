@@ -3,12 +3,12 @@ import * as echarts from 'echarts';
 import Swal from 'sweetalert2';
 import { HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { URLParamsDTO } from '../../../../dto/url-params.model';
-import { Asignatura } from '../../../../models/asignatura.model';
-import { ResponseListDTO } from '../../../../dto/response-list.model';
-import { AsignaturaService } from '../../../../services/asignatura.service';
-import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
-import { APP_CONSTANTS } from '../../../../utils/app-constants';
+import { URLParamsDTO } from '../../../dto/url-params.model';
+import { Asignatura } from '../../../models/asignatura.model';
+import { ResponseListDTO } from '../../../dto/response-list.model';
+import { AsignaturaService } from '../../../services/asignatura.service';
+import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
+import { APP_CONSTANTS } from '../../../utils/app-constants';
 
 
 @Component({

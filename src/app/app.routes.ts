@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
 import { IndexComponent } from './pages/index/index.component';
-import { AsignaturasBubbleChartComponent } from './pages/asignaturas/bubble-chart/echart/asignaturas-bubble-chart.component';
-import { CamposFormacionBubbleChartComponent } from './pages/campos-formacion/echart/bubble-chart/campos-formacion-bubble-chart.component';
-import { AreasFormacionBubbleChartComponent } from './pages/areas-formacion/echart/bubble-chart/areas-formacion-bubble-chart.component';
-import { PlanEstudiosCirclePackingComponent } from './pages/plan-estudios/echart/circle-packing/plan-estudios-circle-packing.component';
-import { PrerrequisitosTreeChartComponent } from './pages/prerrequisitos/echart/tree-chart/prerrequisitos-tree-chart/prerrequisitos-tree-chart.component';
-import { AsignaturasListaComponent } from './pages/asignaturas/lista/asignaturas-lista/asignaturas-lista.component';
-import { CamposFormacionListaComponent } from './pages/campos-formacion/lista/campos-lista/campos-formacion-lista.component';
-import { AreasFormacionListaComponent } from './pages/areas-formacion/lista/areas-formacion-lista/areas-formacion-lista.component';
+import { CamposFormacionBubbleChartComponent } from './pages/campos-formacion/bubble-chart/campos-formacion-bubble-chart.component';
+import { CamposFormacionListaComponent } from './pages/campos-formacion/campos-formacion-lista/campos-formacion-lista.component';
+import { AreasFormacionBubbleChartComponent } from './pages/areas-formacion/bubble-chart/areas-formacion-bubble-chart.component';
+import { AreasFormacionListaComponent } from './pages/areas-formacion/areas-formacion-lista/areas-formacion-lista.component';
+import { AsignaturasBubbleChartComponent } from './pages/asignaturas/bubble-chart/asignaturas-bubble-chart.component';
+import { AsignaturasListaComponent } from './pages/asignaturas/asignaturas-lista/asignaturas-lista.component';
+import { PlanEstudiosCirclePackingComponent } from './pages/plan-estudios/circle-packing/plan-estudios-circle-packing.component';
+import { PrerrequisitosTreeChartComponent } from './pages/prerrequisitos/tree-chart/prerrequisitos-tree-chart.component';
+
 
 
 // Si se editan las rutas o se adicionan,
@@ -23,7 +24,7 @@ export const routes: Routes = [
       component: IndexComponent,
     },
     {
-      path: 'campos-formacion/echart/bubble-chart',
+      path: 'campos-formacion/bubble-chart',
       component: CamposFormacionBubbleChartComponent,
     },
     {
@@ -31,7 +32,7 @@ export const routes: Routes = [
       component: CamposFormacionListaComponent,
     },
     {
-      path: 'areas-formacion/echart/bubble-chart',
+      path: 'areas-formacion/bubble-chart',
       component: AreasFormacionBubbleChartComponent,
     },
     {
@@ -39,7 +40,7 @@ export const routes: Routes = [
       component: AreasFormacionListaComponent,
     },
     {
-      path: 'asignaturas/echart/bubble-chart',
+      path: 'asignaturas/bubble-chart',
       component: AsignaturasBubbleChartComponent,
     },
     {
@@ -47,11 +48,11 @@ export const routes: Routes = [
       component: AsignaturasListaComponent,
     },
     {
-    path: 'plan-estudios/echart/circle-packing',
-    component: PlanEstudiosCirclePackingComponent,
+    path: 'plan-estudios/circle-packing',
+    component: PlanEstudiosCirclePackingComponent
     },
     {
-      path: 'prerrequisitos/echart/tree-chart',
+      path: 'prerrequisitos/tree-chart',
       component: PrerrequisitosTreeChartComponent,
     },
 
