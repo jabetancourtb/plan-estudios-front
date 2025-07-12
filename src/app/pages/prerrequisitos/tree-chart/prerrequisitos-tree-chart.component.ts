@@ -323,7 +323,7 @@ export class PrerrequisitosTreeChartComponent {
               <th>Campo de Formación</th>
               <td>
                 Ver las áreas de formación asociadas:
-                <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.campoFormacion)}">
+                <a href="${APP_CONSTANTS.ROUTES.areasFormacionBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.campoFormacion)}">
                   ${a.campoFormacion}
                 </a>
               </td>
@@ -333,7 +333,7 @@ export class PrerrequisitosTreeChartComponent {
               <th>Área de Formación</th>
               <td>
                 Ver las asignaturas asociadas:
-                <a href="${APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart}?nombreAreaFormacion=${encodeURIComponent(a.areaFormacion)}">
+                <a href="${APP_CONSTANTS.ROUTES.asignaturasBubbleChart}?nombreAreaFormacion=${encodeURIComponent(a.areaFormacion)}">
                   ${a.areaFormacion}
                 </a>
               </td>

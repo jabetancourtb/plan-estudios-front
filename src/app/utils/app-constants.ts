@@ -5,15 +5,15 @@ export const APP_CONSTANTS = {
 
   ROUTES: {
     index: '/index',
-    camposFormacionEchartBubbleChart: '/campos-formacion/bubble-chart',
+    camposFormacionBubbleChart: '/campos-formacion/bubble-chart',
     camposFormacionLista: '/campos-formacion/lista',
-    areasFormacionEchartBubbleChart: '/areas-formacion/bubble-chart',
+    areasFormacionBubbleChart: '/areas-formacion/bubble-chart',
     areasFormacionLista: '/areas-formacion/lista',
-    asignaturasEchartBubbleChart: '/asignaturas/bubble-chart',
+    asignaturasBubbleChart: '/asignaturas/bubble-chart',
     asignaturasLista: '/asignaturas/lista',
     prerrequisitosTreegraphChart: '/prerrequisitos/tree-chart',
     prerrequisitosBuscar: '/prerrequisitos/buscar',
-    planEstudiosEchartCirclePacking: '/plan-estudios/circle-packing',
+    planEstudiosCirclePacking: '/plan-estudios/circle-packing',
     planEstudiosTabla: '/plan-estudios/tabla',
   },
 

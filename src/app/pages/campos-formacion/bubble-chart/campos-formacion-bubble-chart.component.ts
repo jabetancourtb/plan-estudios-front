@@ -250,7 +250,7 @@ export class CamposFormacionBubbleChartComponent {
         this.copyImage();
         break;
       case this.contextualMenuOptions.irAreasFormacion:
-        this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart], { queryParams: { idCampoFormacion: this.clickedData.id, nombreCampoFormacion: this.clickedData.name } });
+        this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionBubbleChart], { queryParams: { idCampoFormacion: this.clickedData.id, nombreCampoFormacion: this.clickedData.name } });
         break;
       default:
     }
@@ -284,7 +284,7 @@ export class CamposFormacionBubbleChartComponent {
           <tr>
             <th>Ver áreas de formación asociadas</th>
             <td>
-              <a href="${APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
+              <a href="${APP_CONSTANTS.ROUTES.areasFormacionBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.nombre)}">
                 Áreas de formación
               </a>
             </td>

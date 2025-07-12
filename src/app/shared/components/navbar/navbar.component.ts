@@ -25,7 +25,7 @@ export class NavbarComponent {
   // Redirige a / luego redigecciona a la ruta deseada
   goToCamposFormacionBubbleChart() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.camposFormacionEchartBubbleChart]);
+        this.router.navigate([APP_CONSTANTS.ROUTES.camposFormacionBubbleChart]);
     });
   }
 
@@ -41,7 +41,7 @@ export class NavbarComponent {
   // Redirige a / luego redigecciona a la ruta deseada
   goToAreasFormacionBubbleChart() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionEchartBubbleChart]);
+        this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionBubbleChart]);
     });
   }
 
@@ -57,7 +57,7 @@ export class NavbarComponent {
   // Redirige a / luego redigecciona a la ruta deseada
   goToAsignaturasBubbleChart() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.asignaturasEchartBubbleChart]);
+        this.router.navigate([APP_CONSTANTS.ROUTES.asignaturasBubbleChart]);
     });
   }
 
@@ -80,7 +80,7 @@ export class NavbarComponent {
   // Redirige a / luego redigecciona a la ruta deseada
   goToPlanEstudiosCirclePacking() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.planEstudiosEchartCirclePacking]);
+        this.router.navigate([APP_CONSTANTS.ROUTES.planEstudiosCirclePacking]);
     });
   }
 
