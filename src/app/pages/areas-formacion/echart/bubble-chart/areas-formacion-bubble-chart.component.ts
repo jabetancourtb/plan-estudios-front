@@ -4,7 +4,6 @@ import * as echarts from 'echarts';
 import { HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { URLParamsDTO } from '../../../../dto/url-params.model';
-import { LoaderService } from '../../../../services/loader.service';
 import { AreaFormacionService } from '../../../../services/area-formacion.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
@@ -25,8 +24,9 @@ export class AreasFormacionBubbleChartComponent {
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private loaderService: LoaderService = inject(LoaderService);
   private areaFormacionService: AreaFormacionService= inject(AreaFormacionService);
+
+  areasFormacionBubbleGraphIsLoading = signal(false);
 
   chartInstance!: echarts.ECharts;
 
@@ -103,45 +103,45 @@ export class AreasFormacionBubbleChartComponent {
 
 
   private consultarAreasFormacionPorPaginacion(page?: number, pageSize?: number, field?: string, asc?: boolean) {
-    this.loaderService.show();
+    this.areasFormacionBubbleGraphIsLoading.set(true);
     this.areaFormacionService.consultarAreasFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
         this.loadChart();
-        this.loaderService.hide();
+        this.areasFormacionBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.areasFormacionBubbleGraphIsLoading.set(false);
       }
     });
   }
 
 
   private consultarAreasFormacionPorIdCampoFormacion(idCampoFormacion: number, page?: number, pageSize?: number, field?: string, asc?: boolean) {
-    this.loaderService.show();
+    this.areasFormacionBubbleGraphIsLoading.set(true);
     this.areaFormacionService.consultarAreasFormacionPorIdCampoFormacion(idCampoFormacion, page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
         this.loadChart();
-        this.loaderService.hide();
+        this.areasFormacionBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.areasFormacionBubbleGraphIsLoading.set(false);
       }
     });
   }
 
 
   private consultarAreasFormacionPorNombreCampoFormacion(nombreCampoFormacion: string, page?: number, pageSize?: number, field?: string, asc?: boolean) {
-    this.loaderService.show();
+    this.areasFormacionBubbleGraphIsLoading.set(true);
     this.areaFormacionService.consultarAreasFormacionPorNombreCampoFormacion(nombreCampoFormacion, page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
         this.loadChart();
-        this.loaderService.hide();
+        this.areasFormacionBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.areasFormacionBubbleGraphIsLoading.set(false);
       }
     });
   }
