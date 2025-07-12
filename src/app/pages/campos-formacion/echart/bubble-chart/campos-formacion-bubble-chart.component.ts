@@ -3,7 +3,6 @@ import * as echarts from 'echarts';
 import { HostListener } from '@angular/core';
 import { CampoFormacion } from '../../../../models/campo-formacion.model';
 import { CampoFormacionService } from '../../../../services/campo-formacion.service';
-import { LoaderService } from '../../../../services/loader.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NavbarComponent } from "../../../../shared/components/navbar/navbar.component";
@@ -25,8 +24,9 @@ export class CamposFormacionBubbleChartComponent {
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private loaderService: LoaderService = inject(LoaderService);
   private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
+
+  camposFormacionBubbleGraphIsLoading = signal(false);
 
   chartInstance!: echarts.ECharts;
 
@@ -90,15 +90,15 @@ export class CamposFormacionBubbleChartComponent {
 
 
   private consultarCamposFormacionPorPaginacion(page?: number, pageSize?: number, field?: string, asc?: boolean) {
-    this.loaderService.show();
+    this.camposFormacionBubbleGraphIsLoading.set(true);
     this.campoFormacionService.consultarCamposFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListCamposFormacion.set(res);
         this.loadChart();
-        this.loaderService.hide();
+        this.camposFormacionBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.camposFormacionBubbleGraphIsLoading.set(false);
       }
     });
   }
