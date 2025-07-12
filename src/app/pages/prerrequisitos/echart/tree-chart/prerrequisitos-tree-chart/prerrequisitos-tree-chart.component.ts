@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
 import * as echarts from 'echarts';
 import { NavbarComponent } from "../../../../../shared/components/navbar/navbar.component";
-import { LoaderService } from '../../../../../services/loader.service';
 import { AsignaturaService } from '../../../../../services/asignatura.service';
 import { PrerrequisitoService } from '../../../../../services/prerrequisito.service';
 import { ResponseListDTO } from '../../../../../dto/response-list.model';
@@ -24,6 +23,7 @@ export interface NodoFlare {
   children: NodoFlare[];
 }
 
+
 @Component({
   selector: 'app-prerrequisitos-tree-chart',
   imports: [NavbarComponent],
@@ -36,9 +36,10 @@ export class PrerrequisitosTreeChartComponent {
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
-  private loaderService: LoaderService = inject(LoaderService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
   private prerrequisitoService: PrerrequisitoService = inject(PrerrequisitoService);
+
+  asignaturasTreeChartIsLoading = signal(false);
 
   responseListAsignaturas = signal<ResponseListDTO<Asignatura>>({
     recordCountPerPage: 0,
@@ -80,30 +81,30 @@ export class PrerrequisitosTreeChartComponent {
 
 
   private consultarAsignaturas(page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
+    this.asignaturasTreeChartIsLoading.set(true);
     this.asignaturaService.consultarAsignaturas(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.consultarPrerrequisitosPorPagnacion(1, 200, 'id', true);
-        this.loaderService.hide();
+        this.asignaturasTreeChartIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.asignaturasTreeChartIsLoading.set(false);
       }
     });
   }
 
 
    private consultarPrerrequisitosPorPagnacion(page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
+    this.asignaturasTreeChartIsLoading.set(true);
     this.prerrequisitoService.consultarPrerrequisitos(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListPrerrequisitos.set(res);
         this.loadAndConvertExternalData();
-        this.loaderService.hide();
+        this.asignaturasTreeChartIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.asignaturasTreeChartIsLoading.set(false);
       }
     });
   }

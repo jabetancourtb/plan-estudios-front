@@ -1,22 +1,34 @@
 <app-navbar>
 
-  <div #chartContainer style="width: 100%; height: 1500px;" (contextmenu)="onGlobalContextMenu($event)"></div>
+  <div style="position: relative;">
 
-  @if(menuVisible) {
-    <ul
-      #contextMenuRef
-      [style.left.px]="menuX"
-      [style.top.px]="menuY"
-      class="context-menu">
-      <li (click)="onOptionSelected(contextualMenuOptions.verDetalles, $event)"> {{ contextualMenuOptions.verDetalles }}</li>
-      <li (click)="onOptionSelected(contextualMenuOptions.verJustificacion, $event)" class="bi bi-justify">{{ contextualMenuOptions.verJustificacion }}</li>
-      <li (click)="onOptionSelected(contextualMenuOptions.guardarImage, $event)">{{ contextualMenuOptions.guardarImage }}</li>
-      <li (click)="onOptionSelected(contextualMenuOptions.copiarImagen, $event)">{{ contextualMenuOptions.copiarImagen }}</li>
-      <li (click)="onOptionSelected(contextualMenuOptions.irSyllabus, $event)">{{ contextualMenuOptions.irSyllabus }}</li>
-      <li (click)="onOptionSelected(contextualMenuOptions.irObjetosEstudio, $event)">{{ contextualMenuOptions.irObjetosEstudio }}</li>
-      <li (click)="onOptionSelected(contextualMenuOptions.irVerbos, $event)">{{ contextualMenuOptions.irVerbos }}</li>
-    </ul>
-  }
+     @if(asignaturasTreeChartIsLoading()) {
+        <div class="spinner-container">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      }
+
+      <div #chartContainer style="width: 100%; height: 1500px;" (contextmenu)="onGlobalContextMenu($event)"></div>
+
+      @if(menuVisible) {
+        <ul
+          #contextMenuRef
+          [style.left.px]="menuX"
+          [style.top.px]="menuY"
+          class="context-menu">
+          <li (click)="onOptionSelected(contextualMenuOptions.verDetalles, $event)"> {{ contextualMenuOptions.verDetalles }}</li>
+          <li (click)="onOptionSelected(contextualMenuOptions.verJustificacion, $event)" class="bi bi-justify">{{ contextualMenuOptions.verJustificacion }}</li>
+          <li (click)="onOptionSelected(contextualMenuOptions.guardarImage, $event)">{{ contextualMenuOptions.guardarImage }}</li>
+          <li (click)="onOptionSelected(contextualMenuOptions.copiarImagen, $event)">{{ contextualMenuOptions.copiarImagen }}</li>
+          <li (click)="onOptionSelected(contextualMenuOptions.irSyllabus, $event)">{{ contextualMenuOptions.irSyllabus }}</li>
+          <li (click)="onOptionSelected(contextualMenuOptions.irObjetosEstudio, $event)">{{ contextualMenuOptions.irObjetosEstudio }}</li>
+          <li (click)="onOptionSelected(contextualMenuOptions.irVerbos, $event)">{{ contextualMenuOptions.irVerbos }}</li>
+        </ul>
+      }
+
+  </div>
 
 </app-navbar>
 
