@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { LoaderService } from '../../../../services/loader.service';
 import { AsignaturaService } from '../../../../services/asignatura.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
 import { Asignatura } from '../../../../models/asignatura.model';
@@ -26,8 +25,9 @@ export class AsignaturasListaComponent {
 
   private router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private loaderService: LoaderService = inject(LoaderService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
+
+  isLoading = signal(false);
 
   responseListAsignaturas = signal<ResponseListDTO<Asignatura>>({
     recordCountPerPage: 0,
@@ -83,16 +83,16 @@ export class AsignaturasListaComponent {
 
 
   private consultarAsignaturasPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
+    this.isLoading.set(true);
     this.asignaturaService.consultarAsignaturas(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.updatePageInformation();
-        this.loaderService.hide();
+        this.isLoading.set(false);
       },
       error: (e) => {
         this.updatePageInformation();
-        this.loaderService.hide();
+        this.isLoading.set(false);
       }
     });
   }
