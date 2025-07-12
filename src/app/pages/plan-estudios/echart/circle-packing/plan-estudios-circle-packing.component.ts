@@ -9,7 +9,6 @@ import { AsignaturaService } from '../../../../services/asignatura.service';
 import { CampoFormacionService } from '../../../../services/campo-formacion.service';
 import { AreaFormacionService } from '../../../../services/area-formacion.service';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
-import { LoaderService } from '../../../../services/loader.service';
 
 
 type EstructuraResultado = Record<string, any>;
@@ -23,16 +22,16 @@ type EstructuraResultado = Record<string, any>;
 })
 export class PlanEstudiosCirclePackingComponent {
 
-  private loaderService: LoaderService = inject(LoaderService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
   private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
   private areaFormacionService: AreaFormacionService = inject(AreaFormacionService);
+
+  planEstudiosCirclePackingIsLoading = signal(false);
 
   chartInstance!: any;
   chartOption: any = {};
   currentSeriesData: any[] = [];
   displayRoot: any;
-
 
   responseListAsignaturas = signal<ResponseListDTO<Asignatura>>({
     recordCountPerPage: 0,
@@ -64,45 +63,45 @@ export class PlanEstudiosCirclePackingComponent {
 
 
   private consultarCamposFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) {
-    this.loaderService.show();
+    this.planEstudiosCirclePackingIsLoading.set(true);
     this.campoFormacionService.consultarCamposFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListCamposFormacion.set(res);
         this.consultarAreasFormacion(1, 100, undefined, true);
-        this.loaderService.hide();
+        this.planEstudiosCirclePackingIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.planEstudiosCirclePackingIsLoading.set(false);
       }
     });
   }
 
 
   private consultarAreasFormacion(page?: number, pageSize?: number, field?: string, asc?: boolean) {
-    this.loaderService.show();
+    this.planEstudiosCirclePackingIsLoading.set(true);
     this.areaFormacionService.consultarAreasFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
         this.consultarAsignaturas(1, 100, 'codigo', true);
-        this.loaderService.hide();
+        this.planEstudiosCirclePackingIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.planEstudiosCirclePackingIsLoading.set(false);
       }
     });
   }
 
 
   private consultarAsignaturas(page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
+    this.planEstudiosCirclePackingIsLoading.set(true);
     this.asignaturaService.consultarAsignaturas(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.loadChart();
-        this.loaderService.hide();
+        this.planEstudiosCirclePackingIsLoading.set(false);
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.planEstudiosCirclePackingIsLoading.set(false);
       }
     });
   }

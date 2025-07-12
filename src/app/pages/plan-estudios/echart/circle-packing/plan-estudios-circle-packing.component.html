@@ -2,12 +2,24 @@
 
   <div style="overflow-x: auto; overflow-y: auto;">
 
-    <echarts
-      class="echarts-circle-packing"
-      [options]="chartOption"
-      (chartInit)="onChartInit($event)"
-      style="height: 1500px; width: 100%; display: block;">
-    </echarts>
+    <div style="position: relative;">
+
+      @if(planEstudiosCirclePackingIsLoading()) {
+        <div class="spinner-container">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      }
+
+      <echarts
+        class="echarts-circle-packing"
+        [options]="chartOption"
+        (chartInit)="onChartInit($event)"
+        style="height: 1500px; width: 100%; display: block;">
+      </echarts>
+
+    </div>
 
   </div>
 
