@@ -7,7 +7,15 @@
       </div>
       <div class="card-body" >
 
-        @if(responseListAreasFormacion()) {
+        @if(asignaturasTableIsLoading()) {
+          <div class="spinner-container">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+        }
+
+        @if(responseListAreasFormacion() && !asignaturasTableIsLoading()) {
 
         <div class="row mb-3" >
             <div class="col-xl-6"></div>

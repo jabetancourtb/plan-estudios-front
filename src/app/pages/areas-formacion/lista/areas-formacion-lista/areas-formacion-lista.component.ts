@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { FilterAllFieldsPipe } from '../../../../pipes/filter-all-fields.pipe';
 import { NgStyle } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoaderService } from '../../../../services/loader.service';
 import { AreaFormacionService } from '../../../../services/area-formacion.service';
 import { AreaFormacion } from '../../../../models/area-formacion.model';
 import { ResponseListDTO } from '../../../../dto/response-list.model';
@@ -27,9 +26,11 @@ export class AreasFormacionListaComponent {
 
   private router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private loaderService: LoaderService = inject(LoaderService);
   private areaFormacionService: AreaFormacionService = inject(AreaFormacionService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
+
+  asignaturasTableIsLoading = signal(false);
+  swalAsignaturasIsLoading = signal(false);
 
   responseListAreasFormacion = signal<ResponseListDTO<AreaFormacion>>({
     recordCountPerPage: 0,
@@ -90,16 +91,16 @@ export class AreasFormacionListaComponent {
 
 
   private consultarAreasformacionPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
-    this.loaderService.show();
+    this.asignaturasTableIsLoading.set(true);
     this.areaFormacionService.consultarAreasFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
         this.updatePageInformation();
-        this.loaderService.hide();
+        this.asignaturasTableIsLoading.set(false);
       },
       error: (e) => {
         this.updatePageInformation();
-        this.loaderService.hide();
+        this.asignaturasTableIsLoading.set(false);
       }
     });
   }
@@ -158,15 +159,15 @@ export class AreasFormacionListaComponent {
 
 
   consultarAsignaturasPorAreaFormacion(areaFormacion: AreaFormacion) {
-    this.loaderService.show();
+    this.swalAsignaturasIsLoading.set(true);
     this.asignaturaService.consultarAsignaturasPorAreaFormacion(areaFormacion.nombre, 1, 100, 'codigo', true).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
+        this.swalAsignaturasIsLoading.set(false);
         this.showSwalAsignaturasAsignadas(areaFormacion, this.responseListAsignaturas().content);
-        this.loaderService.hide();
       },
       error: (e) => {
-        this.loaderService.hide();
+        this.swalAsignaturasIsLoading.set(false);
       }
     });
   }
@@ -178,14 +179,24 @@ export class AreasFormacionListaComponent {
         <ul style='list-style: none; padding-left: 0;'>
     `;
 
-    for (let asignatura of asignaturas) {
+    if(this.swalAsignaturasIsLoading()) {
       html += `
-        <li class='mb-3'>
-          <a href="${APP_CONSTANTS.ROUTES.asignaturasLista}?pageSize=200&searchTerm=${encodeURIComponent(asignatura.nombre)}">
-            ${asignatura.nombre}
-          </a>
-        </li>
-      `;
+      <div class="spinner-container">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>`;
+    }
+    else {
+      for (let asignatura of asignaturas) {
+        html += `
+          <li class='mb-3'>
+            <a href="${APP_CONSTANTS.ROUTES.asignaturasLista}?pageSize=200&searchTerm=${encodeURIComponent(asignatura.nombre)}">
+              ${asignatura.nombre}
+            </a>
+          </li>
+        `;
+      }
     }
 
     html += `
