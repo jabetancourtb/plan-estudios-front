@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row flex-nowrap">
-        <div class="col-auto col-md-3 col-xl-1 px-sm-2 px-0 bg-ligth">
+        <div class="col-auto col-md-3 col-xl-1 px-sm-2 px-0 bg-light">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-1 pt-2 text-white min-vh-100">
                 <a href="https://www.udistrital.edu.co/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-blue text-decoration-none">
                   <img
@@ -24,10 +24,10 @@
                       </a>
                       <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu">
                           <li class="w-100">
-                            <a (click)="goToCamposFormacionBubbleChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Campos de formación</span> 1</a>
+                            <a (click)="goToCamposFormacionBubbleChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Bubble chart</span> 1</a>
                           </li>
                           <li>
-                            <a (click)="goToCamposFormacionLista()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Lista campos de formación</span> 2</a>
+                            <a (click)="goToCamposFormacionLista()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Lista</span> 2</a>
                           </li>
                       </ul>
                     </li>
@@ -37,10 +37,10 @@
                         </a>
                         <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu">
                             <li class="w-100">
-                              <a (click)="goToAreasFormacionBubbleChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Áreas de formación</span> 1</a>
+                              <a (click)="goToAreasFormacionBubbleChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Bubble chart</span> 1</a>
                             </li>
                             <li>
-                              <a (click)="goToAreasFormacionLista()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Lista áreas de formación</span> 2</a>
+                              <a (click)="goToAreasFormacionLista()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Lista</span> 2</a>
                             </li>
                         </ul>
                     </li>
@@ -50,10 +50,10 @@
                         </a>
                         <ul class="collapse nav flex-column ms-1" id="submenu3" data-bs-parent="#menu">
                             <li class="w-100">
-                              <a (click)="goToAsignaturasBubbleChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Asignaturas</span> 1</a>
+                              <a (click)="goToAsignaturasBubbleChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Bubble chart</span> 1</a>
                             </li>
                             <li>
-                              <a (click)="goToAsignaturasLista()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Lista asignaturas</span> 2</a>
+                              <a (click)="goToAsignaturasLista()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Lista</span> 2</a>
                             </li>
                         </ul>
                     </li>
@@ -62,10 +62,10 @@
                             <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Prerrequisitos</span></a>
                         <ul class="collapse nav flex-column ms-1" id="submenu4" data-bs-parent="#menu">
                             <li class="w-100">
-                                <a (click)="goToPrerrequisitosTreeChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
+                                <a (click)="goToPrerrequisitosTreeChart()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Tree chart</span> 1</a>
                             </li>
                             <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
+                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Buscar</span> 2</a>
                             </li>
                         </ul>
                     </li>
@@ -74,10 +74,10 @@
                             <i class="fs-4 bi-table"></i> <span class="ms-1 d-none d-sm-inline">Plan de estudios</span></a>
                         <ul class="collapse nav flex-column ms-1" id="submenu5" data-bs-parent="#menu">
                             <li class="w-100">
-                                <a (click)="goToPlanEstudiosCirclePacking()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 1</a>
+                                <a (click)="goToPlanEstudiosCirclePacking()" style="cursor: pointer;" class="nav-link px-0"> <span class="d-none d-sm-inline">Circle packing</span> 1</a>
                             </li>
                             <li>
-                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Item</span> 2</a>
+                                <a href="#" class="nav-link px-0"> <span class="d-none d-sm-inline">Tabla</span> 2</a>
                             </li>
                         </ul>
                     </li>
@@ -125,13 +125,12 @@
             </div>
         </div>
 
-        <div class="col-auto d-flex justify-content-center">
-          <div style="width: 1px; height: 100%; background-color: gray;"></div>
-        </div>
 
         <div class="col py-3">
           <ng-content></ng-content>
           <app-footer/>
         </div>
+
+
     </div>
 </div>
