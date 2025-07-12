@@ -11,8 +11,10 @@ export const APP_CONSTANTS = {
     areasFormacionLista: '/areas-formacion/lista',
     asignaturasEchartBubbleChart: '/asignaturas/bubble-chart',
     asignaturasLista: '/asignaturas/lista',
-    planEstudiosEchartCirclePacking: '/plan-estudios/circle-packing',
     prerrequisitosTreegraphChart: '/prerrequisitos/tree-chart',
+    prerrequisitosBuscar: '/prerrequisitos/buscar',
+    planEstudiosEchartCirclePacking: '/plan-estudios/circle-packing',
+    planEstudiosTabla: '/plan-estudios/tabla',
   },
 
 };
