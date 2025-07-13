@@ -111,11 +111,11 @@ export class PrerrequisitosTreeChartComponent {
 
 
   loadAndConvertExternalData() {
-    let data = construirArbol(this.responseListAsignaturas().content, this.responseListPrerrequisitos().content);
+    let data = buildTree(this.responseListAsignaturas().content, this.responseListPrerrequisitos().content);
 
     this.loadChart(data);
 
-    function construirArbol(
+    function buildTree(
         asignaturas: Asignatura[],
         prerrequisitos: PrerrequisitoDataGraph[]
       ): NodoFlare {
