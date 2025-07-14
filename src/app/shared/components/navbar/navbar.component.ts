@@ -85,4 +85,12 @@ export class NavbarComponent {
   }
 
 
+  // Redirige a / luego redigecciona a la ruta deseada
+  goToPlanEstudiosTabla() {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([APP_CONSTANTS.ROUTES.planEstudiosTabla]);
+    });
+  }
+
+
 }
