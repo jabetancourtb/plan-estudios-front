@@ -2,7 +2,19 @@
 
   <div style="position: relative;">
 
-    <div #myDiagram style="width:50%; height:600px; border:1px solid black;"></div>
+    @if(asignaturasGraphIsLoading()) {
+      <div class="spinner-container">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    }
+
+    <p>
+      Todas las materias de semestre 11 son prerrequisitos de todas las materias de los semestres 7 al 10.
+    </p>
+
+    <div #myDiagram style="width:100%; height:1200px; border:1px solid black;"></div>
 
   </div>
 
