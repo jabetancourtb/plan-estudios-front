@@ -15,20 +15,6 @@ export class PlanEstudiosTablaComponent {
 
   @ViewChild('myDiagram', { static: true }) public myDiagramComponent!: ElementRef;
 
-  public diagramNodeData = [
-    { key: 1, header: 'Supplier', text: 'Planned Order Variations', footer: 'Retailer', role: 'b' },
-    { key: 2, header: 'Supplier', text: 'Order & Delivery Variations', footer: 'Retailer', role: 't', loop: true },
-    { key: 3, header: 'Group 1', isGroup: true, footer: 'Shipper', role: 'b' },
-    { key: 4, header: 'Supplier', text: 'Inner Node A', footer: 'Retailer', role: 'b', group: 3 },
-    { key: 5, header: 'Supplier', text: 'Inner Node B', footer: 'Retailer', role: 't', group: 3 }
-  ];
-
-
-  public diagramLinkData = [
-    { key: -1, from: 1, to: 2 },
-    { key: -2, from: 2, to: 3 },
-    { key: -3, from: 4, to: 5 }
-  ];
 
   public stateData = {
 
@@ -46,18 +32,13 @@ export class PlanEstudiosTablaComponent {
       { key: -3, from: 4, to: 5 }
     ],
 
-    diagramModelData: { prop: 'value' },
-    skipsDiagramUpdate: false,
-    selectedNodeData: [], // used by InspectorComponent
-
   }
-
-  public observedDiagram! : any;
 
 
   ngOnInit() {
     this.initDiagram();
   }
+
 
   public initDiagram(): go.Diagram {
     const $ = go.GraphObject.make;
@@ -129,7 +110,7 @@ export class PlanEstudiosTablaComponent {
       $(go.Shape, { toArrow: 'Triangle' })
     );
 
-    const model = new go.GraphLinksModel(this.diagramNodeData, this.diagramLinkData);
+    const model = new go.GraphLinksModel(this.stateData.diagramNodeData, this.stateData.diagramLinkData);
     model.linkKeyProperty = 'key';
     diagram.model = model;
 
