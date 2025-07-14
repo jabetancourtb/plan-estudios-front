@@ -1,3 +1,9 @@
 :host {
   display: block;
 }
+
+#myDiagramDiv {
+  width: 50%;
+  height: 600px;
+  border: solid 1px black;
+}
