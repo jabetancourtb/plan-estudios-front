@@ -1,15 +1,12 @@
 import { ChangeDetectionStrategy, Component, ElementRef, ViewChild  } from '@angular/core';
 import * as go from 'gojs';
-import {
-  DiagramComponent,
-} from 'gojs-angular';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 
 
 @Component({
   selector: 'app-plan-estudios-tabla',
-  imports: [DiagramComponent, CommonModule, NavbarComponent],
+  imports: [CommonModule, NavbarComponent],
   templateUrl: './plan-estudios-tabla.component.html',
   styleUrl: './plan-estudios-tabla.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -138,91 +135,6 @@ export class PlanEstudiosTablaComponent {
 
     return diagram;
   }
-
-
-    /*
-    diagram.groupTemplate = $(
-      go.Group, 'Vertical',
-      {
-        layout: $(go.GridLayout, { wrappingColumn: 1 }),
-        selectionObjectName: 'PANEL',
-        ungroupable: true
-      },
-      $(
-        go.Shape, 'RoundedTopRectangle',
-        {
-          fill: 'rgba(128,128,128,0.33)', stroke: '#999', height: 20, stretch: go.GraphObject.Horizontal
-        }
-      ),
-      $(
-        go.Panel, 'Auto',
-        { name: 'PANEL' },
-        $(go.Shape, 'RoundedBottomRectangle',
-          { fill: 'rgba(128,128,128,0.15)', stroke: '#999', strokeWidth: 1 }),
-        $(go.Placeholder, { padding: 10 })
-      )
-    );
-
-    diagram.nodeTemplate = $(
-      go.Node, 'Auto',
-      $(go.Shape, 'Ellipse', { fill: 'lightblue', stroke: null }),
-      $(go.TextBlock, { margin: 6 }, new go.Binding('text', 'key'))
-    );
-    */
-
-
-    /*
-    diagram.groupTemplate = $(
-      go.Group, 'Vertical',
-      {
-        layout: $(go.TreeLayout, {
-          setsPortSpot: false,
-          setsChildPortSpot: false
-        }),
-        defaultStretch: go.GraphObject.Horizontal,
-        fromSpot: go.Spot.RightSide,
-        toSpot: go.Spot.LeftSide
-      },
-      $(go.Panel, 'Auto',
-        $(go.Shape, 'RoundedRectangle', { fill: 'white', parameter2: 1 | 2 })
-          .bind('fill', 'role', r => r[0] === 't' ? 'lightgray' : 'white'),
-        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
-          .bind('text', 'header')
-      ),
-      $(go.Panel, 'Auto',
-        $(go.Shape, { fill: 'white' }),
-        $(go.Placeholder, { padding: 20 })
-      ),
-      $(go.Panel, 'Auto',
-        $(go.Shape, 'RoundedRectangle', { fill: 'white', parameter2: 4 | 8 })
-          .bind('fill', 'role', r => r[0] === 'b' ? 'lightgray' : 'white'),
-        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
-          .bind('text', 'footer')
-      )
-    );
-
-    diagram.nodeTemplate = $(
-      go.Node, 'Vertical',
-      { defaultStretch: go.GraphObject.Horizontal, fromSpot: go.Spot.RightSide, toSpot: go.Spot.LeftSide },
-      $(go.Panel, 'Auto',
-        $(go.Shape, 'RoundedTopRectangle', { fill: 'white' })
-          .bind('fill', 'role', r => r[0] === 't' ? 'lightgray' : 'white'),
-        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
-          .bind('text', 'header')
-      ),
-      $(go.Panel, 'Auto', { minSize: new go.Size(NaN, 70) },
-        $(go.Shape, 'Rectangle', { fill: 'white' }),
-        $(go.TextBlock, { width: 120, margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
-          .bind('text')
-      ),
-      $(go.Panel, 'Auto',
-        $(go.Shape, 'RoundedBottomRectangle', { fill: 'white' })
-          .bind('fill', 'role', r => r[0] === 'b' ? 'lightgray' : 'white'),
-        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
-          .bind('text', 'footer')
-      )
-    );
-    */
 
 
 }
