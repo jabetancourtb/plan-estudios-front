@@ -10,6 +10,10 @@ import { Prerrequisito } from '../../../models/prerrequisito.model';
 import { ignoreElements } from 'rxjs';
 import { CarreraService } from '../../../services/carrera.service';
 import { Carrera } from '../../../models/carrera.model';
+import { CampoFormacionService } from '../../../services/campo-formacion.service';
+import { AreaFormacionService } from '../../../services/area-formacion.service';
+import { AreaFormacion } from '../../../models/area-formacion.model';
+import { CampoFormacion } from '../../../models/campo-formacion.model';
 
 
 @Component({
@@ -24,12 +28,28 @@ export class PlanEstudiosTablaComponent {
   @ViewChild('myDiagram', { static: true }) public myDiagramComponent!: ElementRef;
 
   private carreraService: CarreraService = inject(CarreraService);
+  private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
+  private areaFormacionService: AreaFormacionService = inject(AreaFormacionService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
   private prerrequisitoService: PrerrequisitoService = inject(PrerrequisitoService);
 
   asignaturasGraphIsLoading = signal(false);
 
   responseListCarreras = signal<ResponseListDTO<Carrera>>({
+    recordCountPerPage: 0,
+    totalRecordCount: 0,
+    totalPages: 0,
+    content: []
+  });
+
+  responseListCamposFormacion = signal<ResponseListDTO<CampoFormacion>>({
+    recordCountPerPage: 0,
+    totalRecordCount: 0,
+    totalPages: 0,
+    content: []
+  });
+
+  responseListAreasFormacion = signal<ResponseListDTO<AreaFormacion>>({
     recordCountPerPage: 0,
     totalRecordCount: 0,
     totalPages: 0,
@@ -110,6 +130,36 @@ export class PlanEstudiosTablaComponent {
     this.asignaturaService.consultarSemestres(true).subscribe({
       next: (res) => {
         this.responseListSemestres.set(res);
+        this.consultarCamposFormacion();
+        this.asignaturasGraphIsLoading.set(false);
+      },
+      error: (e) => {
+        this.asignaturasGraphIsLoading.set(false);
+      }
+    });
+  }
+
+
+  private consultarCamposFormacion() {
+    this.asignaturasGraphIsLoading.set(true);
+    this.campoFormacionService.consultarCamposFormacion(1, 100, 'id', true).subscribe({
+      next: (res) => {
+        this.responseListCamposFormacion.set(res);
+        this.consultarAreasFormacion();
+        this.asignaturasGraphIsLoading.set(false);
+      },
+      error: (e) => {
+        this.asignaturasGraphIsLoading.set(false);
+      }
+    });
+  }
+
+
+  private consultarAreasFormacion() {
+    this.asignaturasGraphIsLoading.set(true);
+    this.areaFormacionService.consultarAreasFormacion(1, 100, 'id', true).subscribe({
+      next: (res) => {
+        this.responseListAreasFormacion.set(res);
         this.consultarAsignaturas(1, 200, 'semestreAsignatura', true);
         this.asignaturasGraphIsLoading.set(false);
       },
@@ -150,36 +200,25 @@ export class PlanEstudiosTablaComponent {
   }
 
 
-  obtenerColorPorArea(area: string): string {
-    const colores: Record<string, string> = {
-      'Matemáticas': '#A5D6A7',
-      'Lenguaje': '#FFCC80',
-      'Física': '#90CAF9',
-      'Química': '#CE93D8',
-      'Biología': '#FFF176',
-      'Ingeniería': '#B0BEC5'
-    };
-    return colores[area] || '#E0E0E0'; // color por defecto
-  }
-
-
   public loadAndConvertExternalData() {
 
     let keyCarreraCounter = 10000
 
     for(let carrera of this.responseListCarreras().content) {
-      this.stateData.diagramNodeData.push({
+      let data = {
         key: keyCarreraCounter,
         header: carrera.nombre,
         isGroup: true,
-        footer: ''
-      });
+        footer: carrera.nombre,
+        color: '#f2f5df'
+      }
+      this.stateData.diagramNodeData.push(data);
 
       this.stateData.diagramLinkData.push({
         key: -keyCarreraCounter,
         from: keyCarreraCounter,
         to: keyCarreraCounter+1,
-        color: '#FF5722'
+        color: '#dff5e6'
       });
 
       keyCarreraCounter += 1;
@@ -192,8 +231,9 @@ export class PlanEstudiosTablaComponent {
         key: semestre,
         header: `Semestre ${semestre}`,
         isGroup: true,
-        footer: this.responseListAsignaturas().content.find(a => a.semestreAsignatura == semestre)?.carrera,
-        group: group
+        footer: `Semestre ${semestre}`,
+        group: group,
+        color: '#d3e5ed'
       }
       this.stateData.diagramNodeData.push(data);
     }
@@ -204,15 +244,16 @@ export class PlanEstudiosTablaComponent {
     let prerrequisitos = this.responseListPrerrequisitos().content;
 
     for(let asignatura of this.responseListAsignaturas().content) {
-      let role = prerrequisitos.find(p => p.prerrequisito == asignatura.nombre) ? 't' : '';
+      let role = prerrequisitos.find(p => p.asignatura == asignatura.nombre) ? 't' : 'b';
+      let color = this.responseListCamposFormacion().content.find(a => a.nombre == asignatura.campoFormacion)?.colorHtml;
 
       let data = {
         key: keyCounter,
-        header: asignatura.areaFormacion,
+        header: asignatura.campoFormacion,
         text: asignatura.nombre,
-        footer: asignatura.EspacioAcademico,
+        footer: asignatura.areaFormacion,
         group: asignatura.semestreAsignatura,
-        color: this.obtenerColorPorArea(asignatura.areaFormacion),
+        color: color,
         role: role
       }
       this.stateData.diagramNodeData.push(data);
@@ -276,7 +317,8 @@ export class PlanEstudiosTablaComponent {
           .bind('text', 'header')
       ),
       $(go.Panel, 'Auto',
-        $(go.Shape, { fill: 'white' }),
+        $(go.Shape, { fill: 'white' })
+          .bind('fill', 'color'),
         $(go.Placeholder, { padding: 20 })
       ),
       $(go.Panel, 'Auto',
@@ -292,7 +334,7 @@ export class PlanEstudiosTablaComponent {
       { defaultStretch: go.GraphObject.Horizontal, fromSpot: go.Spot.RightSide, toSpot: go.Spot.LeftSide },
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedTopRectangle')
-          .bind('fill', 'color'), // Aquí usas el color definido por nodo
+          .bind('fill', 'role', r => r[0] === 't' ? 'lightgray' : 'white'), // Aquí usas el color definido por nodo
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'header')
       ),
