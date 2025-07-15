@@ -286,7 +286,8 @@ export class AsignaturasBubbleChartComponent {
       await navigator.clipboard.write([item]);
 
       Swal.fire('Copiado', 'La imagen fue copiada al portapapeles.', 'success');
-    } catch (err) {
+    }
+    catch (err) {
       Swal.fire('Error', 'No se pudo copiar la imagen.', 'error');
     }
   }
