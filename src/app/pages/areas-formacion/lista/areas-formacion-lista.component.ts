@@ -14,6 +14,8 @@ import { AsignaturaService } from '../../../services/asignatura.service';
 import { Asignatura } from '../../../models/asignatura.model';
 import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
+import { CampoFormacionService } from '../../../services/campo-formacion.service';
+import { CampoFormacion } from '../../../models/campo-formacion.model';
 
 
 @Component({
@@ -27,11 +29,19 @@ export class AreasFormacionListaComponent {
 
   private router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
   private areaFormacionService: AreaFormacionService = inject(AreaFormacionService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
 
-  asignaturasTableIsLoading = signal(false);
+  areasFormacionTableIsLoading = signal(false);
   swalAsignaturasIsLoading = signal(false);
+
+  responseListCamposFormacion = signal<ResponseListDTO<CampoFormacion>>({
+    recordCountPerPage: 0,
+    totalRecordCount: 0,
+    totalPages: 0,
+    content: []
+  });
 
   responseListAreasFormacion = signal<ResponseListDTO<AreaFormacion>>({
     recordCountPerPage: 0,
@@ -47,6 +57,7 @@ export class AreasFormacionListaComponent {
   fieldsOptions = [
     { value: 'id', label: 'Id' },
     { value: 'idCampoFormacion', label: 'Id campo de formación' },
+    { value: 'nombreCampoFormacion', label: 'Nombre campo de formación' },
     { value: 'nombre', label: 'Nombre' },
     { value: 'color', label: 'Color' },
     { value: 'cantidadAsignaturas', label: 'Cantidad de asignaturas' },
@@ -92,19 +103,41 @@ export class AreasFormacionListaComponent {
 
 
   private consultarAreasformacionPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
-    this.asignaturasTableIsLoading.set(true);
+    this.areasFormacionTableIsLoading.set(true);
     this.areaFormacionService.consultarAreasFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
-        this.updatePageInformation();
-        this.asignaturasTableIsLoading.set(false);
+        this.consultarCamposformacionPorPaginacion(1, 100, 'id', true);
+        this.areasFormacionTableIsLoading.set(false);
       },
       error: (e) => {
         this.updatePageInformation();
-        this.asignaturasTableIsLoading.set(false);
+        this.areasFormacionTableIsLoading.set(false);
       }
     });
   }
+
+
+  private consultarCamposformacionPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
+    this.areasFormacionTableIsLoading.set(true);
+    this.campoFormacionService.consultarCamposFormacion(page, pageSize, field, asc).subscribe({
+      next: (res) => {
+        this.responseListCamposFormacion.set(res);
+
+        this.responseListAreasFormacion().content.forEach(af => {
+          af.nombreCampoFormacion = this.responseListCamposFormacion().content.find(cf => cf.id == af.idCampoFormacion)?.nombre || '';
+        });
+
+        this.updatePageInformation();
+        this.areasFormacionTableIsLoading.set(false);
+      },
+      error: (e) => {
+        this.updatePageInformation();
+        this.areasFormacionTableIsLoading.set(false);
+      }
+    });
+  }
+
 
 
   updatePageInformation(): void {

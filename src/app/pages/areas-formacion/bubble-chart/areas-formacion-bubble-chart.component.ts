@@ -9,6 +9,8 @@ import { ResponseListDTO } from '../../../dto/response-list.model';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
+import { CampoFormacion } from '../../../models/campo-formacion.model';
+import { CampoFormacionService } from '../../../services/campo-formacion.service';
 
 
 @Component({
@@ -24,6 +26,7 @@ export class AreasFormacionBubbleChartComponent {
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
   private areaFormacionService: AreaFormacionService= inject(AreaFormacionService);
 
   areasFormacionBubbleGraphIsLoading = signal(false);
@@ -47,6 +50,14 @@ export class AreasFormacionBubbleChartComponent {
     totalPages: 0,
     content: []
   });
+
+  responseListCamposFormacion = signal<ResponseListDTO<CampoFormacion>>({
+      recordCountPerPage: 0,
+      totalRecordCount: 0,
+      totalPages: 0,
+      content: []
+  });
+
 
   areaFormacion = signal<AreaFormacion>({} as AreaFormacion);
 
@@ -107,7 +118,7 @@ export class AreasFormacionBubbleChartComponent {
     this.areaFormacionService.consultarAreasFormacion(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
-        this.loadChart();
+        this.consultarCamposformacionPorPaginacion(1, 100, 'id', true);
         this.areasFormacionBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
@@ -122,7 +133,7 @@ export class AreasFormacionBubbleChartComponent {
     this.areaFormacionService.consultarAreasFormacionPorIdCampoFormacion(idCampoFormacion, page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
-        this.loadChart();
+        this.consultarCamposformacionPorPaginacion(1, 100, 'id', true);
         this.areasFormacionBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
@@ -137,7 +148,28 @@ export class AreasFormacionBubbleChartComponent {
     this.areaFormacionService.consultarAreasFormacionPorNombreCampoFormacion(nombreCampoFormacion, page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
+        this.consultarCamposformacionPorPaginacion(1, 100, 'id', true);
+        this.areasFormacionBubbleGraphIsLoading.set(false);
+      },
+      error: (e) => {
+        this.areasFormacionBubbleGraphIsLoading.set(false);
+      }
+    });
+  }
+
+
+  private consultarCamposformacionPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
+    this.areasFormacionBubbleGraphIsLoading.set(true);
+    this.campoFormacionService.consultarCamposFormacion(page, pageSize, field, asc).subscribe({
+      next: (res) => {
+        this.responseListCamposFormacion.set(res);
+
+        this.responseListAreasFormacion().content.forEach(af => {
+          af.nombreCampoFormacion = this.responseListCamposFormacion().content.find(cf => cf.id == af.idCampoFormacion)?.nombre || '';
+        });
+
         this.loadChart();
+
         this.areasFormacionBubbleGraphIsLoading.set(false);
       },
       error: (e) => {
@@ -327,19 +359,18 @@ export class AreasFormacionBubbleChartComponent {
             </td>
           </tr>`;
 
-          if(this.urlParams().nombreCampoFormacion !== '') {
-            html += `
-            <tr>
-              <th>Campo de Formación</th>
-              <td>
-                Ver las áreas de formación asociadas a:
-                <a href="${APP_CONSTANTS.ROUTES.areasFormacionBubbleChart}?nombreCampoFormacion=${encodeURIComponent(this.urlParams()?.nombreCampoFormacion)}">
-                  ${this.urlParams()?.nombreCampoFormacion}
-                </a>
-              </td>
-            </tr>
-            `
-          }
+
+          html += `
+          <tr>
+            <th>Campo de Formación</th>
+            <td>
+              Ver las áreas de formación asociadas a:
+              <a href="${APP_CONSTANTS.ROUTES.areasFormacionBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.nombreCampoFormacion)}">
+                ${a.nombreCampoFormacion}
+              </a>
+            </td>
+          </tr>
+          `
 
           html += `<tr><th>Color</th><td> <span style="display: inline-block; width: 15px; height: 15px; background-color: ${a.colorHtml}; border: 1px solid #000;"></span></td></tr>
           <tr><th>Cantidad de asignaturas</th><td>${a.cantidadAsignaturas}</td></tr>`
@@ -349,7 +380,7 @@ export class AreasFormacionBubbleChartComponent {
             <tr>
               <th>Ver asignaturas asociadas</th>
               <td>
-                <a href="${APP_CONSTANTS.ROUTES.asignaturasBubbleChart}?nombreCampoFormacion=${encodeURIComponent(this.urlParams().nombreCampoFormacion)}&nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
+                <a href="${APP_CONSTANTS.ROUTES.asignaturasBubbleChart}?nombreCampoFormacion=${encodeURIComponent(a.nombreCampoFormacion)}&nombreAreaFormacion=${encodeURIComponent(a.nombre)}">
                   Asignaturas
                 </a>
               </td>

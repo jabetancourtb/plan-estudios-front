@@ -7,7 +7,7 @@
       </div>
       <div class="card-body" >
 
-        @if(asignaturasTableIsLoading()) {
+        @if(areasFormacionTableIsLoading()) {
           <div class="spinner-container">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Cargando...</span>
@@ -15,7 +15,7 @@
           </div>
         }
 
-        @if(responseListAreasFormacion().content.length > 0 && !asignaturasTableIsLoading()) {
+        @if(responseListAreasFormacion().content.length > 0 && !areasFormacionTableIsLoading()) {
 
           <div class="row mb-3" >
             <div class="col-xl-6"></div>
@@ -42,6 +42,7 @@
                   <tr>
                     <td>{{ areaFormacion.id }}</td>
                     <td>{{ areaFormacion.idCampoFormacion }}</td>
+                    <td>{{ areaFormacion.nombreCampoFormacion }}</td>
                     <td>{{ areaFormacion.nombre }}</td>
                     <td>
                       <span
