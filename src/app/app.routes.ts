@@ -8,7 +8,7 @@ import { AsignaturasBubbleChartComponent } from './pages/asignaturas/bubble-char
 import { AsignaturasListaComponent } from './pages/asignaturas/lista/asignaturas-lista.component';
 import { PlanEstudiosCirclePackingComponent } from './pages/plan-estudios/circle-packing/plan-estudios-circle-packing.component';
 import { PrerrequisitosTreeChartComponent } from './pages/prerrequisitos/tree-chart/prerrequisitos-tree-chart.component';
-import { PlanEstudiosTablaComponent } from './pages/plan-estudios/tabla/plan-estudios-tabla.component';
+import { PlanEstudiosSemestresComponent } from './pages/plan-estudios/semestres/plan-estudios-semestres.component';
 import { PrerrequisitosBuscarComponent } from './pages/prerrequisitos/buscar/prerrequisitos-buscar.component';
 
 
@@ -62,7 +62,7 @@ export const routes: Routes = [
       component: PlanEstudiosCirclePackingComponent
     },
     {
-      path: 'plan-estudios/tabla',
-      component: PlanEstudiosTablaComponent
+      path: 'plan-estudios/semestres',
+      component: PlanEstudiosSemestresComponent
     }
 ];

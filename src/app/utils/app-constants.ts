@@ -14,7 +14,7 @@ export const APP_CONSTANTS = {
     prerrequisitosTreegraphChart: '/prerrequisitos/tree-chart',
     prerrequisitosBuscar: '/prerrequisitos/buscar',
     planEstudiosCirclePacking: '/plan-estudios/circle-packing',
-    planEstudiosTabla: '/plan-estudios/tabla',
+    planEstudiosTabla: '/plan-estudios/semestres',
   },
 
 };
