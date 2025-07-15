@@ -42,7 +42,13 @@
                   <tr>
                     <td>{{ areaFormacion.id }}</td>
                     <td>{{ areaFormacion.idCampoFormacion }}</td>
-                    <td>{{ areaFormacion.nombreCampoFormacion }}</td>
+
+                    <td>
+                      <a [attr.href]="APP_CONSTANTS.ROUTES.camposFormacionLista + '?pageSize=200&searchTerm=' + areaFormacion.nombreCampoFormacion">
+                        {{ areaFormacion.nombreCampoFormacion }}
+                      </a>
+                    </td>
+
                     <td>{{ areaFormacion.nombre }}</td>
                     <td>
                       <span

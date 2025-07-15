@@ -33,6 +33,8 @@ export class AreasFormacionListaComponent {
   private areaFormacionService: AreaFormacionService = inject(AreaFormacionService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
 
+  public APP_CONSTANTS = APP_CONSTANTS;
+
   areasFormacionTableIsLoading = signal(false);
   swalAsignaturasIsLoading = signal(false);
 
