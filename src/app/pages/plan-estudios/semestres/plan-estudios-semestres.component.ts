@@ -226,7 +226,7 @@ export class PlanEstudiosSemestresComponent {
         key: -keyCarreraCounter,
         from: keyCarreraCounter,
         to: keyCarreraCounter+1,
-        color: '#dff5e6'
+        color: '#2957f0ff'
       });
 
       keyCarreraCounter += 1;
@@ -244,6 +244,15 @@ export class PlanEstudiosSemestresComponent {
         color: '#d3e5ed'
       }
       this.stateData.diagramNodeData.push(data);
+
+      if(semestre != 11) {
+        this.stateData.diagramLinkData.push({
+          key: -semestre,
+          from: semestre,
+          to: semestre + 1,
+          color: '#43af65a8'
+        });
+      }
     }
   }
 
