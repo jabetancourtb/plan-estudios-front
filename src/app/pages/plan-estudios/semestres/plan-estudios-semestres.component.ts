@@ -201,7 +201,13 @@ export class PlanEstudiosSemestresComponent {
 
 
   public loadAndConvertExternalData() {
+    this.fillNodeDataCarrerasYSemestres();
+    this.fillNodeDataAsignaturasYPrerrequisitos();
+    this.initDiagram();
+  }
 
+
+  public fillNodeDataCarrerasYSemestres() {
     let keyCarreraCounter = 10000
 
     for(let carrera of this.responseListCarreras().content) {
@@ -237,13 +243,15 @@ export class PlanEstudiosSemestresComponent {
       }
       this.stateData.diagramNodeData.push(data);
     }
+  }
 
 
+  public fillNodeDataAsignaturasYPrerrequisitos() {
     let keyCounter = this.responseListSemestres().totalRecordCount + 1;
 
     let prerrequisitos = this.responseListPrerrequisitos().content;
 
-    for(let asignatura of this.responseListAsignaturas().content) {
+     for(let asignatura of this.responseListAsignaturas().content) {
       let role = prerrequisitos.find(p => p.asignatura == asignatura.nombre) ? 't' : 'b';
       let colorCampoFormacion = this.responseListCamposFormacion().content.find(a => a.nombre == asignatura.campoFormacion)?.colorHtml;
       let colorAreaFormacion = this.responseListAreasFormacion().content.find(a => a.nombre == asignatura.areaFormacion)?.colorHtml;
@@ -286,8 +294,6 @@ export class PlanEstudiosSemestresComponent {
 
       keyCounter += 1;
     }
-
-    this.initDiagram();
   }
 
 
