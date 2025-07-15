@@ -17,13 +17,13 @@ import { CampoFormacion } from '../../../models/campo-formacion.model';
 
 
 @Component({
-  selector: 'app-plan-estudios-tabla',
+  selector: 'app-plan-estudios-semestres',
   imports: [CommonModule, NavbarComponent],
-  templateUrl: './plan-estudios-tabla.component.html',
-  styleUrl: './plan-estudios-tabla.component.css',
+  templateUrl: './plan-estudios-semestres.component.html',
+  styleUrl: './plan-estudios-semestres.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PlanEstudiosTablaComponent {
+export class PlanEstudiosSemestresComponent {
 
   @ViewChild('myDiagram', { static: true }) public myDiagramComponent!: ElementRef;
 
@@ -245,7 +245,9 @@ export class PlanEstudiosTablaComponent {
 
     for(let asignatura of this.responseListAsignaturas().content) {
       let role = prerrequisitos.find(p => p.asignatura == asignatura.nombre) ? 't' : 'b';
-      let color = this.responseListCamposFormacion().content.find(a => a.nombre == asignatura.campoFormacion)?.colorHtml;
+      let colorCampoFormacion = this.responseListCamposFormacion().content.find(a => a.nombre == asignatura.campoFormacion)?.colorHtml;
+      let colorAreaFormacion = this.responseListAreasFormacion().content.find(a => a.nombre == asignatura.areaFormacion)?.colorHtml;
+      let colorBody = prerrequisitos.find(p => p.asignatura == asignatura.nombre) ? '#e3d8dc' : 'white';
 
       let data = {
         key: keyCounter,
@@ -253,7 +255,9 @@ export class PlanEstudiosTablaComponent {
         text: asignatura.nombre,
         footer: asignatura.areaFormacion,
         group: asignatura.semestreAsignatura,
-        color: color,
+        colorCampoFormacion: colorCampoFormacion,
+        colorAreaFormacion: colorAreaFormacion,
+        colorBody: colorBody,
         role: role
       }
       this.stateData.diagramNodeData.push(data);
@@ -334,19 +338,19 @@ export class PlanEstudiosTablaComponent {
       { defaultStretch: go.GraphObject.Horizontal, fromSpot: go.Spot.RightSide, toSpot: go.Spot.LeftSide },
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedTopRectangle')
-          .bind('fill', 'role', r => r[0] === 't' ? 'lightgray' : 'white'), // Aquí usas el color definido por nodo
+          .bind('fill', 'colorCampoFormacion'), // Aquí usas el color definido por nodo
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'header')
       ),
       $(go.Panel, 'Auto', { minSize: new go.Size(NaN, 70) },
         $(go.Shape, 'Rectangle')
-          .bind('fill', 'color'), // También se puede usar aquí
+          .bind('fill', 'colorBody'), // También se puede usar aquí
         $(go.TextBlock, { width: 120, margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text')
       ),
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedBottomRectangle')
-          .bind('fill', 'color'), // O aquí también
+          .bind('fill', 'colorAreaFormacion'), // O aquí también
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'footer')
       )
