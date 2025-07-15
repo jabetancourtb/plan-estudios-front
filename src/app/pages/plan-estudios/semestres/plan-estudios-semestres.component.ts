@@ -14,6 +14,7 @@ import { CampoFormacionService } from '../../../services/campo-formacion.service
 import { AreaFormacionService } from '../../../services/area-formacion.service';
 import { AreaFormacion } from '../../../models/area-formacion.model';
 import { CampoFormacion } from '../../../models/campo-formacion.model';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -77,6 +78,7 @@ export class PlanEstudiosSemestresComponent {
     content: []
   });
 
+  diagram!: go.Diagram;
 
   contextualMenuOptions = {
     verDetalles: '🔍 Ver detalles',
@@ -300,7 +302,7 @@ export class PlanEstudiosSemestresComponent {
   public initDiagram(): go.Diagram {
     const $ = go.GraphObject.make;
 
-    const diagram = $(go.Diagram, this.myDiagramComponent.nativeElement, {
+    this.diagram = $(go.Diagram, this.myDiagramComponent.nativeElement, {
       layout: $(go.TreeLayout, {
         setsPortSpot: false,
         setsChildPortSpot: false,
@@ -309,7 +311,7 @@ export class PlanEstudiosSemestresComponent {
       'undoManager.isEnabled': true
     });
 
-     diagram.groupTemplate = $(
+     this.diagram.groupTemplate = $(
       go.Group, 'Vertical',
       {
         layout: $(go.TreeLayout, {
@@ -339,9 +341,11 @@ export class PlanEstudiosSemestresComponent {
       )
     );
 
-    diagram.nodeTemplate = $(
+    const contextMenu = this.buildContextMenu($);
+
+    this.diagram.nodeTemplate = $(
       go.Node, 'Vertical',
-      { defaultStretch: go.GraphObject.Horizontal, fromSpot: go.Spot.RightSide, toSpot: go.Spot.LeftSide },
+      { defaultStretch: go.GraphObject.Horizontal, fromSpot: go.Spot.RightSide, toSpot: go.Spot.LeftSide, contextMenu: contextMenu },
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedTopRectangle')
           .bind('fill', 'colorCampoFormacion'), // Aquí usas el color definido por nodo
@@ -362,7 +366,7 @@ export class PlanEstudiosSemestresComponent {
       )
     );
 
-    diagram.linkTemplate = $(
+    this.diagram.linkTemplate = $(
       go.Link,
       { routing: go.Routing.Orthogonal, corner: 5 },
       $(go.Shape)  // Línea principal
@@ -376,11 +380,115 @@ export class PlanEstudiosSemestresComponent {
 
     const model = new go.GraphLinksModel(this.stateData.diagramNodeData, this.stateData.diagramLinkData);
     model.linkKeyProperty = 'key';
-    diagram.model = model;
+    this.diagram.model = model;
 
-    return diagram;
+    this.clickListener();
+
+    return this.diagram;
   }
 
 
+  private buildContextMenu($: any): go.Adornment {
+    return $(
+      'ContextMenu',
+      $('ContextMenuButton',
+        $(go.TextBlock, '🔍 Ver detalles'),
+        { click: (e: any, obj: any) => this.showDetailsAsignatura(e, obj)}
+      ),
+      $('ContextMenuButton',
+        $(go.TextBlock, '📋 Copiar nombre'),
+        { click: (e: any, obj: any) => this.copyImage()}
+      ),
+      $('ContextMenuButton',
+        $(go.TextBlock, '💾 Guardar imagen'),
+        { click: (e: any, obj: any) => this.saveImage()}
+      )
+    );
+  }
+
+
+  async showDetailsAsignatura(e: any, obj: any) {
+    const node = obj.part?.adornedPart as go.Node;
+    if (!node) return;
+
+    const data = node.data;
+    const id = data.key;
+    const nombre = data.text;
+
+    Swal.fire({
+      title: 'Asignatura (menú contextual)',
+      html: `ID: <strong>${id}</strong><br>Nombre: <strong>${nombre}</strong>`,
+      icon: 'info'
+    });
+}
+
+
+  async saveImage(): Promise<void> {
+    const diagram = go.Diagram.fromDiv(this.myDiagramComponent.nativeElement);
+    const imgElement = this.diagram.makeImage({ background: 'white', scale: 1 }) as HTMLImageElement;
+
+    if (!imgElement.src) throw new Error('No se pudo generar la imagen');
+
+    const a = document.createElement('a');
+    a.href = imgElement.src;
+    a.download = 'diagrama-plan-estudios.png';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+
+  async copyImage(): Promise<void> {
+    try {
+      const diagram = go.Diagram.fromDiv(this.myDiagramComponent.nativeElement);
+      const image = this.diagram.makeImage({ background: 'white', scale: 1 }) as HTMLImageElement;
+
+      // Crear un canvas temporal
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) throw new Error('No se pudo obtener el contexto del canvas');
+
+      ctx.drawImage(image, 0, 0);
+
+      // Convertir el canvas a blob PNG
+      const blob = await new Promise<Blob | null>(resolve =>
+        canvas.toBlob(resolve, 'image/png')
+      );
+      if (!blob) throw new Error('No se pudo generar el blob de imagen');
+
+      // Copiar al portapapeles
+      await navigator.clipboard.write([
+        new ClipboardItem({ 'image/png': blob })
+      ]);
+
+      Swal.fire('Copiado', 'La imagen fue copiada al portapapeles.', 'success');
+    }
+    catch (err) {
+      console.error(err);
+      Swal.fire('Error', 'No se pudo copiar la imagen.', 'error');
+    }
+  }
+
+
+  public clickListener() {
+    this.diagram.addDiagramListener('ObjectSingleClicked', (e) => {
+      const part = e.subject.part;
+      if (!(part instanceof go.Node)) return; // Solo queremos nodos
+
+
+      if (part instanceof go.Group) {
+        // grupo, ejemplo semestre o carrera
+      }
+      else if (part instanceof go.Node) {
+        const nodeData = part.data;
+        const id = nodeData.key;
+        const nombre = nodeData.text;
+
+        Swal.fire('Asignatura seleccionada', `ID: ${id}<br>Nombre: ${nombre}`, 'info');
+      }
+    });
+  }
 
 }
