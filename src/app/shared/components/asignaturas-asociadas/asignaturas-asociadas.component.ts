@@ -117,7 +117,7 @@ export class AsignaturasAsociadasComponent {
     this.asignaturaService.consultarAsignaturas(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
-        this.consultarPrerrequisitosPorPagnacion(1, 200, 'id', true);
+        this.consultarPrerrequisitosPorPaginacion(1, 200, 'id', true);
         this.asignaturasAsociadasGraphIsLoading.set(false);
       },
       error: (e) => {
@@ -127,7 +127,7 @@ export class AsignaturasAsociadasComponent {
   }
 
 
-  private consultarPrerrequisitosPorPagnacion(page: number, pageSize: number, field: string, asc: boolean) {
+  private consultarPrerrequisitosPorPaginacion(page: number, pageSize: number, field: string, asc: boolean) {
     this.asignaturasAsociadasGraphIsLoading.set(true);
     this.prerrequisitoService.consultarPrerrequisitos(page, pageSize, field, asc).subscribe({
       next: (res) => {
