@@ -247,10 +247,6 @@ export class AsignaturasListaComponent {
 
 
   abrirModalAsignaturasAsociadas(asignatura: Asignatura) {
-    if(this.asignatura().codigo == asignatura.codigo) {
-      return;
-    }
-
     this.asignatura.set(asignatura);
 
     setTimeout(() => {

@@ -78,15 +78,14 @@
 
         }
 
-        @if(asignatura().codigo != null) {
-          <app-modal-asignaturas-asociadas/>
-        }
-
       </div>
     </div>
   </div>
 
 </app-navbar>
 
+@if(asignatura().codigo != null) {
+  <app-modal-asignaturas-asociadas/>
+}
 
 
