@@ -103,6 +103,11 @@ export class PrerrequisitosBuscarComponent {
 
   verAsignaturasAsociadas(asignatura: any) {
     let asignaturaFound = this.responseListAsignaturas().content.find(a => a.codigo == asignatura.codigo)!;
+
+    if(this.asignatura().codigo == asignaturaFound.codigo) {
+      return;
+    }
+
     this.asignatura.set(asignaturaFound);
 
     this.estilosTablaDiv['max-height'] = '10vh';
