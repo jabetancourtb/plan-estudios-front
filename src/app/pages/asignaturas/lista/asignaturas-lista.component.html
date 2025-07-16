@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <div class="table-responsive" style="max-height: 100vh; max-width: 200vh; overflow: auto;">
+          <div class="table-responsive" [ngStyle]="estilosTablaDiv">
             <table class="table table-bordered table-striped" style="text-align: center;">
               <thead class="table-dark">
                 <tr>
@@ -58,6 +58,13 @@
                         <span class="bi bi-eye-fill"></span>
                       </button>
                     </td>
+
+                    <td>
+                      <button type="button" class="btn btn-primary" (click)="verAsignaturasAsociadas(asignatura)">
+                        <span class="bi bi-diagram-3-fill"></span>
+                      </button>
+                    </td>
+
                   </tr>
                 }
               </tbody>
@@ -69,6 +76,19 @@
             (pageChange)="goToPage($event)"
           />
 
+        }
+
+        @if(asignatura().codigo != null) {
+          <app-asignaturas-asociadas
+            [asignatura]="asignatura()"
+          />
+
+          <br>
+          <div style="text-align: center;">
+            <button type="button" class="btn btn-primary" (click)="removeGraph()">
+              <span>Remover</span>
+            </button>
+          </div>
         }
 
       </div>

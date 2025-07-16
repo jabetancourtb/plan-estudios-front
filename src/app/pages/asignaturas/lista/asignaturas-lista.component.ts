@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AsignaturaService } from '../../../services/asignatura.service';
@@ -11,17 +11,22 @@ import { FilterPaginationDTO } from '../../../dto/filter-pagination.model';
 import { PaginationComponent } from '../../../shared/components/pagination/pagination.component';
 import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
+import { AsignaturasAsociadasComponent } from "../../../shared/components/asignaturas-asociadas/asignaturas-asociadas.component";
+import { NgStyle } from '@angular/common';
 
 
 
 @Component({
   selector: 'app-asignaturas-lista',
-  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, FilterPaginationComponent, PaginationComponent],
+  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, FilterPaginationComponent, PaginationComponent, AsignaturasAsociadasComponent, NgStyle],
   templateUrl: './asignaturas-lista.component.html',
   styleUrl: './asignaturas-lista.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AsignaturasListaComponent {
+
+  @ViewChild(AsignaturasAsociadasComponent, { static: false }) asignaturasAsociadas!: AsignaturasAsociadasComponent;
+
 
   private router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -49,7 +54,16 @@ export class AsignaturasListaComponent {
     { value: 'numeroCreditos', label: 'Número de Créditos' },
     { value: 'justificacion', label: 'Justificación' },
     { value: 'verDetalles', label: 'Ver más detalles' },
+    { value: 'verASignaturasAsociadas', label: 'Ver asignaturas asociadas' },
   ];
+
+  mostrarComponenteHijo = false;
+
+  estilosTablaDiv = {
+    'max-height': '60vh',
+    'max-width': '200vh',
+    'overflow': 'auto'
+  };
 
 
   ngOnInit() {
@@ -71,6 +85,8 @@ export class AsignaturasListaComponent {
         ascending: params['ascending'] || true ,
         searchTerm: params['searchTerm'] || ''
       }));
+
+      this.removeGraph();
 
       this.consultarAsignaturasPorPaginacion(
         this.filterPaginationDTO().currentPage,
@@ -146,6 +162,7 @@ export class AsignaturasListaComponent {
 
 
   goToPage(page: number) {
+    this.removeGraph();
     this.filterPaginationDTO().currentPage = page;
     this.setQueryParams();
   }
@@ -241,5 +258,29 @@ export class AsignaturasListaComponent {
 
   }
 
+
+  verAsignaturasAsociadas(asignatura: any) {
+    let asignaturaFound = this.responseListAsignaturas().content.find(a => a.codigo == asignatura.codigo)!;
+
+    if(this.asignatura().codigo == asignaturaFound.codigo) {
+      return;
+    }
+
+    this.asignatura.set(asignaturaFound);
+
+    this.estilosTablaDiv['max-height'] = '10vh';
+
+    this.mostrarComponenteHijo = true;
+
+    setTimeout(() => {
+      this.asignaturasAsociadas.consultarCamposFormacion();
+    });
+  }
+
+
+  removeGraph() {
+    this.asignatura.set({} as Asignatura);
+    this.estilosTablaDiv['max-height'] = '60vh';
+  }
 
 }
