@@ -17,32 +17,23 @@ export class ModalAsignaturasAsociadasComponent {
 
   asignatura = signal<Asignatura>({} as Asignatura);
 
-  confirm = output<boolean>();
   close = output<boolean>();
-
-  mostrarComponenteHijo = false;
-
-  onClose() {
-    this.removeGraph();
-    this.showModal.set(false);
-    this.close.emit(false);
-  }
-
-
-  onConfirm() {
-    this.showModal.set(false);
-    this.confirm.emit(true);
-  }
 
 
   public verAsignaturasAsociadas(asignatura: Asignatura) {
     this.showModal.set(true);
     this.asignatura.set(asignatura);
-    this.mostrarComponenteHijo = true;
 
     setTimeout(() => {
       this.asignaturasAsociadas.consultarCamposFormacion();
     });
+  }
+
+
+  onClose() {
+    this.removeGraph();
+    this.showModal.set(false);
+    this.close.emit(false);
   }
 
 

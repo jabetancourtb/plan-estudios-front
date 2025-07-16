@@ -6,16 +6,20 @@
   transform: translate(0, 25vh);
 }
 
-.modal-content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    color: var(--bs-modal-color);
-    pointer-events: auto;
-    background-color: var(--bs-modal-bg);
-    background-clip: padding-box;
-    border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
-    border-radius: var(--bs-modal-border-radius);
-    outline: 0;
+.modal-backdrop.show {
+  opacity: 0.8 !important;
+  background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+
+@media (max-width: 576px) {
+  .modal-backdrop.show {
+    opacity: 0.95 !important;
+  }
+}
+
+@media (min-width: 577px) {
+  .modal-backdrop.show {
+    opacity: 0.7 !important;
+  }
 }
