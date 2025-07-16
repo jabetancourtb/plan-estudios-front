@@ -15,6 +15,7 @@ import { AreaFormacionService } from '../../../services/area-formacion.service';
 import { AreaFormacion } from '../../../models/area-formacion.model';
 import { CampoFormacion } from '../../../models/campo-formacion.model';
 import Swal from 'sweetalert2';
+import { APP_CONSTANTS } from '../../../utils/app-constants';
 
 
 @Component({
@@ -77,6 +78,8 @@ export class PlanEstudiosSemestresComponent {
     totalPages: 0,
     content: []
   });
+
+  asignatura = signal<Asignatura>({} as Asignatura);
 
   diagram!: go.Diagram;
 
@@ -202,15 +205,77 @@ export class PlanEstudiosSemestresComponent {
   }
 
 
+  private consultarAsignaturaPorCodigo(codigo: number) {
+    this.asignaturasGraphIsLoading.set(true);
+    this.asignaturaService.consultarAsignaturaPorCodigo(codigo).subscribe({
+      next: (res) => {
+        this.asignatura.set(res);
+        this.showSwalAsignaturaDetalle();
+        this.asignaturasGraphIsLoading.set(false);
+      },
+      error: (e) => {
+        this.asignaturasGraphIsLoading.set(false);
+      }
+    });
+  }
+
+
   public loadAndConvertExternalData() {
+    this.fillNodeDataExample();
     this.fillNodeDataCarrerasYSemestres();
     this.fillNodeDataAsignaturasYPrerrequisitos();
     this.initDiagram();
   }
 
 
+  public fillNodeDataExample() {
+    let keyExampleCounter = 1000;
+
+    let dataGroupExample = {
+        key: keyExampleCounter,
+        header: 'Ejemplo',
+        isGroup: true,
+        footer: 'Ejemplo',
+        color: '#f2f5df'
+    }
+    this.stateData.diagramNodeData.push(dataGroupExample);
+
+    let data1 = {
+      key: keyExampleCounter+1,
+      header: 'Campo de formación',
+      text: 'Asignatura Prerrequisito (Obligatoria para ver la asignatura posterior)',
+      footer: 'Área de formación',
+      group: keyExampleCounter,
+      colorCampoFormacion: '#f2f5df',
+      colorBody: 'white',
+      colorAreaFormacion: '#f2f5df',
+    }
+    this.stateData.diagramNodeData.push(data1);
+
+    let data2 = {
+      key: keyExampleCounter+2,
+      header: 'Campo de formación',
+      text: 'Asignatura posterior',
+      footer: 'Área de formación',
+      group: keyExampleCounter,
+      colorCampoFormacion: '#f2f5df',
+      colorBody: '#e3d8dc',
+      colorAreaFormacion: '#f2f5df',
+    }
+    this.stateData.diagramNodeData.push(data2);
+
+    this.stateData.diagramLinkData.push({
+      key: -keyExampleCounter,
+      from: keyExampleCounter+1,
+      to: keyExampleCounter+2,
+      color: '#ff3c00ff'
+    });
+
+  }
+
+
   public fillNodeDataCarrerasYSemestres() {
-    let keyCarreraCounter = 10000
+    let keyCarreraCounter = 10000;
 
     for(let carrera of this.responseListCarreras().content) {
       let data = {
@@ -290,7 +355,7 @@ export class PlanEstudiosSemestresComponent {
             .find(n => n.text === prerrequisito.prerrequisito)?.key!,
           to: this.stateData.diagramNodeData
             .find(n => n.text === prerrequisito.asignatura)?.key!,
-          color: '#FF5722'
+          color: '#ff3c00ff'
         });
       }
 
@@ -298,8 +363,8 @@ export class PlanEstudiosSemestresComponent {
          this.stateData.diagramLinkData.push({
             key: -keyCounter,
             from: keyCounter,
-            to: this.stateData.diagramNodeData[1].key,
-            color: '#FF5722'
+            to: this.stateData.diagramNodeData.find(n => n.text?.toLocaleLowerCase() == 'ingeniería telemática')?.key || 10001,
+            color: '#ff3c00ff'
           });
       }
 
@@ -402,11 +467,19 @@ export class PlanEstudiosSemestresComponent {
       'ContextMenu',
       $('ContextMenuButton',
         $(go.TextBlock, '🔍 Ver detalles'),
-        { click: (e: any, obj: any) => this.showDetailsAsignatura(e, obj)}
+        { click: (e: any, obj: any) => this.consultarlAsignaturaDetalle(obj)}
       ),
       $('ContextMenuButton',
-        $(go.TextBlock, '📋 Copiar nombre'),
-        { click: (e: any, obj: any) => this.copyImage()}
+        $(go.TextBlock, '🔗 Ir a Syllabus'),
+        { click: (e: any, obj: any) => this.irASyllabyus(obj)}
+      ),
+      $('ContextMenuButton',
+        $(go.TextBlock, '🔗 Ir a objetos de estudio'),
+        { click: (e: any, obj: any) => this.irAObjetosEstudio(obj)}
+      ),
+       $('ContextMenuButton',
+        $(go.TextBlock, '🔗 Ir a verbos de estudio'),
+        { click: (e: any, obj: any) => this.irAVerbos(obj)}
       ),
       $('ContextMenuButton',
         $(go.TextBlock, '💾 Guardar imagen'),
@@ -416,7 +489,7 @@ export class PlanEstudiosSemestresComponent {
   }
 
 
-  async showDetailsAsignatura(e: any, obj: any) {
+  async consultarlAsignaturaDetalle(obj: any) {
     const node = obj.part?.adornedPart as go.Node;
     if (!node) return;
 
@@ -424,17 +497,128 @@ export class PlanEstudiosSemestresComponent {
     const id = data.key;
     const nombre = data.text;
 
+    if(this.isExampleNode(id)) {
+      return;
+    }
+
+    let codigo: number = this.responseListAsignaturas().content.find(a => a.nombre == nombre)?.codigo || 0;
+    this.consultarAsignaturaPorCodigo(codigo);
+  }
+
+
+  showSwalAsignaturaDetalle() {
     Swal.fire({
-      title: 'Asignatura (menú contextual)',
-      html: `ID: <strong>${id}</strong><br>Nombre: <strong>${nombre}</strong>`,
-      icon: 'info'
+      title: this.asignatura().nombre,
+      width: '800px',
+      html: `
+        <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
+          <table class="table table-bordered text-start">
+
+            <tr>
+              <th>Campo de Formación</th>
+              <td>
+                Ver las áreas de formación asociadas:
+                <a href="${APP_CONSTANTS.ROUTES.camposFormacionLista}?searchTerm=${encodeURIComponent(this.asignatura().campoFormacion)}">
+                  ${this.asignatura().campoFormacion}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Área de Formación</th>
+              <td>
+                Ver las asignaturas asociadas:
+                <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=50&searchTerm=${encodeURIComponent(this.asignatura().areaFormacion)}">
+                  ${this.asignatura().areaFormacion}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver syllabus</th>
+              <td>
+                <a href="https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${this.asignatura().codigo}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${this.asignatura().codigo}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver objetos de estudio</th>
+              <td>
+                <a href="https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${this.asignatura().codigo}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${this.asignatura().codigo}
+                </a>
+              </td>
+            </tr>
+
+            <tr>
+              <th>Ver verbos</th>
+              <td>
+                <a href="https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${this.asignatura().nombre}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${this.asignatura().nombre}
+                </a>
+              </td>
+            </tr>
+
+            <tr><th>Tipo</th><td>${this.asignatura().Tipo}</td></tr>
+            <tr><th>HTD</th><td>${this.asignatura().HTD}</td></tr>
+            <tr><th>HTC</th><td>${this.asignatura().HTC}</td></tr>
+            <tr><th>HTA</th><td>${this.asignatura().HTA}</td></tr>
+          </table>
+        </div>
+      `
     });
-}
+
+  }
+
+
+  irASyllabyus(obj: any) {
+    const node = obj.part?.adornedPart as go.Node;
+    const data = node.data;
+    const id = data.key;
+    const nombre = data.text;
+
+    if(this.isExampleNode(id)) {
+      return;
+    }
+
+    let codigo: number = this.responseListAsignaturas().content.find(a => a.nombre == nombre)?.codigo || 0;
+    window.open(`https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${codigo}`, '_blank');
+  }
+
+
+  irAObjetosEstudio(obj: any) {
+    const node = obj.part?.adornedPart as go.Node;
+    const data = node.data;
+    const id = data.key;
+    const nombre = data.text;
+
+    if(this.isExampleNode(id)) {
+      return;
+    }
+
+    let codigo: number = this.responseListAsignaturas().content.find(a => a.nombre == nombre)?.codigo || 0;
+    window.open(`https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${codigo}`, '_blank');
+  }
+
+
+  irAVerbos(obj: any) {
+    const node = obj.part?.adornedPart as go.Node;
+    const data = node.data;
+    const id = data.key;
+    const nombre = data.text;
+
+    if(this.isExampleNode(id)) {
+      return;
+    }
+
+    window.open(`https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${nombre}`, '_blank');
+  }
 
 
   async saveImage(): Promise<void> {
-    const diagram = go.Diagram.fromDiv(this.myDiagramComponent.nativeElement);
-    const imgElement = this.diagram.makeImage({ background: 'white', scale: 1 }) as HTMLImageElement;
+    const imgElement = this.diagram.makeImage({ background: 'white', scale: 0.68 }) as HTMLImageElement;
 
     if (!imgElement.src) throw new Error('No se pudo generar la imagen');
 
@@ -447,45 +631,10 @@ export class PlanEstudiosSemestresComponent {
   }
 
 
-  async copyImage(): Promise<void> {
-    try {
-      const diagram = go.Diagram.fromDiv(this.myDiagramComponent.nativeElement);
-      const image = this.diagram.makeImage({ background: 'white', scale: 1 }) as HTMLImageElement;
-
-      // Crear un canvas temporal
-      const canvas = document.createElement('canvas');
-      canvas.width = image.width;
-      canvas.height = image.height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) throw new Error('No se pudo obtener el contexto del canvas');
-
-      ctx.drawImage(image, 0, 0);
-
-      // Convertir el canvas a blob PNG
-      const blob = await new Promise<Blob | null>(resolve =>
-        canvas.toBlob(resolve, 'image/png')
-      );
-      if (!blob) throw new Error('No se pudo generar el blob de imagen');
-
-      // Copiar al portapapeles
-      await navigator.clipboard.write([
-        new ClipboardItem({ 'image/png': blob })
-      ]);
-
-      Swal.fire('Copiado', 'La imagen fue copiada al portapapeles.', 'success');
-    }
-    catch (err) {
-      console.error(err);
-      Swal.fire('Error', 'No se pudo copiar la imagen.', 'error');
-    }
-  }
-
-
   public clickListener() {
     this.diagram.addDiagramListener('ObjectSingleClicked', (e) => {
       const part = e.subject.part;
       if (!(part instanceof go.Node)) return; // Solo queremos nodos
-
 
       if (part instanceof go.Group) {
         // grupo, ejemplo semestre o carrera
@@ -495,9 +644,25 @@ export class PlanEstudiosSemestresComponent {
         const id = nodeData.key;
         const nombre = nodeData.text;
 
-        Swal.fire('Asignatura seleccionada', `ID: ${id}<br>Nombre: ${nombre}`, 'info');
+        if(this.isExampleNode(id)) {
+          return;
+        }
+
+        let codigo: number = this.responseListAsignaturas().content.find(a => a.nombre == nombre)?.codigo || 0;
+        this.consultarAsignaturaPorCodigo(codigo);
       }
     });
+  }
+
+
+  isExampleNode(id: number) {
+    let examplesNodes = this.stateData.diagramNodeData.filter(n => n.header?.toLocaleLowerCase() == 'campo de formación');
+
+    if(examplesNodes.map(en => en.key).includes(id)) {
+      return true;
+    }
+
+    return false;
   }
 
 }
