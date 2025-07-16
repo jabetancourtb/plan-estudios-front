@@ -561,15 +561,55 @@ export class PlanEstudiosSemestresComponent {
               </td>
             </tr>
 
+            <tr>
+              <th>Justificación</th>
+              <td>
+                <button type="button" id="btnJustificacion" class="btn btn-primary">Ver</button>
+              </td>
+            </tr>
+
             <tr><th>Tipo</th><td>${this.asignatura().Tipo}</td></tr>
+            <tr><th>Número de Créditos</th><td>${this.asignatura().numeroCreditos}</td></tr>
+            <tr><th>Codigo de Cóndor</th><td>${this.asignatura().codigoCondor}</td></tr>
             <tr><th>HTD</th><td>${this.asignatura().HTD}</td></tr>
             <tr><th>HTC</th><td>${this.asignatura().HTC}</td></tr>
             <tr><th>HTA</th><td>${this.asignatura().HTA}</td></tr>
           </table>
         </div>
-      `
+      `,
+      didOpen: () => {
+        const btn = document.getElementById('btnJustificacion');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            this.showSwalAsignaturaJustificacion(); // ✅ Abre el otro swal
+          });
+        }
+      }
     });
 
+  }
+
+  showSwalAsignaturaJustificacion() {
+    if(!this.asignatura().justificacion) {
+      Swal.fire({
+        title: 'Justificación no disponible',
+        text: 'No hay justificación disponible para esta asignatura.',
+        icon: 'info'
+      });
+      return;
+    }
+
+    Swal.fire({
+      title:  this.asignatura().nombre,
+      width: '800px',
+      html: `
+      <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
+        <table class="table table-bordered text-start" style="table-layout: fixed; width: 100%;>
+          <tr><td style="white-space: pre-line">${this.asignatura().justificacion}</td></tr>
+        </table>
+      </div>
+      `
+    });
   }
 
 
