@@ -77,6 +77,14 @@ export class NavbarComponent {
   }
 
 
+   // Redirige a / luego redigecciona a la ruta deseada
+  goToPrerrequisitosBuscar() {
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([APP_CONSTANTS.ROUTES.prerrequisitosBuscar]);
+    });
+  }
+
+
   // Redirige a / luego redigecciona a la ruta deseada
   goToPlanEstudiosCirclePacking() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
