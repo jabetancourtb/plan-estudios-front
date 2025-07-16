@@ -396,6 +396,7 @@ export class AsignaturasBubbleChartComponent {
 
             <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
             <tr><th>Número de Créditos</th><td>${a.numeroCreditos}</td></tr>
+            <tr><th>Codigo de Cóndor</th><td>${a.codigoCondor}</td></tr>
             <tr><th>HTD</th><td>${a.HTD}</td></tr>
             <tr><th>HTC</th><td>${a.HTC}</td></tr>
             <tr><th>HTA</th><td>${a.HTA}</td></tr>
