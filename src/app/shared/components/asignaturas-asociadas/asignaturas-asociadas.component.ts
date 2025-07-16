@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, input, signal, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, input, signal, ViewChild } from '@angular/core';
 import { CampoFormacionService } from '../../../services/campo-formacion.service';
 import { AreaFormacionService } from '../../../services/area-formacion.service';
 import { AsignaturaService } from '../../../services/asignatura.service';
@@ -80,15 +80,6 @@ export class AsignaturasAsociadasComponent {
     totalPages: 0,
     content: []
   });
-
-
-  /*
-  ngOnChanges(changes: SimpleChanges): void {
-    if(changes['asignatura']) {
-      this.consultarCamposFormacion();
-    }
-  }
-  */
 
 
   public consultarCamposFormacion() {
