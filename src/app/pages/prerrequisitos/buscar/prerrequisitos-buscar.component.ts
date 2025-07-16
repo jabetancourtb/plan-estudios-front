@@ -200,11 +200,41 @@ export class PrerrequisitosBuscarComponent {
 
 
   public loadAndConvertExternalData() {
+    this.cleanDataGraph();
     this.fillNodeDataGrupos();
     this.fillNodeDataAsignatura();
     let keyCounter = this.fillNodeDataPrerrequisitos();
     this.fillNodeDataAsignaturasPosteriores(keyCounter);
     this.initDiagram();
+  }
+
+  cleanDataGraph() {
+    if (this.diagram) {
+      this.diagram.model = new go.GraphLinksModel();
+
+      this.diagram.div = null;
+
+      this.stateData = {
+        diagramNodeData: [] as {
+          key: number;
+          header?: string;
+          text?: string;
+          footer?: string;
+          isGroup?: boolean;
+          group?: number;
+        }[],
+        diagramLinkData: [] as {
+          key: number;
+          from: number;
+          to: number;
+          color: string;
+        }[],
+      };
+
+    }
+    else {
+      console.warn('El diagrama no está inicializado aún');
+    }
   }
 
 
@@ -489,6 +519,8 @@ export class PrerrequisitosBuscarComponent {
         <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
           <table class="table table-bordered text-start">
 
+            <tr><th>Codigo</th><td>${this.asignatura().codigo}</td></tr>
+
             <tr>
               <th>Campo de Formación</th>
               <td>
@@ -633,7 +665,7 @@ export class PrerrequisitosBuscarComponent {
 
 
   async saveImage(): Promise<void> {
-    const imgElement = this.diagram.makeImage({ background: 'white', scale: 0.68 }) as HTMLImageElement;
+    const imgElement = this.diagram.makeImage({ background: 'white', scale: 1 }) as HTMLImageElement;
 
     if (!imgElement.src) throw new Error('No se pudo generar la imagen');
 
