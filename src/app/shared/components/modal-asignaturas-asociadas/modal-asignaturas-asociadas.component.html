@@ -1,0 +1,35 @@
+
+<!-- Modal -->
+@if(showModal()) {
+    <div class="modal-backdrop fade show"></div>
+
+    <div class="modal fade show d-block" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Asignaturas asociadas a {{asignatura()}}</h5>
+                    <button type="button" class="btn-close" aria-label="Cerrar" (click)="onClose()"></button>
+                </div>
+                <div class="modal-body">
+
+                  <app-asignaturas-asociadas
+                    [asignatura]="asignatura()"
+                  />
+
+                  <!--
+                  <br>
+                  <div style="text-align: center;">
+                    <button type="button" class="btn btn-primary" (click)="removeGraph()">
+                      <span>Remover</span>
+                    </button>
+                  </div>
+                  -->
+
+                </div>
+                <div class="modal-footer mx-auto border-0">
+                    <button type="button" class="btn btn-warning" (click)="onClose()">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
