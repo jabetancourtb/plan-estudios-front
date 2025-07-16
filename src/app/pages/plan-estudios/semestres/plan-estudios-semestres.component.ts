@@ -504,6 +504,8 @@ export class PlanEstudiosSemestresComponent {
         <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
           <table class="table table-bordered text-start">
 
+            <tr><th>Codigo</th><td>${this.asignatura().codigo}</td></tr>
+
             <tr>
               <th>Campo de Formación</th>
               <td>
