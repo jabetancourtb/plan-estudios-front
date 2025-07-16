@@ -22,7 +22,7 @@
 
         @if(asignaturas().length > 0 && !prerrequisitosBuscarIsLoading()) {
 
-          <div class="table-responsive" style="max-height: 20vh; max-width: 200vh; overflow: auto;">
+          <div class="table-responsive" [ngStyle]="estilosTablaDiv">
             <table class="table table-bordered table-striped" style="text-align: center;">
               <thead class="table-dark">
                 <tr>
@@ -55,6 +55,13 @@
           <app-asignaturas-asociadas
             [asignatura]="asignatura()"
           />
+
+          <br>
+          <div style="text-align: center;">
+            <button type="button" class="btn btn-primary" (click)="removeGraph()">
+              <span>Remover</span>
+            </button>
+          </div>
         }
 
 

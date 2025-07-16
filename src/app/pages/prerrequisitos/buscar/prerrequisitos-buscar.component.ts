@@ -7,18 +7,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FilterAllFieldsPipe } from '../../../pipes/filter-all-fields.pipe';
 import { AsignaturasAsociadasComponent } from "../../../shared/components/asignaturas-asociadas/asignaturas-asociadas.component";
+import { NgStyle } from '@angular/common';
 
 
 @Component({
   selector: 'app-prerrequisitos-buscar',
-  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, AsignaturasAsociadasComponent],
+  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, AsignaturasAsociadasComponent, NgStyle],
   templateUrl: './prerrequisitos-buscar.component.html',
   styleUrl: './prerrequisitos-buscar.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrerrequisitosBuscarComponent {
 
-  @ViewChild(AsignaturasAsociadasComponent, { static: false }) asignatrasAsociadas!: AsignaturasAsociadasComponent;
+  @ViewChild(AsignaturasAsociadasComponent, { static: false }) asignaturasAsociadas!: AsignaturasAsociadasComponent;
 
   private router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -46,6 +47,12 @@ export class PrerrequisitosBuscarComponent {
   searchTerm = signal<string>('');
 
   mostrarComponenteHijo = false;
+
+  estilosTablaDiv = {
+    'max-height': '60vh',
+    'max-width': '200vh',
+    'overflow': 'auto'
+  };
 
 
   ngOnInit() {
@@ -97,13 +104,20 @@ export class PrerrequisitosBuscarComponent {
   verAsignaturasAsociadas(asignatura: any) {
     let asignaturaFound = this.responseListAsignaturas().content.find(a => a.codigo == asignatura.codigo)!;
     this.asignatura.set(asignaturaFound);
-    //this.asignatrasAsociadas.consultarCamposFormacion();
+
+    this.estilosTablaDiv['max-height'] = '10vh';
 
     this.mostrarComponenteHijo = true;
 
     setTimeout(() => {
-      this.asignatrasAsociadas.consultarCamposFormacion();
+      this.asignaturasAsociadas.consultarCamposFormacion();
     });
+  }
+
+
+  removeGraph() {
+    this.asignatura.set({} as Asignatura);
+    this.estilosTablaDiv['max-height'] = '60vh';
   }
 
 
