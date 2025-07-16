@@ -83,16 +83,6 @@ export class PlanEstudiosSemestresComponent {
 
   diagram!: go.Diagram;
 
-  contextualMenuOptions = {
-    verDetalles: '🔍 Ver detalles',
-    verJustificacion: 'Ver justificación',
-    guardarImage: '💾 Guardar imagen',
-    copiarImagen: '📋 Copiar imagen',
-    irSyllabus: '🔗 Ir al syllabus',
-    irObjetosEstudio: '🔗 Ir a objetos de estudio',
-    irVerbos: '🔗 Ir a verbos de estudio',
-  }
-
   public stateData = {
     diagramNodeData: [] as {
       key: number;
