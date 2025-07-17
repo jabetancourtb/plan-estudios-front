@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, output, signal, ViewChild } from '@angular/core';
-import { AsignaturasAsociadasComponent } from '../asignaturas-asociadas/asignaturas-asociadas.component';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Asignatura } from '../../../models/asignatura.model';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { AsignaturasAsociadasComponent } from "../asignaturas-asociadas/asignaturas-asociadas.component";
 
 @Component({
   selector: 'app-modal-asignaturas-asociadas',
@@ -11,34 +12,17 @@ import { Asignatura } from '../../../models/asignatura.model';
 })
 export class ModalAsignaturasAsociadasComponent {
 
-  @ViewChild(AsignaturasAsociadasComponent, { static: false }) asignaturasAsociadas!: AsignaturasAsociadasComponent;
+  @Input() asignatura: any;
 
-  showModal = signal<boolean>(false);
-
-  asignatura = signal<Asignatura>({} as Asignatura);
-
-  close = output<boolean>();
-
-
-  public verAsignaturasAsociadas(asignatura: Asignatura) {
-    this.showModal.set(true);
-    this.asignatura.set(asignatura);
-
-    setTimeout(() => {
-      this.asignaturasAsociadas.consultarCamposFormacion();
-    });
-  }
-
+  constructor(public activeModal: NgbActiveModal) {}
 
   onClose() {
     this.removeGraph();
-    this.showModal.set(false);
-    this.close.emit(false);
+    this.activeModal.dismiss();
   }
 
-
   removeGraph() {
-    this.asignatura = signal<Asignatura>({} as Asignatura);
+    this.asignatura = {} as Asignatura;
   }
 
 }
