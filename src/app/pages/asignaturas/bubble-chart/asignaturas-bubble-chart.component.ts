@@ -9,11 +9,13 @@ import { ResponseListDTO } from '../../../dto/response-list.model';
 import { AsignaturaService } from '../../../services/asignatura.service';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar.component';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
+import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalAsignaturasAsociadasComponent } from '../../../shared/components/modal-asignaturas-asociadas/modal-asignaturas-asociadas.component';
 
 
 @Component({
   selector: 'app-asignaturas-bubble-chart',
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, NgbModalModule, ModalAsignaturasAsociadasComponent],
   templateUrl: './asignaturas-bubble-chart.component.html',
   styleUrl: './asignaturas-bubble-chart.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,6 +25,7 @@ export class AsignaturasBubbleChartComponent {
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
+  private modalService = inject(NgbModal);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
 
@@ -58,6 +61,7 @@ export class AsignaturasBubbleChartComponent {
   contextualMenuOptions = {
     verDetalles: '🔍 Ver detalles',
     verJustificacion: 'Ver justificación',
+    verAsignaturasAsociadas: 'Ver asignaturas asociadas',
     guardarImage: '💾 Guardar imagen',
     copiarImagen: '📋 Copiar imagen',
     irSyllabus: '🔗 Ir al syllabus',
@@ -305,6 +309,9 @@ export class AsignaturasBubbleChartComponent {
       case this.contextualMenuOptions.verJustificacion:
         this.showSwalAsignaturaJustificacion();
         break;
+      case this.contextualMenuOptions.verAsignaturasAsociadas:
+        this.abrirModalAsignaturasAsociadas();
+        break;
       case this.contextualMenuOptions.guardarImage:
         this.saveImage();
         break;
@@ -394,6 +401,13 @@ export class AsignaturasBubbleChartComponent {
               </td>
             </tr>
 
+            <tr>
+              <th>Asignaturas Asociadas</th>
+              <td>
+                <button type="button" id="btnAsignaturasAsociadas" class="btn btn-primary">Ver</button>
+              </td>
+            </tr>
+
             <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
             <tr><th>Número de Créditos</th><td>${a.numeroCreditos}</td></tr>
             <tr><th>Codigo de Cóndor</th><td>${a.codigoCondor}</td></tr>
@@ -404,10 +418,19 @@ export class AsignaturasBubbleChartComponent {
         </div>
       `,
       didOpen: () => {
-        const btn = document.getElementById('btnJustificacion');
-        if (btn) {
-          btn.addEventListener('click', () => {
-            this.showSwalAsignaturaJustificacion(); // ✅ Abre el otro swal
+        const btnJust = document.getElementById('btnJustificacion');
+        const btnAsociadas = document.getElementById('btnAsignaturasAsociadas');
+
+        if (btnJust) {
+          btnJust.addEventListener('click', () => {
+            this.showSwalAsignaturaJustificacion();
+          });
+        }
+
+        if (btnAsociadas) {
+          btnAsociadas.addEventListener('click', () => {
+            this.abrirModalAsignaturasAsociadas();
+            Swal.close();
           });
         }
       }
@@ -438,6 +461,19 @@ export class AsignaturasBubbleChartComponent {
       </div>
       `
     });
+  }
+
+
+  abrirModalAsignaturasAsociadas() {
+    const a = this.clickedData.subject;
+
+    const modalRef = this.modalService.open(ModalAsignaturasAsociadasComponent, {
+      size: 'xl',
+      scrollable: true
+    });
+    console.log(this.asignatura())
+
+    modalRef.componentInstance.asignatura = a;
   }
 
 
