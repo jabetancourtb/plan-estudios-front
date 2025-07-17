@@ -465,14 +465,14 @@ export class AsignaturasBubbleChartComponent {
 
 
   abrirModalAsignaturasAsociadas() {
-    const a = this.clickedData.subject;
+    const asignatura = this.clickedData.subject;
 
     const modalRef = this.modalService.open(ModalAsignaturasAsociadasComponent, {
       size: 'xl',
       scrollable: true
     });
 
-    modalRef.componentInstance.asignatura = a;
+    modalRef.componentInstance.asignatura = asignatura;
   }
 
 
