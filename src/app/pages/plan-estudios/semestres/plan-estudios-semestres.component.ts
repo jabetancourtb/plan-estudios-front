@@ -16,11 +16,13 @@ import { AreaFormacion } from '../../../models/area-formacion.model';
 import { CampoFormacion } from '../../../models/campo-formacion.model';
 import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
+import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalAsignaturasAsociadasComponent } from '../../../shared/components/modal-asignaturas-asociadas/modal-asignaturas-asociadas.component';
 
 
 @Component({
   selector: 'app-plan-estudios-semestres',
-  imports: [CommonModule, NavbarComponent],
+  imports: [CommonModule, NavbarComponent, NgbModalModule],
   templateUrl: './plan-estudios-semestres.component.html',
   styleUrl: './plan-estudios-semestres.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,13 +31,14 @@ export class PlanEstudiosSemestresComponent {
 
   @ViewChild('myDiagram', { static: true }) public myDiagramComponent!: ElementRef;
 
+  private modalService = inject(NgbModal);
   private carreraService: CarreraService = inject(CarreraService);
   private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
   private areaFormacionService: AreaFormacionService = inject(AreaFormacionService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
   private prerrequisitoService: PrerrequisitoService = inject(PrerrequisitoService);
 
-  asignaturasGraphIsLoading = signal(false);
+  planEstudiosGraphIsLoading = signal(false);
 
   responseListCarreras = signal<ResponseListDTO<Carrera>>({
     recordCountPerPage: 0,
@@ -107,104 +110,89 @@ export class PlanEstudiosSemestresComponent {
 
 
   private consultarCarreras() {
-    this.asignaturasGraphIsLoading.set(true);
+    this.planEstudiosGraphIsLoading.set(true);
     this.carreraService.consultarCarreras(1, 100, 'id' , true).subscribe({
       next: (res) => {
         this.responseListCarreras.set(res);
         this.consultarSemestres();
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       }
     });
   }
 
   private consultarSemestres() {
-    this.asignaturasGraphIsLoading.set(true);
+    this.planEstudiosGraphIsLoading.set(true);
     this.asignaturaService.consultarSemestres(true).subscribe({
       next: (res) => {
         this.responseListSemestres.set(res);
         this.consultarCamposFormacion();
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       }
     });
   }
 
 
   private consultarCamposFormacion() {
-    this.asignaturasGraphIsLoading.set(true);
+    this.planEstudiosGraphIsLoading.set(true);
     this.campoFormacionService.consultarCamposFormacion(1, 100, 'id', true).subscribe({
       next: (res) => {
         this.responseListCamposFormacion.set(res);
         this.consultarAreasFormacion();
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       }
     });
   }
 
 
   private consultarAreasFormacion() {
-    this.asignaturasGraphIsLoading.set(true);
+    this.planEstudiosGraphIsLoading.set(true);
     this.areaFormacionService.consultarAreasFormacion(1, 100, 'id', true).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
         this.consultarAsignaturas(1, 200, 'semestreAsignatura', true);
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       }
     });
   }
 
 
   private consultarAsignaturas(page: number, pageSize: number, field: string, asc: boolean) {
-    this.asignaturasGraphIsLoading.set(true);
+    this.planEstudiosGraphIsLoading.set(true);
     this.asignaturaService.consultarAsignaturas(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListAsignaturas.set(res);
         this.consultarPrerrequisitosPorPagnacion(1, 200, 'id', true);
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       }
     });
   }
 
 
   private consultarPrerrequisitosPorPagnacion(page: number, pageSize: number, field: string, asc: boolean) {
-    this.asignaturasGraphIsLoading.set(true);
+    this.planEstudiosGraphIsLoading.set(true);
     this.prerrequisitoService.consultarPrerrequisitos(page, pageSize, field, asc).subscribe({
       next: (res) => {
         this.responseListPrerrequisitos.set(res);
         this.loadAndConvertExternalData();
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       },
       error: (e) => {
-        this.asignaturasGraphIsLoading.set(false);
-      }
-    });
-  }
-
-
-  private consultarAsignaturaPorCodigo(codigo: number) {
-    this.asignaturasGraphIsLoading.set(true);
-    this.asignaturaService.consultarAsignaturaPorCodigo(codigo).subscribe({
-      next: (res) => {
-        this.asignatura.set(res);
-        this.showSwalAsignaturaDetalle();
-        this.asignaturasGraphIsLoading.set(false);
-      },
-      error: (e) => {
-        this.asignaturasGraphIsLoading.set(false);
+        this.planEstudiosGraphIsLoading.set(false);
       }
     });
   }
@@ -460,6 +448,14 @@ export class PlanEstudiosSemestresComponent {
         { click: (e: any, obj: any) => this.consultarlAsignaturaDetalle(obj)}
       ),
       $('ContextMenuButton',
+        $(go.TextBlock, 'Ver justificación'),
+        { click: (e: any, obj: any) => this.consultarJustificacion(obj)}
+      ),
+      $('ContextMenuButton',
+        $(go.TextBlock, 'Ver asignaturas asociadas'),
+        { click: (e: any, obj: any) => this.abrirModalAsignaturasAsociadas(obj)}
+      ),
+      $('ContextMenuButton',
         $(go.TextBlock, '🔗 Ir a Syllabus'),
         { click: (e: any, obj: any) => this.irASyllabyus(obj)}
       ),
@@ -491,8 +487,27 @@ export class PlanEstudiosSemestresComponent {
       return;
     }
 
-    let codigo: number = this.responseListAsignaturas().content.find(a => a.nombre == nombre)?.codigo || 0;
-    this.consultarAsignaturaPorCodigo(codigo);
+    let asignatura = this.responseListAsignaturas().content.find(a => a.nombre == nombre)!;
+    this.asignatura.set(asignatura);
+    this.showSwalAsignaturaDetalle();
+  }
+
+
+  async consultarJustificacion(obj: any) {
+    const node = obj.part?.adornedPart as go.Node;
+    if (!node) return;
+
+    const data = node.data;
+    const id = data.key;
+    const nombre = data.text;
+
+    if(this.isExampleNode(id)) {
+      return;
+    }
+
+    let asignatura = this.responseListAsignaturas().content.find(a => a.nombre == nombre)!;
+    this.asignatura.set(asignatura);
+    this.showSwalAsignaturaJustificacion();
   }
 
 
@@ -560,6 +575,13 @@ export class PlanEstudiosSemestresComponent {
               </td>
             </tr>
 
+             <tr>
+              <th>Asignaturas Asociadas</th>
+              <td>
+                <button type="button" id="btnAsignaturasAsociadas" class="btn btn-primary">Ver</button>
+              </td>
+            </tr>
+
             <tr><th>Tipo</th><td>${this.asignatura().Tipo}</td></tr>
             <tr><th>Número de Créditos</th><td>${this.asignatura().numeroCreditos}</td></tr>
             <tr><th>Codigo de Cóndor</th><td>${this.asignatura().codigoCondor}</td></tr>
@@ -570,10 +592,19 @@ export class PlanEstudiosSemestresComponent {
         </div>
       `,
       didOpen: () => {
-        const btn = document.getElementById('btnJustificacion');
-        if (btn) {
-          btn.addEventListener('click', () => {
-            this.showSwalAsignaturaJustificacion(); // ✅ Abre el otro swal
+        const btnJust = document.getElementById('btnJustificacion');
+        const btnAsociadas = document.getElementById('btnAsignaturasAsociadas');
+
+        if (btnJust) {
+          btnJust.addEventListener('click', () => {
+            this.showSwalAsignaturaJustificacion();
+          });
+        }
+
+        if (btnAsociadas) {
+          btnAsociadas.addEventListener('click', () => {
+            this.abrirModalAsignaturasAsociadas(null);
+            Swal.close();
           });
         }
       }
@@ -680,8 +711,9 @@ export class PlanEstudiosSemestresComponent {
           return;
         }
 
-        let codigo: number = this.responseListAsignaturas().content.find(a => a.nombre == nombre)?.codigo || 0;
-        this.consultarAsignaturaPorCodigo(codigo);
+        let asignatura = this.responseListAsignaturas().content.find(a => a.nombre == nombre)!;
+        this.asignatura.set(asignatura);
+        this.showSwalAsignaturaDetalle();
       }
     });
   }
@@ -696,5 +728,30 @@ export class PlanEstudiosSemestresComponent {
 
     return false;
   }
+
+
+  abrirModalAsignaturasAsociadas(obj?: any) {
+    if(obj) {
+      const node = obj.part?.adornedPart as go.Node;
+      const data = node.data;
+      const id = data.key;
+      const nombre = data.text;
+
+      if(this.isExampleNode(id)) {
+        return;
+      }
+
+      let asignatura = this.responseListAsignaturas().content.find(a => a.nombre == nombre)!;
+      this.asignatura.set(asignatura);
+    }
+
+    const modalRef = this.modalService.open(ModalAsignaturasAsociadasComponent, {
+      size: 'xl',
+      scrollable: true
+    });
+
+    modalRef.componentInstance.asignatura = this.asignatura();
+  }
+
 
 }
