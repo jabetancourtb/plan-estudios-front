@@ -14,12 +14,21 @@ export class ModalAsignaturasAsociadasComponent {
 
   @Input() asignatura: any;
 
+  simplificarDiagrama = false;
+
   constructor(public activeModal: NgbActiveModal) {}
+
+
+  onSimplificarDiagrama() {
+    this.simplificarDiagrama = !this.simplificarDiagrama;
+  }
+
 
   onClose() {
     this.removeGraph();
     this.activeModal.dismiss();
   }
+
 
   removeGraph() {
     this.asignatura = {} as Asignatura;

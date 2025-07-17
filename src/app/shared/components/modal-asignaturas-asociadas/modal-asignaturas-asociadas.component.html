@@ -6,10 +6,27 @@
   </div>
 
   <div class="modal-body">
-    <app-asignaturas-asociadas [asignatura]="asignatura" />
+    <p>
+      <strong style="color:red;">Simplificar:</strong> Mostrará únicamente las asignaturas relacionadas con la asignatura seleccionada <br>
+      <strong style="color:red;">Visualización completa:</strong> Mostrará el flujo de asignaturas anteriores y posteriores de la asignatura seleccionada
+    </p>
+    <app-asignaturas-asociadas
+      [asignatura]="asignatura"
+      [simplificarDiagrama]="simplificarDiagrama"
+    />
   </div>
 
   <div class="modal-footer">
+
+    <button type="button" class="btn btn-danger" (click)="onSimplificarDiagrama()">
+      @if(simplificarDiagrama){
+        Visualización completa
+      }
+      @else {
+        Simplificar
+      }
+    </button>
+
     <button type="button" class="btn btn-danger" (click)="activeModal.close('cerrar')">Cerrar</button>
   </div>
 </div>
