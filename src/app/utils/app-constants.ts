@@ -12,9 +12,9 @@ export const APP_CONSTANTS = {
     asignaturasBubbleChart: '/asignaturas/bubble-chart',
     asignaturasLista: '/asignaturas/lista',
     prerrequisitosTreegraphChart: '/prerrequisitos/tree-chart',
-    prerrequisitosBuscar: '/prerrequisitos/buscar',
     planEstudiosCirclePacking: '/plan-estudios/circle-packing',
     planEstudiosTabla: '/plan-estudios/semestres',
+    planEstudiosSemestre: '/plan-estudios/semestres-2',
   },
 
 };
