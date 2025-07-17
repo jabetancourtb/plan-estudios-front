@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, input, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, input, signal, SimpleChanges, ViewChild } from '@angular/core';
 import { CampoFormacionService } from '../../../services/campo-formacion.service';
 import { AreaFormacionService } from '../../../services/area-formacion.service';
 import { AsignaturaService } from '../../../services/asignatura.service';
@@ -80,6 +80,15 @@ export class AsignaturasAsociadasComponent {
     totalPages: 0,
     content: []
   });
+
+
+  ngOnChanges(changes: SimpleChanges): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    if(this.asignatura()){
+      this.consultarCamposFormacion();
+    }
+  }
 
 
   public consultarCamposFormacion() {
