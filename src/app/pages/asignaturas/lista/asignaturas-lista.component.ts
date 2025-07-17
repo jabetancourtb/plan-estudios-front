@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AsignaturaService } from '../../../services/asignatura.service';
@@ -12,20 +12,20 @@ import { PaginationComponent } from '../../../shared/components/pagination/pagin
 import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
 import { ModalAsignaturasAsociadasComponent } from "../../../shared/components/modal-asignaturas-asociadas/modal-asignaturas-asociadas.component";
+import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
 @Component({
   selector: 'app-asignaturas-lista',
-  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, FilterPaginationComponent, PaginationComponent, ModalAsignaturasAsociadasComponent],
+  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, FilterPaginationComponent, PaginationComponent, ModalAsignaturasAsociadasComponent, NgbModalModule],
   templateUrl: './asignaturas-lista.component.html',
   styleUrl: './asignaturas-lista.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AsignaturasListaComponent {
 
-  @ViewChild(ModalAsignaturasAsociadasComponent, { static: false }) modalAsignaturasAsociadas!: ModalAsignaturasAsociadasComponent;
-
+  private modalService = inject(NgbModal);
   private router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
@@ -249,9 +249,12 @@ export class AsignaturasListaComponent {
   abrirModalAsignaturasAsociadas(asignatura: Asignatura) {
     this.asignatura.set(asignatura);
 
-    setTimeout(() => {
-      this.modalAsignaturasAsociadas.verAsignaturasAsociadas(asignatura);
+    const modalRef = this.modalService.open(ModalAsignaturasAsociadasComponent, {
+      size: 'xl',
+      scrollable: true
     });
+
+    modalRef.componentInstance.asignatura = this.asignatura();
   }
 
 
