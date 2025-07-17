@@ -90,6 +90,8 @@ export class PlanEstudiosSemestresComponent {
     diagramNodeData: [] as {
       key: number;
       header?: string;
+      codigoCondor?: string;
+      creditos?: string;
       text?: string;
       footer?: string;
       isGroup?: boolean;
@@ -221,7 +223,9 @@ export class PlanEstudiosSemestresComponent {
     let data1 = {
       key: keyExampleCounter+1,
       header: 'Campo de formación',
+      codigoCondor: 'Código cóndor',
       text: 'Asignatura Prerrequisito (Obligatoria para ver la asignatura posterior)',
+      creditos: 'Creditos',
       footer: 'Área de formación',
       group: keyExampleCounter,
       colorCampoFormacion: '#f2f5df',
@@ -233,7 +237,9 @@ export class PlanEstudiosSemestresComponent {
     let data2 = {
       key: keyExampleCounter+2,
       header: 'Campo de formación',
+      codigoCondor: 'Código cóndor',
       text: 'Asignatura posterior',
+      creditos: 'Creditos',
       footer: 'Área de formación',
       group: keyExampleCounter,
       colorCampoFormacion: '#f2f5df',
@@ -314,7 +320,9 @@ export class PlanEstudiosSemestresComponent {
       let data = {
         key: keyCounter,
         header: asignatura.campoFormacion,
+        codigoCondor: 'Código cóndor: '+asignatura.codigoCondor,
         text: asignatura.nombre,
+        creditos: 'Créditos: '+asignatura.numeroCreditos,
         footer: asignatura.areaFormacion,
         group: asignatura.semestreAsignatura,
         colorCampoFormacion: colorCampoFormacion,
@@ -398,11 +406,19 @@ export class PlanEstudiosSemestresComponent {
     this.diagram.nodeTemplate = $(
       go.Node, 'Vertical',
       { defaultStretch: go.GraphObject.Horizontal, fromSpot: go.Spot.RightSide, toSpot: go.Spot.LeftSide, contextMenu: contextMenu },
+
+      /*
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedTopRectangle')
           .bind('fill', 'colorCampoFormacion'), // Aquí usas el color definido por nodo
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'header')
+      ),*/
+       $(go.Panel, 'Auto',
+        $(go.Shape, 'RoundedTopRectangle')
+          .bind('fill', 'colorCampoFormacion'),
+        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
+          .bind('text', 'codigoCondor')
       ),
       $(go.Panel, 'Auto', { minSize: new go.Size(NaN, 70) },
         $(go.Shape, 'Rectangle')
@@ -410,12 +426,19 @@ export class PlanEstudiosSemestresComponent {
         $(go.TextBlock, { width: 120, margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text')
       ),
+        $(go.Panel, 'Auto',
+        $(go.Shape, 'RoundedBottomRectangle')
+          .bind('fill', 'colorAreaFormacion'),
+        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
+          .bind('text', 'creditos')
+      ),
+      /*
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedBottomRectangle')
           .bind('fill', 'colorAreaFormacion'), // O aquí también
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'footer')
-      )
+      )*/
     );
 
     this.diagram.linkTemplate = $(
