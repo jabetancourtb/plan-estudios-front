@@ -32,6 +32,7 @@ export class AsignaturasAsociadasComponent {
   asignaturasAsociadasGraphIsLoading = signal(false);
 
   asignatura = input.required<Asignatura>();
+  simplificarDiagrama = input.required<boolean>();
 
   diagram!: go.Diagram;
 
@@ -155,7 +156,7 @@ export class AsignaturasAsociadasComponent {
     this.cleanDataGraph();
     this.fillNodeDataGrupos();
     this.fillNodeDataAsignatura();
-    let keyCounter = this.fillNodeDataPrerrequisitos();
+    let keyCounter = this.fillNodeDataAsignaturasAnteriores();
     this.fillNodeDataAsignaturasPosteriores(keyCounter);
     this.initDiagram();
   }
@@ -226,18 +227,15 @@ export class AsignaturasAsociadasComponent {
 
 
   public fillNodeDataAsignatura() {
-    let keyCounter = 1;
-
     let colorCampoFormacion = this.responseListCamposFormacion().content.find(a => a.nombre == this.asignatura().campoFormacion)?.colorHtml;
     let colorAreaFormacion = this.responseListAreasFormacion().content.find(a => a.nombre == this.asignatura().areaFormacion)?.colorHtml;
     let colorBody = 'white';
 
     let data = {
-      key: keyCounter,
+      key: this.asignatura().codigo,
       header: this.asignatura().campoFormacion,
       text: this.asignatura().nombre,
       footer: this.asignatura().areaFormacion,
-      group: this.asignatura().semestreAsignatura,
       colorCampoFormacion: colorCampoFormacion,
       colorAreaFormacion: colorAreaFormacion,
       colorBody: colorBody,
@@ -247,82 +245,120 @@ export class AsignaturasAsociadasComponent {
   }
 
 
-  public fillNodeDataPrerrequisitos() {
-    let keyCounter = 2;
+  public fillNodeDataAsignaturasAnteriores() {
+    let keyCounter = 1;
 
+    let camposFormacion = this.responseListCamposFormacion().content;
+    let areasFormacion = this.responseListAreasFormacion().content;
+    let asignaturas = this.responseListAsignaturas().content;
     let prerrequisitos = this.responseListPrerrequisitos().content;
+    let stateData = this.stateData;
+    let simplificarDiagrama = this.simplificarDiagrama;
 
-    let asignaturasAnteriores = prerrequisitos.filter(p => p.asignaturaCodigo == this.asignatura().codigo);
+    buscarAsignaturasAnteriores(this.asignatura());
 
-    for(let aa of asignaturasAnteriores) {
+    function buscarAsignaturasAnteriores(asignaturaFunc: Asignatura) {
 
-      let asignaturaAnterior = this.responseListAsignaturas().content.find(a => a.codigo == aa.prerrequisitoCodigo)!;
+      let asignaturasAnteriores = prerrequisitos.filter(p => p.asignaturaCodigo == asignaturaFunc.codigo);
 
-      let colorCampoFormacion = this.responseListCamposFormacion().content.find(a => a.nombre == asignaturaAnterior.campoFormacion)?.colorHtml;
-      let colorAreaFormacion = this.responseListAreasFormacion().content.find(a => a.nombre == asignaturaAnterior.areaFormacion)?.colorHtml;
-      let colorBody = 'white';
+      for(let prerrequisito of asignaturasAnteriores) {
 
-      let data = {
-        key: keyCounter+1,
-        header: asignaturaAnterior.campoFormacion,
-        text: asignaturaAnterior.nombre,
-        footer: asignaturaAnterior.areaFormacion,
-        group: this.stateData.diagramNodeData.find(dn => dn.header == 'Asignaturas prerrequisitos')?.key,
-        colorCampoFormacion: colorCampoFormacion,
-        colorAreaFormacion: colorAreaFormacion,
-        colorBody: colorBody,
+        let asignaturaAnterior = asignaturas.find(a => a.codigo == prerrequisito.prerrequisitoCodigo)!;
+
+        let colorCampoFormacion = camposFormacion.find(a => a.nombre == asignaturaAnterior.campoFormacion)?.colorHtml;
+        let colorAreaFormacion = areasFormacion.find(a => a.nombre == asignaturaAnterior.areaFormacion)?.colorHtml;
+        let colorBody = 'white';
+
+        if(!stateData.diagramNodeData.find(n => n.key == asignaturaAnterior.codigo)) {
+           let data = {
+            key: asignaturaAnterior.codigo,
+            header: asignaturaAnterior.campoFormacion,
+            text: asignaturaAnterior.nombre,
+            footer: asignaturaAnterior.areaFormacion,
+            group: stateData.diagramNodeData.find(dn => dn.header == 'Asignaturas prerrequisitos')?.key,
+            colorCampoFormacion: colorCampoFormacion,
+            colorAreaFormacion: colorAreaFormacion,
+            colorBody: colorBody,
+          }
+          stateData.diagramNodeData.push(data);
+        }
+
+        if(!stateData.diagramLinkData.find(l => l.from == prerrequisito.prerrequisitoCodigo && l.to == asignaturaFunc.codigo)) {
+          stateData.diagramLinkData.push({
+            key: -keyCounter,
+            from: prerrequisito.prerrequisitoCodigo,
+            to: asignaturaFunc.codigo,
+            color: '#ff3c00ff'
+          });
+        }
+
+        keyCounter += 1;
+
+        if(!simplificarDiagrama()) {
+          buscarAsignaturasAnteriores(asignaturaAnterior);
+        }
       }
-      this.stateData.diagramNodeData.push(data);
 
-      this.stateData.diagramLinkData.push({
-        key: -keyCounter,
-        from: keyCounter+1,
-        to: 1,
-        color: '#ff3c00ff'
-      });
-
-      keyCounter += 1;
     }
 
     return keyCounter;
+
   }
 
 
   public fillNodeDataAsignaturasPosteriores(keyCounter: number) {
 
+    let camposFormacion = this.responseListCamposFormacion().content;
+    let areasFormacion = this.responseListAreasFormacion().content;
+    let asignaturas = this.responseListAsignaturas().content;
     let prerrequisitos = this.responseListPrerrequisitos().content;
+    let stateData = this.stateData;
+    let simplificarDiagrama = this.simplificarDiagrama;
 
-    let asignaturasPosteriores = prerrequisitos.filter(p => p.prerrequisitoCodigo == this.asignatura().codigo);
+    buscarAsignaturasPosteriores(this.asignatura());
 
-    for(let ap of asignaturasPosteriores) {
+    function buscarAsignaturasPosteriores(asignaturaFunc: Asignatura) {
 
-      let asignaturaPosterior = this.responseListAsignaturas().content.find(a => a.codigo == ap.asignaturaCodigo)!;
+      let asignaturasPosteriores = prerrequisitos.filter(p => p.prerrequisitoCodigo == asignaturaFunc.codigo);
 
-      let colorCampoFormacion = this.responseListCamposFormacion().content.find(a => a.nombre == asignaturaPosterior.campoFormacion)?.colorHtml;
-      let colorAreaFormacion = this.responseListAreasFormacion().content.find(a => a.nombre == asignaturaPosterior.areaFormacion)?.colorHtml;
-      let colorBody = 'white';
+      for(let ap of asignaturasPosteriores) {
 
-      let data = {
-        key: keyCounter+1,
-        header: asignaturaPosterior.campoFormacion,
-        text: asignaturaPosterior.nombre,
-        footer: asignaturaPosterior.areaFormacion,
-        group: this.stateData.diagramNodeData.find(dn => dn.header == 'Asignaturas posteriores')?.key,
-        colorCampoFormacion: colorCampoFormacion,
-        colorAreaFormacion: colorAreaFormacion,
-        colorBody: colorBody,
+        let asignaturaPosterior = asignaturas.find(a => a.codigo == ap.asignaturaCodigo)!;
+
+        let colorCampoFormacion = camposFormacion.find(a => a.nombre == asignaturaPosterior.campoFormacion)?.colorHtml;
+        let colorAreaFormacion = areasFormacion.find(a => a.nombre == asignaturaPosterior.areaFormacion)?.colorHtml;
+        let colorBody = 'white';
+
+        if(!stateData.diagramNodeData.find(n => n.key == asignaturaPosterior.codigo)) {
+          let data = {
+            key: asignaturaPosterior.codigo,
+            header: asignaturaPosterior.campoFormacion,
+            text: asignaturaPosterior.nombre,
+            footer: asignaturaPosterior.areaFormacion,
+            group: stateData.diagramNodeData.find(dn => dn.header == 'Asignaturas posteriores')?.key,
+            colorCampoFormacion: colorCampoFormacion,
+            colorAreaFormacion: colorAreaFormacion,
+            colorBody: colorBody,
+          }
+          stateData.diagramNodeData.push(data);
+        }
+
+        if(!stateData.diagramLinkData.find(l => l.from == asignaturaFunc.codigo && l.to == asignaturaPosterior.codigo)) {
+          stateData.diagramLinkData.push({
+            key: -keyCounter,
+            from: asignaturaFunc.codigo,
+            to: asignaturaPosterior.codigo,
+            color: '#ff3c00ff'
+          });
+        }
+
+        keyCounter += 1;
+
+        if(!simplificarDiagrama()) {
+          buscarAsignaturasPosteriores(asignaturaPosterior);
+        }
       }
-      this.stateData.diagramNodeData.push(data);
 
-      this.stateData.diagramLinkData.push({
-        key: -keyCounter,
-        from: 1,
-        to: keyCounter+1,
-        color: '#ff3c00ff'
-      });
-
-
-      keyCounter += 1;
     }
   }
 
@@ -425,7 +461,7 @@ export class AsignaturasAsociadasComponent {
       ),
       $('ContextMenuButton',
         $(go.TextBlock, 'Ver justificación'),
-        { click: (e: any, obj: any) => this.showSwalAsignaturaJustificacion()}
+        { click: (e: any, obj: any) => this.consultarlAsignaturaJustificacion(obj)}
       ),
       $('ContextMenuButton',
         $(go.TextBlock, '🔗 Ir a syllabus'),
@@ -459,27 +495,47 @@ export class AsignaturasAsociadasComponent {
         return;
       }
 
-      this.showSwalAsignaturaDetalle();
+      let asignatura = this.responseListAsignaturas().content.find(a => a.codigo == id)!;
+
+      this.showSwalAsignaturaDetalle(asignatura);
     }
 
 
-  showSwalAsignaturaDetalle() {
+    async consultarlAsignaturaJustificacion(obj: any) {
+      const node = obj.part?.adornedPart as go.Node;
+      if (!node) return;
+
+      const data = node.data;
+      const id = data.key;
+      const nombre = data.text;
+
+      if(this.isExampleNode(id)) {
+        return;
+      }
+
+      let asignatura = this.responseListAsignaturas().content.find(a => a.codigo == id)!;
+
+      this.showSwalAsignaturaJustificacion(asignatura);
+    }
+
+
+  showSwalAsignaturaDetalle(asignatura: Asignatura) {
     Swal.fire({
-      title: this.asignatura().nombre,
+      title: asignatura.nombre,
       width: '800px',
       html: `
         <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
           <table class="table table-bordered text-start">
 
-            <tr><th>Codigo</th><td>${this.asignatura().codigo}</td></tr>
-            <tr><th>Carrera</th><td>${this.asignatura().carrera}</td></tr>
+            <tr><th>Codigo</th><td>${asignatura.codigo}</td></tr>
+            <tr><th>Carrera</th><td>${asignatura.carrera}</td></tr>
 
             <tr>
               <th>Campo de Formación</th>
               <td>
                 Ver las áreas de formación asociadas:
-                <a href="${APP_CONSTANTS.ROUTES.camposFormacionLista}?searchTerm=${encodeURIComponent(this.asignatura().campoFormacion)}">
-                  ${this.asignatura().campoFormacion}
+                <a href="${APP_CONSTANTS.ROUTES.camposFormacionLista}?searchTerm=${encodeURIComponent(asignatura.campoFormacion)}">
+                  ${asignatura.campoFormacion}
                 </a>
               </td>
             </tr>
@@ -488,8 +544,8 @@ export class AsignaturasAsociadasComponent {
               <th>Área de Formación</th>
               <td>
                 Ver las asignaturas asociadas:
-                <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=50&searchTerm=${encodeURIComponent(this.asignatura().areaFormacion)}">
-                  ${this.asignatura().areaFormacion}
+                <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=50&searchTerm=${encodeURIComponent(asignatura.areaFormacion)}">
+                  ${asignatura.areaFormacion}
                 </a>
               </td>
             </tr>
@@ -497,8 +553,8 @@ export class AsignaturasAsociadasComponent {
             <tr>
               <th>Ver syllabus</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${this.asignatura().codigo}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${this.asignatura().codigo}
+                <a href="https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${asignatura.codigo}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${asignatura.codigo}
                 </a>
               </td>
             </tr>
@@ -506,8 +562,8 @@ export class AsignaturasAsociadasComponent {
             <tr>
               <th>Ver objetos de estudio</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${this.asignatura().codigo}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${this.asignatura().codigo}
+                <a href="https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${asignatura.codigo}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${asignatura.codigo}
                 </a>
               </td>
             </tr>
@@ -515,8 +571,8 @@ export class AsignaturasAsociadasComponent {
             <tr>
               <th>Ver verbos</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${this.asignatura().nombre}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${this.asignatura().nombre}
+                <a href="https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${asignatura.nombre}" target="_blank">
+                  https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${asignatura.nombre}
                 </a>
               </td>
             </tr>
@@ -528,12 +584,12 @@ export class AsignaturasAsociadasComponent {
               </td>
             </tr>
 
-            <tr><th>Tipo</th><td>${this.asignatura().Tipo}</td></tr>
-            <tr><th>Número de Créditos</th><td>${this.asignatura().numeroCreditos}</td></tr>
-            <tr><th>Codigo de Cóndor</th><td>${this.asignatura().codigoCondor}</td></tr>
-            <tr><th>HTD</th><td>${this.asignatura().HTD}</td></tr>
-            <tr><th>HTC</th><td>${this.asignatura().HTC}</td></tr>
-            <tr><th>HTA</th><td>${this.asignatura().HTA}</td></tr>
+            <tr><th>Tipo</th><td>${asignatura.Tipo}</td></tr>
+            <tr><th>Número de Créditos</th><td>${asignatura.numeroCreditos}</td></tr>
+            <tr><th>Codigo de Cóndor</th><td>${asignatura.codigoCondor}</td></tr>
+            <tr><th>HTD</th><td>${asignatura.HTD}</td></tr>
+            <tr><th>HTC</th><td>${asignatura.HTC}</td></tr>
+            <tr><th>HTA</th><td>${asignatura.HTA}</td></tr>
           </table>
         </div>
       `,
@@ -541,7 +597,7 @@ export class AsignaturasAsociadasComponent {
         const btn = document.getElementById('btnJustificacion');
         if (btn) {
           btn.addEventListener('click', () => {
-            this.showSwalAsignaturaJustificacion(); // ✅ Abre el otro swal
+            this.showSwalAsignaturaJustificacion(asignatura); // ✅ Abre el otro swal
           });
         }
       }
@@ -549,8 +605,8 @@ export class AsignaturasAsociadasComponent {
 
   }
 
-  showSwalAsignaturaJustificacion() {
-    if(!this.asignatura().justificacion) {
+  showSwalAsignaturaJustificacion(asignatura: Asignatura) {
+    if(!asignatura.justificacion) {
       Swal.fire({
         title: 'Justificación no disponible',
         text: 'No hay justificación disponible para esta asignatura.',
@@ -560,12 +616,12 @@ export class AsignaturasAsociadasComponent {
     }
 
     Swal.fire({
-      title:  this.asignatura().nombre,
+      title:  asignatura.nombre,
       width: '800px',
       html: `
       <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
         <table class="table table-bordered text-start" style="table-layout: fixed; width: 100%;>
-          <tr><td style="white-space: pre-line">${this.asignatura().justificacion}</td></tr>
+          <tr><td style="white-space: pre-line">${asignatura.justificacion}</td></tr>
         </table>
       </div>
       `
@@ -648,7 +704,9 @@ export class AsignaturasAsociadasComponent {
           return;
         }
 
-        this.showSwalAsignaturaDetalle();
+        let asignatura = this.responseListAsignaturas().content.find(a => a.codigo == id)!;
+
+        this.showSwalAsignaturaDetalle(asignatura);
       }
     });
   }
