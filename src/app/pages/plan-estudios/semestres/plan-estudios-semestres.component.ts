@@ -225,7 +225,7 @@ export class PlanEstudiosSemestresComponent {
       header: 'Campo de formación',
       codigoCondor: 'Código cóndor',
       text: 'Asignatura Prerrequisito (Obligatoria para ver la asignatura posterior)',
-      creditos: 'Creditos',
+      creditos: 'Créditos',
       footer: 'Área de formación',
       group: keyExampleCounter,
       colorCampoFormacion: '#f2f5df',
@@ -239,7 +239,7 @@ export class PlanEstudiosSemestresComponent {
       header: 'Campo de formación',
       codigoCondor: 'Código cóndor',
       text: 'Asignatura posterior',
-      creditos: 'Creditos',
+      creditos: 'Créditos',
       footer: 'Área de formación',
       group: keyExampleCounter,
       colorCampoFormacion: '#f2f5df',
@@ -543,6 +543,8 @@ export class PlanEstudiosSemestresComponent {
           <table class="table table-bordered text-start">
 
             <tr><th>Codigo</th><td>${this.asignatura().codigo}</td></tr>
+            <tr><th>Codigo de Cóndor</th><td>${this.asignatura().codigoCondor}</td></tr>
+            <tr><th>Créditos</th><td>${this.asignatura().numeroCreditos}</td></tr>
 
             <tr>
               <th>Campo de Formación</th>
@@ -606,8 +608,6 @@ export class PlanEstudiosSemestresComponent {
             </tr>
 
             <tr><th>Tipo</th><td>${this.asignatura().Tipo}</td></tr>
-            <tr><th>Número de Créditos</th><td>${this.asignatura().numeroCreditos}</td></tr>
-            <tr><th>Codigo de Cóndor</th><td>${this.asignatura().codigoCondor}</td></tr>
             <tr><th>HTD</th><td>${this.asignatura().HTD}</td></tr>
             <tr><th>HTC</th><td>${this.asignatura().HTC}</td></tr>
             <tr><th>HTA</th><td>${this.asignatura().HTA}</td></tr>
