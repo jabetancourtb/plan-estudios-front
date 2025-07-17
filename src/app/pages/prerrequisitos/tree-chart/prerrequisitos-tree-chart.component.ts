@@ -8,6 +8,9 @@ import { Asignatura } from '../../../models/asignatura.model';
 import { Prerrequisito } from '../../../models/prerrequisito.model';
 import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
+import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
+import { ModalAsignaturasAsociadasComponent } from '../../../shared/components/modal-asignaturas-asociadas/modal-asignaturas-asociadas.component';
+
 
 export interface PrerrequisitoDataGraph {
   id: number;
@@ -26,7 +29,7 @@ export interface NodoFlare {
 
 @Component({
   selector: 'app-prerrequisitos-tree-chart',
-  imports: [NavbarComponent],
+  imports: [NavbarComponent, NgbModalModule],
   templateUrl: './prerrequisitos-tree-chart.component.html',
   styleUrl: './prerrequisitos-tree-chart.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +39,7 @@ export class PrerrequisitosTreeChartComponent {
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
+  private modalService = inject(NgbModal);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
   private prerrequisitoService: PrerrequisitoService = inject(PrerrequisitoService);
 
@@ -65,6 +69,7 @@ export class PrerrequisitosTreeChartComponent {
   contextualMenuOptions = {
     verDetalles: '🔍 Ver detalles',
     verJustificacion: 'Ver justificación',
+    verAsignaturasAsociadas: 'Ver asignaturas asociadas',
     guardarImage: '💾 Guardar imagen',
     copiarImagen: '📋 Copiar imagen',
     irSyllabus: '🔗 Ir al syllabus',
@@ -285,6 +290,9 @@ export class PrerrequisitosTreeChartComponent {
       case this.contextualMenuOptions.verJustificacion:
         this.showSwalAsignaturaJustificacion();
         break;
+      case this.contextualMenuOptions.verAsignaturasAsociadas:
+        this.abrirModalAsignaturasAsociadas();
+        break;
       case this.contextualMenuOptions.guardarImage:
         this.saveImage();
         break;
@@ -374,6 +382,13 @@ export class PrerrequisitosTreeChartComponent {
               </td>
             </tr>
 
+            <tr>
+              <th>Asignaturas Asociadas</th>
+              <td>
+                <button type="button" id="btnAsignaturasAsociadas" class="btn btn-primary">Ver</button>
+              </td>
+            </tr>
+
             <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
             <tr><th>Número de Créditos</th><td>${a.numeroCreditos}</td></tr>
             <tr><th>HTD</th><td>${a.HTD}</td></tr>
@@ -383,10 +398,19 @@ export class PrerrequisitosTreeChartComponent {
         </div>
       `,
       didOpen: () => {
-        const btn = document.getElementById('btnJustificacion');
-        if (btn) {
-          btn.addEventListener('click', () => {
-            this.showSwalAsignaturaJustificacion(); // ✅ Abre el otro swal
+        const btnJust = document.getElementById('btnJustificacion');
+        const btnAsociadas = document.getElementById('btnAsignaturasAsociadas');
+
+        if (btnJust) {
+          btnJust.addEventListener('click', () => {
+            this.showSwalAsignaturaJustificacion();
+          });
+        }
+
+        if (btnAsociadas) {
+          btnAsociadas.addEventListener('click', () => {
+            this.abrirModalAsignaturasAsociadas();
+            Swal.close();
           });
         }
       }
@@ -420,5 +444,16 @@ export class PrerrequisitosTreeChartComponent {
     });
   }
 
+
+  abrirModalAsignaturasAsociadas() {
+    const a = this.clickedData.subject;
+
+    const modalRef = this.modalService.open(ModalAsignaturasAsociadasComponent, {
+      size: 'xl',
+      scrollable: true
+    });
+
+    modalRef.componentInstance.asignatura = a;
+  }
 
 }
