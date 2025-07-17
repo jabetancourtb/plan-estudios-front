@@ -471,7 +471,6 @@ export class AsignaturasBubbleChartComponent {
       size: 'xl',
       scrollable: true
     });
-    console.log(this.asignatura())
 
     modalRef.componentInstance.asignatura = a;
   }
