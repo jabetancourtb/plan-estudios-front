@@ -48,11 +48,11 @@ export class AsignaturasListaComponent {
     { value: 'nombre', label: 'Nombre' },
     { value: 'semestreAsignatura', label: 'Semestre' },
     { value: 'carrera', label: 'Carrera' },
-    { value: 'codigoCondor', label: 'Código Condor' },
-    { value: 'numeroCreditos', label: 'Número de Créditos' },
+    { value: 'codigoCondor', label: 'Código de Cóndor' },
+    { value: 'numeroCreditos', label: 'Créditos' },
     { value: 'justificacion', label: 'Justificación' },
-    { value: 'verDetalles', label: 'Ver más detalles' },
-    { value: 'verASignaturasAsociadas', label: 'Ver asignaturas asociadas' },
+    { value: 'detalles', label: 'Más detalles' },
+    { value: 'asignaturasAsociadas', label: 'Asignaturas asociadas' },
   ];
 
 
