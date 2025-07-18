@@ -7,7 +7,6 @@ import { PrerrequisitoService } from '../../../services/prerrequisito.service';
 import { ResponseListDTO } from '../../../dto/response-list.model';
 import { Asignatura } from '../../../models/asignatura.model';
 import { Prerrequisito } from '../../../models/prerrequisito.model';
-import { ignoreElements } from 'rxjs';
 import { CarreraService } from '../../../services/carrera.service';
 import { Carrera } from '../../../models/carrera.model';
 import { CampoFormacionService } from '../../../services/campo-formacion.service';
@@ -18,6 +17,7 @@ import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalAsignaturasAsociadasComponent } from '../../../shared/components/modal-asignaturas-asociadas/modal-asignaturas-asociadas.component';
+go.Diagram.licenseKey = 'Tdfgihsdgiopsdhjg';
 
 
 @Component({
@@ -202,7 +202,8 @@ export class PlanEstudiosSemestresComponent {
 
   public loadAndConvertExternalData() {
     this.fillNodeDataExample();
-    this.fillNodeDataCarrerasYSemestres();
+    this.fillNodeDataCarreras();
+    this.fillNodeDataSemestres();
     this.fillNodeDataAsignaturasYPrerrequisitos();
     this.initDiagram();
   }
@@ -258,7 +259,7 @@ export class PlanEstudiosSemestresComponent {
   }
 
 
-  public fillNodeDataCarrerasYSemestres() {
+  public fillNodeDataCarreras() {
     let keyCarreraCounter = 10000;
 
     for(let carrera of this.responseListCarreras().content) {
@@ -281,26 +282,61 @@ export class PlanEstudiosSemestresComponent {
       keyCarreraCounter += 1;
     }
 
+    let carrera = this.responseListCarreras().content.find(c => c.nombre.startsWith('Tecnología'));
+
+    let data = {
+      key: keyCarreraCounter,
+      header: carrera?.nombre,
+      isGroup: true,
+      footer: carrera?.nombre,
+      color: '#f2f5df'
+    }
+    this.stateData.diagramNodeData.push(data);
+
+    this.stateData.diagramLinkData.push({
+      key: -keyCarreraCounter,
+      from: keyCarreraCounter,
+      to: keyCarreraCounter+1,
+      color: '#2957f0ff'
+    });
+
+  }
+
+
+  public fillNodeDataSemestres() {
     for(let semestre of this.responseListSemestres().content) {
-      let group = this.stateData.diagramNodeData.find(d => d.header == this.responseListAsignaturas().content.find(a => a.semestreAsignatura == semestre)?.carrera)?.key
-
-      let data = {
-        key: semestre,
-        header: `Semestre ${semestre}`,
-        isGroup: true,
-        footer: `Semestre ${semestre}`,
-        group: group,
-        color: '#d3e5ed'
-      }
-      this.stateData.diagramNodeData.push(data);
-
       if(semestre != 11) {
+        let group = this.stateData.diagramNodeData.find(d => d.header == this.responseListAsignaturas().content.find(a => a.semestreAsignatura == semestre)?.carrera)?.key
+
+        let data = {
+          key: semestre,
+          header: `Semestre ${semestre}`,
+          isGroup: true,
+          footer: `Semestre ${semestre}`,
+          group: group,
+          color: '#d3e5ed'
+        }
+        this.stateData.diagramNodeData.push(data);
+
         this.stateData.diagramLinkData.push({
           key: -semestre,
           from: semestre,
           to: semestre + 1,
           color: '#43af65a8'
         });
+      }
+      else {
+        let group2 = this.stateData.diagramNodeData.filter(n => n.header?.toLowerCase().startsWith('tecnología'))[1].key;
+
+        let data = {
+          key: semestre,
+          header: `Semestre ${semestre}`,
+          isGroup: true,
+          footer: `Semestre ${semestre}`,
+          group: group2,
+          color: '#d3e5ed'
+        }
+        this.stateData.diagramNodeData.push(data);
       }
     }
   }
@@ -349,7 +385,7 @@ export class PlanEstudiosSemestresComponent {
          this.stateData.diagramLinkData.push({
             key: -keyCounter,
             from: keyCounter,
-            to: this.stateData.diagramNodeData.find(n => n.text?.toLocaleLowerCase() == 'ingeniería telemática')?.key || 10001,
+            to: this.stateData.diagramNodeData.find(n => n.header?.toLocaleLowerCase().startsWith('ingeniería'))?.key!,
             color: '#ff3c00ff'
           });
       }
@@ -553,6 +589,15 @@ export class PlanEstudiosSemestresComponent {
                 <a href="${APP_CONSTANTS.ROUTES.camposFormacionLista}?searchTerm=${encodeURIComponent(this.asignatura().campoFormacion)}">
                   ${this.asignatura().campoFormacion}
                 </a>
+
+                <span style = "
+                    display: inline-block;
+                    width: 0;
+                    height: 0;
+                    border-top: 15px solid transparent;
+                    border-bottom: 15px solid transparent;
+                    border-left: 20px solid  ${this.responseListCamposFormacion().content.find(cf => cf.nombre == this.asignatura().campoFormacion)?.colorHtml};">
+                </span>
               </td>
             </tr>
 
@@ -563,6 +608,15 @@ export class PlanEstudiosSemestresComponent {
                 <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=50&searchTerm=${encodeURIComponent(this.asignatura().areaFormacion)}">
                   ${this.asignatura().areaFormacion}
                 </a>
+
+                <span style = "
+                    display: inline-block;
+                    width: 20px;
+                    height: 20px;
+                    border: 2px solid #000;
+                    background-color: ${this.responseListAreasFormacion().content.find(cf => cf.nombre == this.asignatura().areaFormacion)?.colorHtml};">
+                </span>
+
               </td>
             </tr>
 
@@ -596,14 +650,18 @@ export class PlanEstudiosSemestresComponent {
             <tr>
               <th>Justificación</th>
               <td>
-                <button type="button" id="btnJustificacion" class="btn btn-primary">Ver</button>
+                <button type="button" id="btnJustificacion" class="btn btn-primary">
+                  <span class="bi bi-card-text"></span>
+                </button>
               </td>
             </tr>
 
              <tr>
               <th>Asignaturas Asociadas</th>
               <td>
-                <button type="button" id="btnAsignaturasAsociadas" class="btn btn-primary">Ver</button>
+                <button type="button" id="btnAsignaturasAsociadas" class="btn btn-primary">
+                  <span class="bi bi-diagram-3-fill"></span>
+                </button>
               </td>
             </tr>
 
