@@ -23,14 +23,13 @@ export class CamposFormacionBubbleChartComponent {
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
+  router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
 
   camposFormacionBubbleGraphIsLoading = signal(false);
 
   chartInstance!: echarts.ECharts;
-
-  router = inject(Router);
 
   urlParams = signal<URLParamsDTO>({
     "categoria": '',

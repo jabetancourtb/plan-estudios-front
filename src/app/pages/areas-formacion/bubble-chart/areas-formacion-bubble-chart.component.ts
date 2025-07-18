@@ -25,6 +25,7 @@ export class AreasFormacionBubbleChartComponent {
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
+  router = inject(Router);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
   private areaFormacionService: AreaFormacionService= inject(AreaFormacionService);
@@ -32,8 +33,6 @@ export class AreasFormacionBubbleChartComponent {
   areasFormacionBubbleGraphIsLoading = signal(false);
 
   chartInstance!: echarts.ECharts;
-
-  router = inject(Router);
 
   urlParams = signal<URLParamsDTO>({
     "categoria": '',

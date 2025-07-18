@@ -25,6 +25,7 @@ export class AsignaturasBubbleChartComponent {
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
 
+  router = inject(Router);
   private modalService = inject(NgbModal);
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
@@ -32,8 +33,6 @@ export class AsignaturasBubbleChartComponent {
   asignaturasBubbleGraphIsLoading = signal(false);
 
   chartInstance!: echarts.ECharts;
-
-  router = inject(Router);
 
   urlParams = signal<URLParamsDTO>({
     "categoria": '',
