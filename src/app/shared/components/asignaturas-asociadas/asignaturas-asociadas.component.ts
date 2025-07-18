@@ -234,7 +234,9 @@ export class AsignaturasAsociadasComponent {
     let data = {
       key: this.asignatura().codigo,
       header: this.asignatura().campoFormacion,
+      codigoCondor: 'Código cóndor: '+this.asignatura().codigoCondor,
       text: this.asignatura().nombre,
+      creditos: 'Créditos: '+this.asignatura().numeroCreditos,
       footer: this.asignatura().areaFormacion,
       colorCampoFormacion: colorCampoFormacion,
       colorAreaFormacion: colorAreaFormacion,
@@ -273,7 +275,9 @@ export class AsignaturasAsociadasComponent {
            let data = {
             key: asignaturaAnterior.codigo,
             header: asignaturaAnterior.campoFormacion,
+            codigoCondor: 'Código cóndor: '+asignaturaAnterior.codigoCondor,
             text: asignaturaAnterior.nombre,
+            creditos: 'Créditos: '+asignaturaAnterior.numeroCreditos,
             footer: asignaturaAnterior.areaFormacion,
             group: stateData.diagramNodeData.find(dn => dn.header == 'Asignaturas prerrequisitos')?.key,
             colorCampoFormacion: colorCampoFormacion,
@@ -333,7 +337,9 @@ export class AsignaturasAsociadasComponent {
           let data = {
             key: asignaturaPosterior.codigo,
             header: asignaturaPosterior.campoFormacion,
+            codigoCondor: 'Código cóndor: '+asignaturaPosterior.codigoCondor,
             text: asignaturaPosterior.nombre,
+            creditos: 'Créditos: '+asignaturaPosterior.numeroCreditos,
             footer: asignaturaPosterior.areaFormacion,
             group: stateData.diagramNodeData.find(dn => dn.header == 'Asignaturas posteriores')?.key,
             colorCampoFormacion: colorCampoFormacion,
@@ -410,11 +416,19 @@ export class AsignaturasAsociadasComponent {
     this.diagram.nodeTemplate = $(
       go.Node, 'Vertical',
       { defaultStretch: go.GraphObject.Horizontal, fromSpot: go.Spot.RightSide, toSpot: go.Spot.LeftSide, contextMenu: contextMenu },
+      /*
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedTopRectangle')
           .bind('fill', 'colorCampoFormacion'), // Aquí usas el color definido por nodo
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'header')
+      ),
+      */
+      $(go.Panel, 'Auto',
+        $(go.Shape, 'RoundedTopRectangle')
+          .bind('fill', 'colorCampoFormacion'),
+        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
+          .bind('text', 'codigoCondor')
       ),
       $(go.Panel, 'Auto', { minSize: new go.Size(NaN, 70) },
         $(go.Shape, 'Rectangle')
@@ -424,10 +438,18 @@ export class AsignaturasAsociadasComponent {
       ),
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedBottomRectangle')
+          .bind('fill', 'colorAreaFormacion'),
+        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
+          .bind('text', 'creditos')
+      ),
+      /*
+      $(go.Panel, 'Auto',
+        $(go.Shape, 'RoundedBottomRectangle')
           .bind('fill', 'colorAreaFormacion'), // O aquí también
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'footer')
       )
+      */
     );
 
     this.diagram.linkTemplate = $(
@@ -529,6 +551,8 @@ export class AsignaturasAsociadasComponent {
 
             <tr><th>Codigo</th><td>${asignatura.codigo}</td></tr>
             <tr><th>Carrera</th><td>${asignatura.carrera}</td></tr>
+            <tr><th>Codigo de Cóndor</th><td>${asignatura.codigoCondor}</td></tr>
+            <tr><th>Número de Créditos</th><td>${asignatura.numeroCreditos}</td></tr>
 
             <tr>
               <th>Campo de Formación</th>
@@ -537,8 +561,19 @@ export class AsignaturasAsociadasComponent {
                 <a href="${APP_CONSTANTS.ROUTES.camposFormacionLista}?searchTerm=${encodeURIComponent(asignatura.campoFormacion)}">
                   ${asignatura.campoFormacion}
                 </a>
+
+                 <span style = "
+                    display: inline-block;
+                    width: 0;
+                    height: 0;
+                    border-top: 15px solid transparent;
+                    border-bottom: 15px solid transparent;
+                    border-left: 20px solid  ${this.responseListCamposFormacion().content.find(cf => cf.nombre == this.asignatura().campoFormacion)?.colorHtml};">
+                </span>
+
               </td>
             </tr>
+
 
             <tr>
               <th>Área de Formación</th>
@@ -547,8 +582,18 @@ export class AsignaturasAsociadasComponent {
                 <a href="${APP_CONSTANTS.ROUTES.areasFormacionLista}?pageSize=50&searchTerm=${encodeURIComponent(asignatura.areaFormacion)}">
                   ${asignatura.areaFormacion}
                 </a>
+
+                 <span style = "
+                    display: inline-block;
+                    width: 20px;
+                    height: 20px;
+                    border: 2px solid #000;
+                    background-color: ${this.responseListAreasFormacion().content.find(cf => cf.nombre == this.asignatura().areaFormacion)?.colorHtml};">
+                </span>
+
               </td>
             </tr>
+
 
             <tr>
               <th>Ver syllabus</th>
@@ -585,8 +630,6 @@ export class AsignaturasAsociadasComponent {
             </tr>
 
             <tr><th>Tipo</th><td>${asignatura.Tipo}</td></tr>
-            <tr><th>Número de Créditos</th><td>${asignatura.numeroCreditos}</td></tr>
-            <tr><th>Codigo de Cóndor</th><td>${asignatura.codigoCondor}</td></tr>
             <tr><th>HTD</th><td>${asignatura.HTD}</td></tr>
             <tr><th>HTC</th><td>${asignatura.HTC}</td></tr>
             <tr><th>HTA</th><td>${asignatura.HTA}</td></tr>
