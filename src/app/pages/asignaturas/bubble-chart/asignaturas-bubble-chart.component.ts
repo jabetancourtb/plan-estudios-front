@@ -343,9 +343,12 @@ export class AsignaturasBubbleChartComponent {
       html: `
         <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
           <table class="table table-bordered text-start">
+
             <tr><th>Código</th><td>${a.codigo}</td></tr>
             <tr><th>Carrera</th><td>${a.carrera}</td></tr>
             <tr><th>Semestre</th><td>${a.semestreAsignatura}</td></tr>
+            <tr><th>Créditos</th><td>${a.numeroCreditos}</td></tr>
+            <tr><th>Código de Cóndor</th><td>${a.codigoCondor}</td></tr>
 
             <tr>
               <th>Campo de Formación</th>
@@ -397,20 +400,22 @@ export class AsignaturasBubbleChartComponent {
             <tr>
               <th>Justificación</th>
               <td>
-                <button type="button" id="btnJustificacion" class="btn btn-primary">Ver</button>
+                <button type="button" id="btnJustificacion" class="btn btn-primary">
+                  <span class="bi bi-card-text"></span>
+                </button>
               </td>
             </tr>
 
             <tr>
               <th>Asignaturas Asociadas</th>
               <td>
-                <button type="button" id="btnAsignaturasAsociadas" class="btn btn-primary">Ver</button>
+                <button type="button" id="btnAsignaturasAsociadas" class="btn btn-primary">
+                  <span class="bi bi-diagram-3-fill"></span>
+                </button>
               </td>
             </tr>
 
             <tr><th>Tipo</th><td>${a.Tipo}</td></tr>
-            <tr><th>Número de Créditos</th><td>${a.numeroCreditos}</td></tr>
-            <tr><th>Codigo de Cóndor</th><td>${a.codigoCondor}</td></tr>
             <tr><th>HTD</th><td>${a.HTD}</td></tr>
             <tr><th>HTC</th><td>${a.HTC}</td></tr>
             <tr><th>HTA</th><td>${a.HTA}</td></tr>

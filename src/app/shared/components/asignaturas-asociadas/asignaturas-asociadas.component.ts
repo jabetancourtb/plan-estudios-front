@@ -549,10 +549,11 @@ export class AsignaturasAsociadasComponent {
         <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
           <table class="table table-bordered text-start">
 
-            <tr><th>Codigo</th><td>${asignatura.codigo}</td></tr>
+            <tr><th>Código</th><td>${asignatura.codigo}</td></tr>
             <tr><th>Carrera</th><td>${asignatura.carrera}</td></tr>
-            <tr><th>Codigo de Cóndor</th><td>${asignatura.codigoCondor}</td></tr>
-            <tr><th>Número de Créditos</th><td>${asignatura.numeroCreditos}</td></tr>
+            <tr><th>Semestre</th><td>${asignatura.semestreAsignatura}</td></tr>
+            <tr><th>Créditos</th><td>${asignatura.numeroCreditos}</td></tr>
+            <tr><th>Código de Cóndor</th><td>${asignatura.codigoCondor}</td></tr>
 
             <tr>
               <th>Campo de Formación</th>
@@ -568,7 +569,7 @@ export class AsignaturasAsociadasComponent {
                     height: 0;
                     border-top: 15px solid transparent;
                     border-bottom: 15px solid transparent;
-                    border-left: 20px solid  ${this.responseListCamposFormacion().content.find(cf => cf.nombre == this.asignatura().campoFormacion)?.colorHtml};">
+                    border-left: 20px solid  ${this.responseListCamposFormacion().content.find(cf => cf.nombre == asignatura.campoFormacion)?.colorHtml};">
                 </span>
 
               </td>
@@ -588,7 +589,7 @@ export class AsignaturasAsociadasComponent {
                     width: 20px;
                     height: 20px;
                     border: 2px solid #000;
-                    background-color: ${this.responseListAreasFormacion().content.find(cf => cf.nombre == this.asignatura().areaFormacion)?.colorHtml};">
+                    background-color: ${this.responseListAreasFormacion().content.find(cf => cf.nombre == asignatura.areaFormacion)?.colorHtml};">
                 </span>
 
               </td>
@@ -625,7 +626,9 @@ export class AsignaturasAsociadasComponent {
             <tr>
               <th>Justificación</th>
               <td>
-                <button type="button" id="btnJustificacion" class="btn btn-primary">Ver</button>
+                <button type="button" id="btnJustificacion" class="btn btn-primary">
+                  <span class="bi bi-card-text"></span>
+                </button>
               </td>
             </tr>
 

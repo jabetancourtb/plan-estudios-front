@@ -578,10 +578,11 @@ export class PlanEstudiosSemestresComponent {
         <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
           <table class="table table-bordered text-start">
 
-            <tr><th>Codigo</th><td>${this.asignatura().codigo}</td></tr>
-            <tr><th>Codigo cóndor</th><td>${this.asignatura().codigoCondor}</td></tr>
+            <tr><th>Código</th><td>${this.asignatura().codigo}</td></tr>
+            <tr><th>Carrera</th><td>${this.asignatura().carrera}</td></tr>
+            <tr><th>Semestre</th><td>${this.asignatura().semestreAsignatura}</td></tr>
             <tr><th>Créditos</th><td>${this.asignatura().numeroCreditos}</td></tr>
-
+            <tr><th>Código de cóndor</th><td>${this.asignatura().codigoCondor}</td></tr>
 
             <tr>
               <th>Campo de Formación</th>
@@ -669,7 +670,6 @@ export class PlanEstudiosSemestresComponent {
               </td>
             </tr>
 
-            <tr><th>Carrera</th><td>${this.asignatura().carrera}</td></tr>
             <tr><th>Tipo</th><td>${this.asignatura().Tipo}</td></tr>
             <tr><th>HTD</th><td>${this.asignatura().HTD}</td></tr>
             <tr><th>HTC</th><td>${this.asignatura().HTC}</td></tr>
