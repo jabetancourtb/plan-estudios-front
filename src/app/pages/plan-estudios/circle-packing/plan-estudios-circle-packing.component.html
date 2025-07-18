@@ -16,8 +16,35 @@
         class="echarts-circle-packing"
         [options]="chartOption"
         (chartInit)="onChartInit($event)"
-        style="height: 1500px; width: 100%; display: block;">
+        style="height: 1500px; width: 100%; display: block;"
+        (contextmenu)="onGlobalContextMenu($event)">
       </echarts>
+
+      @if(menuVisible) {
+        <ul
+          #contextMenuRef
+          class="context-menu"
+          [ngStyle]="{ top: menuY + 'px', left: menuX + 'px', display: menuVisible ? 'block' : 'none' }">
+
+          @if(depth == 1 || depth == 2) {
+            <li (click)="onOptionSelected(contextualMenuOptions.verDetalles)"> {{ contextualMenuOptions.verDetalles }}</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.guardarImage)">{{ contextualMenuOptions.guardarImage }}</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.copiarImagen)">{{ contextualMenuOptions.copiarImagen }}</li>
+          }
+          @else if(depth == 3) {
+            <li (click)="onOptionSelected(contextualMenuOptions.verDetalles)"> {{ contextualMenuOptions.verDetalles }}</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.verJustificacion)" class="bi bi-justify">{{ contextualMenuOptions.verJustificacion }}</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.verAsignaturasAsociadas)">{{ contextualMenuOptions.verAsignaturasAsociadas }}</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.guardarImage)">{{ contextualMenuOptions.guardarImage }}</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.copiarImagen)">{{ contextualMenuOptions.copiarImagen }}</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.irSyllabus)">{{ contextualMenuOptions.irSyllabus }}</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.irObjetosEstudio)">{{ contextualMenuOptions.irObjetosEstudio }}</li>
+            <li (click)="onOptionSelected(contextualMenuOptions.irVerbos)">{{ contextualMenuOptions.irVerbos }}</li>
+
+          }
+
+        </ul>
+      }
 
     </div>
 
