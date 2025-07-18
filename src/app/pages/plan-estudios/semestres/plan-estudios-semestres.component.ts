@@ -450,7 +450,7 @@ export class PlanEstudiosSemestresComponent {
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'header')
       ),*/
-       $(go.Panel, 'Auto',
+      $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedTopRectangle')
           .bind('fill', 'colorCampoFormacion'),
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
@@ -462,7 +462,7 @@ export class PlanEstudiosSemestresComponent {
         $(go.TextBlock, { width: 120, margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text')
       ),
-        $(go.Panel, 'Auto',
+      $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedBottomRectangle')
           .bind('fill', 'colorAreaFormacion'),
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
@@ -579,8 +579,9 @@ export class PlanEstudiosSemestresComponent {
           <table class="table table-bordered text-start">
 
             <tr><th>Codigo</th><td>${this.asignatura().codigo}</td></tr>
-            <tr><th>Codigo de Cóndor</th><td>${this.asignatura().codigoCondor}</td></tr>
+            <tr><th>Codigo cóndor</th><td>${this.asignatura().codigoCondor}</td></tr>
             <tr><th>Créditos</th><td>${this.asignatura().numeroCreditos}</td></tr>
+
 
             <tr>
               <th>Campo de Formación</th>
@@ -598,8 +599,10 @@ export class PlanEstudiosSemestresComponent {
                     border-bottom: 15px solid transparent;
                     border-left: 20px solid  ${this.responseListCamposFormacion().content.find(cf => cf.nombre == this.asignatura().campoFormacion)?.colorHtml};">
                 </span>
+
               </td>
             </tr>
+
 
             <tr>
               <th>Área de Formación</th>
@@ -619,6 +622,7 @@ export class PlanEstudiosSemestresComponent {
 
               </td>
             </tr>
+
 
             <tr>
               <th>Ver syllabus</th>
@@ -665,6 +669,7 @@ export class PlanEstudiosSemestresComponent {
               </td>
             </tr>
 
+            <tr><th>Carrera</th><td>${this.asignatura().carrera}</td></tr>
             <tr><th>Tipo</th><td>${this.asignatura().Tipo}</td></tr>
             <tr><th>HTD</th><td>${this.asignatura().HTD}</td></tr>
             <tr><th>HTC</th><td>${this.asignatura().HTC}</td></tr>
