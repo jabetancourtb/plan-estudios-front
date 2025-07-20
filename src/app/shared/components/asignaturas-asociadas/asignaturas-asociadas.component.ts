@@ -728,7 +728,7 @@ export class AsignaturasAsociadasComponent {
 
     const a = document.createElement('a');
     a.href = imgElement.src;
-    a.download = 'diagrama-plan-estudios.png';
+    a.download = 'diagrama-asignaturas-asociadas.png';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
