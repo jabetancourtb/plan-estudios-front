@@ -17,7 +17,8 @@ import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
 import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalAsignaturasAsociadasComponent } from '../../../shared/components/modal-asignaturas-asociadas/modal-asignaturas-asociadas.component';
-go.Diagram.licenseKey = 'Tdfgihsdgiopsdhjg';
+import { environment } from '../../../../environments/environment';
+go.Diagram.licenseKey = environment.GoJsLicenseKey;
 
 
 @Component({

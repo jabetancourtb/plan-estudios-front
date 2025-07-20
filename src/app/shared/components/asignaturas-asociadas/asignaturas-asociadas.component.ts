@@ -11,6 +11,8 @@ import { Prerrequisito } from '../../../models/prerrequisito.model';
 import * as go from 'gojs';
 import Swal from 'sweetalert2';
 import { APP_CONSTANTS } from '../../../utils/app-constants';
+import { environment } from '../../../../environments/environment';
+go.Diagram.licenseKey = environment.GoJsLicenseKey;
 
 
 @Component({
