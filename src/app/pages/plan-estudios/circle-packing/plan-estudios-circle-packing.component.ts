@@ -453,17 +453,17 @@ export class PlanEstudiosCirclePackingComponent {
 
 
   irASyllabyus() {
-    window.open(`https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${this.clickedData.codigo}`, '_blank');
+    window.open(`${APP_CONSTANTS.ASIGNATURAS_URLS.syllabus}${this.clickedData.codigo}`, '_blank');
   }
 
 
   irAObjetosEstudio() {
-    window.open(`https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${this.clickedData.codigo}`, '_blank');
+    window.open(`${APP_CONSTANTS.ASIGNATURAS_URLS.objetosEstudios}${this.clickedData.codigo}`, '_blank');
   }
 
 
   irAVerbos() {
-    window.open(`https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${this.clickedData.nombre}`, '_blank');
+    window.open(`${APP_CONSTANTS.ASIGNATURAS_URLS.verbos}${this.clickedData.nombre}`, '_blank');
   }
 
 
@@ -602,8 +602,8 @@ export class PlanEstudiosCirclePackingComponent {
             <tr>
               <th>Ver syllabus</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${a.codigo}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${a.codigo}
+                <a href="${APP_CONSTANTS.ASIGNATURAS_URLS.syllabus}${a.codigo}" target="_blank">
+                  ${APP_CONSTANTS.ASIGNATURAS_URLS.syllabus}${a.codigo}
                 </a>
               </td>
             </tr>
@@ -611,8 +611,8 @@ export class PlanEstudiosCirclePackingComponent {
             <tr>
               <th>Ver objetos de estudio</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${a.codigo}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${a.codigo}
+                <a href="${APP_CONSTANTS.ASIGNATURAS_URLS.objetosEstudios}${a.codigo}" target="_blank">
+                  ${APP_CONSTANTS.ASIGNATURAS_URLS.objetosEstudios}${a.codigo}
                 </a>
               </td>
             </tr>
@@ -620,8 +620,8 @@ export class PlanEstudiosCirclePackingComponent {
             <tr>
               <th>Ver verbos</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${a.nombre}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${a.nombre}
+                <a href="${APP_CONSTANTS.ASIGNATURAS_URLS.verbos}${a.nombre}" target="_blank">
+                  ${APP_CONSTANTS.ASIGNATURAS_URLS.verbos}${a.nombre}
                 </a>
               </td>
             </tr>

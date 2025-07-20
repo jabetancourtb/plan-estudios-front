@@ -628,8 +628,8 @@ export class PlanEstudiosSemestresComponent {
             <tr>
               <th>Ver syllabus</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${this.asignatura().codigo}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${this.asignatura().codigo}
+                <a href="${APP_CONSTANTS.ASIGNATURAS_URLS.syllabus}${this.asignatura().codigo}" target="_blank">
+                  ${APP_CONSTANTS.ASIGNATURAS_URLS.syllabus}${this.asignatura().codigo}
                 </a>
               </td>
             </tr>
@@ -637,8 +637,8 @@ export class PlanEstudiosSemestresComponent {
             <tr>
               <th>Ver objetos de estudio</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${this.asignatura().codigo}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${this.asignatura().codigo}
+                <a href="${APP_CONSTANTS.ASIGNATURAS_URLS.objetosEstudios}${this.asignatura().codigo}" target="_blank">
+                  ${APP_CONSTANTS.ASIGNATURAS_URLS.objetosEstudios}${this.asignatura().codigo}
                 </a>
               </td>
             </tr>
@@ -646,8 +646,8 @@ export class PlanEstudiosSemestresComponent {
             <tr>
               <th>Ver verbos</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${this.asignatura().nombre}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${this.asignatura().nombre}
+                <a href="${APP_CONSTANTS.ASIGNATURAS_URLS.verbos}${this.asignatura().nombre}" target="_blank">
+                  ${APP_CONSTANTS.ASIGNATURAS_URLS.verbos}${this.asignatura().nombre}
                 </a>
               </td>
             </tr>
@@ -733,7 +733,7 @@ export class PlanEstudiosSemestresComponent {
     }
 
     let codigo: number = this.responseListAsignaturas().content.find(a => a.nombre == nombre)?.codigo || 0;
-    window.open(`https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${codigo}`, '_blank');
+    window.open(`${APP_CONSTANTS.ASIGNATURAS_URLS.syllabus}${codigo}`, '_blank');
   }
 
 
@@ -748,7 +748,7 @@ export class PlanEstudiosSemestresComponent {
     }
 
     let codigo: number = this.responseListAsignaturas().content.find(a => a.nombre == nombre)?.codigo || 0;
-    window.open(`https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${codigo}`, '_blank');
+    window.open(`${APP_CONSTANTS.ASIGNATURAS_URLS.objetosEstudios}${codigo}`, '_blank');
   }
 
 
@@ -762,7 +762,7 @@ export class PlanEstudiosSemestresComponent {
       return;
     }
 
-    window.open(`https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${nombre}`, '_blank');
+    window.open(`${APP_CONSTANTS.ASIGNATURAS_URLS.verbos}${nombre}`, '_blank');
   }
 
 

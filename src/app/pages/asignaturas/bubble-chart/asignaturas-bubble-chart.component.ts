@@ -178,9 +178,9 @@ export class AsignaturasBubbleChartComponent {
           id: data.codigo,
           name: data.nombre,
           symbolSize: 100,
-          syllabusURL: `https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${data.codigo}`,
-          studyObjectsURL: `https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${data.codigo}`,
-          verbsURL: `https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${data.nombre}`,
+          syllabusURL: `${APP_CONSTANTS.ASIGNATURAS_URLS.syllabus}${data.codigo}`,
+          studyObjectsURL: `${APP_CONSTANTS.ASIGNATURAS_URLS.objetosEstudios}${data.codigo}`,
+          verbsURL: `${APP_CONSTANTS.ASIGNATURAS_URLS.verbos}${data.nombre}`,
           itemStyle: {
             color: this.getRandomColor(),
           },

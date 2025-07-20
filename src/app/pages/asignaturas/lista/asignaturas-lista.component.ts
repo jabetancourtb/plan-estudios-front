@@ -210,8 +210,8 @@ export class AsignaturasListaComponent {
             <tr>
               <th>Ver syllabus</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${asignatura.codigo}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=${asignatura.codigo}
+                <a href="${APP_CONSTANTS.ASIGNATURAS_URLS.syllabus}${asignatura.codigo}" target="_blank">
+                  ${APP_CONSTANTS.ASIGNATURAS_URLS.syllabus}${asignatura.codigo}
                 </a>
               </td>
             </tr>
@@ -219,8 +219,8 @@ export class AsignaturasListaComponent {
             <tr>
               <th>Ver objetos de estudio</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${asignatura.codigo}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=${asignatura.codigo}
+                <a href="${APP_CONSTANTS.ASIGNATURAS_URLS.objetosEstudios}${asignatura.codigo}" target="_blank">
+                  ${APP_CONSTANTS.ASIGNATURAS_URLS.objetosEstudios}${asignatura.codigo}
                 </a>
               </td>
             </tr>
@@ -228,8 +228,8 @@ export class AsignaturasListaComponent {
             <tr>
               <th>Ver verbos</th>
               <td>
-                <a href="https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${asignatura.nombre}" target="_blank">
-                  https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura=${asignatura.nombre}
+                <a href="${APP_CONSTANTS.ASIGNATURAS_URLS.verbos}${asignatura.nombre}" target="_blank">
+                  ${APP_CONSTANTS.ASIGNATURAS_URLS.verbos}${asignatura.nombre}
                 </a>
               </td>
             </tr>

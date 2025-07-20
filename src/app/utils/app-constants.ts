@@ -24,5 +24,10 @@ export const APP_CONSTANTS = {
     planEstudiosSemestres: '/plan-estudios/semestres',
     planEstudiosSemestres2: '/plan-estudios/semestres-2',
   },
+  ASIGNATURAS_URLS: {
+    syllabus: 'https://sistematizaciondedatos.com/wp-content/Modul_056_ImprimirSyllabus_07/public/mostrar3.php?codigo_asignatura=',
+    objetosEstudios: 'https://sistematizaciondedatos.com/wp-content/verbos/visualizar_datos.php?asignatura=',
+    verbos: 'https://sistematizaciondedatos.com/wp-content/verbos/results.php?asignatura='
+  }
 
 };
