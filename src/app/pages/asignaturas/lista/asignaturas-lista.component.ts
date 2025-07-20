@@ -18,7 +18,7 @@ import { NgbModal, NgbModalModule } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-asignaturas-lista',
-  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, FilterPaginationComponent, PaginationComponent, ModalAsignaturasAsociadasComponent, NgbModalModule],
+  imports: [NavbarComponent, FormsModule, FilterAllFieldsPipe, FilterPaginationComponent, PaginationComponent, NgbModalModule],
   templateUrl: './asignaturas-lista.component.html',
   styleUrl: './asignaturas-lista.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
