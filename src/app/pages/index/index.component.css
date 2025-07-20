@@ -1,3 +1,28 @@
 :host {
   display: block;
 }
+
+.general-card {
+  max-width: 400px;
+}
+
+.general-header-image {
+  background-size: cover;
+}
+
+.general-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.general-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  padding: 16px;
+}
