@@ -79,5 +79,9 @@ export const routes: Routes = [
     {
       path: 'plan-estudios/circle-packing',
       component: PlanEstudiosCirclePackingComponent
-    }
+    },
+    {
+      path: '**',
+      redirectTo: 'index'
+    },
 ];
