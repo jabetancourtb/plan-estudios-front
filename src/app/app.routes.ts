@@ -9,7 +9,6 @@ import { AsignaturasListaComponent } from './pages/asignaturas/lista/asignaturas
 import { PlanEstudiosCirclePackingComponent } from './pages/plan-estudios/circle-packing/plan-estudios-circle-packing.component';
 import { AsignaturasTreeChartComponent } from './pages/asignaturas/tree-chart/asignaturas-tree-chart.component';
 import { PlanEstudiosSemestresComponent } from './pages/plan-estudios/semestres/plan-estudios-semestres.component';
-import { PlanEstudiosSemestres2Component } from './pages/plan-estudios/semestres-2/plan-estudios-semestres-2.component';
 import { CamposFormacionIndexComponent } from './pages/campos-formacion/index/campos-formacion-index.component';
 import { AreasFormacionIndexComponent } from './pages/areas-formacion/index/areas-formacion-index.component';
 import { AsignaturasIndexComponent } from './pages/asignaturas/index/asignaturas-index.component';
@@ -80,9 +79,5 @@ export const routes: Routes = [
     {
       path: 'plan-estudios/circle-packing',
       component: PlanEstudiosCirclePackingComponent
-    },
-    {
-      path: 'plan-estudios/semestres-2',
-      component: PlanEstudiosSemestres2Component
     }
 ];
