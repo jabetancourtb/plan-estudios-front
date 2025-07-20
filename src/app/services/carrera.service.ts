@@ -12,12 +12,11 @@ import { Carrera } from '../models/carrera.model';
 export class CarreraService extends BaseService<any> {
 
   protected apiPlanEstudiosUDistrital: string = environment.apiPlanEstudiosUDistrital.url;
-  protected apiPlanEstudiosUDistritalApiKeyRequestHeader: string = environment.apiPlanEstudiosUDistrital.apiKey.requestHeader;
-  protected apiPlanEstudiosUDistritalApiKeyRequestValue: string = environment.apiPlanEstudiosUDistrital.apiKey.requestValue;
 
-  protected headers = new HttpHeaders({ [this.apiPlanEstudiosUDistritalApiKeyRequestHeader] : this.apiPlanEstudiosUDistritalApiKeyRequestValue });
 
-  
+  protected headers = new HttpHeaders({});
+
+
   constructor() {
     super();
     this.apiUrl = this.apiPlanEstudiosUDistrital;
@@ -36,7 +35,7 @@ export class CarreraService extends BaseService<any> {
     return this.executeGet('', { params: params, headers: this.headers });
   }
 
-  
+
   consultarCarrerasPorNombre(name: string, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Carrera>> {
     this.resource = "/carreras/" + name;
 

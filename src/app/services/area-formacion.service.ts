@@ -13,10 +13,8 @@ import { AreaFormacion } from '../models/area-formacion.model';
 export class AreaFormacionService extends BaseService<any> {
 
   protected apiPlanEstudiosUDistrital: string = environment.apiPlanEstudiosUDistrital.url;
-  protected apiPlanEstudiosUDistritalApiKeyRequestHeader: string = environment.apiPlanEstudiosUDistrital.apiKey.requestHeader;
-  protected apiPlanEstudiosUDistritalApiKeyRequestValue: string = environment.apiPlanEstudiosUDistrital.apiKey.requestValue;
 
-  protected headers = new HttpHeaders({ [this.apiPlanEstudiosUDistritalApiKeyRequestHeader] : this.apiPlanEstudiosUDistritalApiKeyRequestValue });
+  protected headers = new HttpHeaders({});
 
 
   constructor() {

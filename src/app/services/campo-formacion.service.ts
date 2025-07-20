@@ -13,10 +13,8 @@ import { CampoFormacion } from '../models/campo-formacion.model';
 export class CampoFormacionService extends BaseService<any> {
 
   protected apiPlanEstudiosUDistrital: string = environment.apiPlanEstudiosUDistrital.url;
-  protected apiPlanEstudiosUDistritalApiKeyRequestHeader: string = environment.apiPlanEstudiosUDistrital.apiKey.requestHeader;
-  protected apiPlanEstudiosUDistritalApiKeyRequestValue: string = environment.apiPlanEstudiosUDistrital.apiKey.requestValue;
 
-  protected headers = new HttpHeaders({ [this.apiPlanEstudiosUDistritalApiKeyRequestHeader] : this.apiPlanEstudiosUDistritalApiKeyRequestValue });
+  protected headers = new HttpHeaders({});
 
 
   constructor() {
