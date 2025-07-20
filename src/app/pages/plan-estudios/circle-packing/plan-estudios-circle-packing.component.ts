@@ -531,7 +531,7 @@ export class PlanEstudiosCirclePackingComponent {
       `;
 
     Swal.fire({
-      title: a.nombre,
+      title: '(Campo de formación) ' + a.nombre,
       html: html
     });
   }
@@ -557,7 +557,7 @@ export class PlanEstudiosCirclePackingComponent {
       `;
 
     Swal.fire({
-      title: a.nombre,
+      title: '(Área de formación) ' + a.nombre,
       html: html
     });
   }
@@ -567,7 +567,7 @@ export class PlanEstudiosCirclePackingComponent {
     const a = this.clickedData;
 
     Swal.fire({
-      title: this.clickedData.nombre,
+      title: '(Asignatura) ' + this.clickedData.nombre,
       width: '800px',
       html: `
         <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
