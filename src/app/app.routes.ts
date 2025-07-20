@@ -7,9 +7,13 @@ import { AreasFormacionListaComponent } from './pages/areas-formacion/lista/area
 import { AsignaturasBubbleChartComponent } from './pages/asignaturas/bubble-chart/asignaturas-bubble-chart.component';
 import { AsignaturasListaComponent } from './pages/asignaturas/lista/asignaturas-lista.component';
 import { PlanEstudiosCirclePackingComponent } from './pages/plan-estudios/circle-packing/plan-estudios-circle-packing.component';
-import { PrerrequisitosTreeChartComponent } from './pages/prerrequisitos/tree-chart/prerrequisitos-tree-chart.component';
+import { AsignaturasTreeChartComponent } from './pages/asignaturas/tree-chart/asignaturas-tree-chart.component';
 import { PlanEstudiosSemestresComponent } from './pages/plan-estudios/semestres/plan-estudios-semestres.component';
 import { PlanEstudiosSemestres2Component } from './pages/plan-estudios/semestres-2/plan-estudios-semestres-2.component';
+import { CamposFormacionIndexComponent } from './pages/campos-formacion/index/campos-formacion-index.component';
+import { AreasFormacionIndexComponent } from './pages/areas-formacion/index/areas-formacion-index.component';
+import { AsignaturasIndexComponent } from './pages/asignaturas/index/asignaturas-index.component';
+import { PlanEstudiosIndexComponent } from './pages/plan-estudios/index/plan-estudios-index.component';
 
 
 
@@ -26,12 +30,20 @@ export const routes: Routes = [
       component: IndexComponent,
     },
     {
+      path: 'campos-formacion/index',
+      component: CamposFormacionIndexComponent,
+    },
+    {
       path: 'campos-formacion/bubble-chart',
       component: CamposFormacionBubbleChartComponent,
     },
     {
       path: 'campos-formacion/lista',
       component: CamposFormacionListaComponent,
+    },
+    {
+      path: 'areas-formacion/index',
+      component: AreasFormacionIndexComponent,
     },
     {
       path: 'areas-formacion/bubble-chart',
@@ -42,24 +54,32 @@ export const routes: Routes = [
       component: AreasFormacionListaComponent,
     },
     {
+      path: 'asignaturas/index',
+      component: AsignaturasIndexComponent,
+    },
+    {
       path: 'asignaturas/bubble-chart',
       component: AsignaturasBubbleChartComponent,
+    },
+    {
+      path: 'asignaturas/tree-chart',
+      component: AsignaturasTreeChartComponent,
     },
     {
       path: 'asignaturas/lista',
       component: AsignaturasListaComponent,
     },
     {
-      path: 'prerrequisitos/tree-chart',
-      component: PrerrequisitosTreeChartComponent,
-    },
-    {
-      path: 'plan-estudios/circle-packing',
-      component: PlanEstudiosCirclePackingComponent
+      path: 'plan-estudios/index',
+      component: PlanEstudiosIndexComponent
     },
     {
       path: 'plan-estudios/semestres',
       component: PlanEstudiosSemestresComponent
+    },
+    {
+      path: 'plan-estudios/circle-packing',
+      component: PlanEstudiosCirclePackingComponent
     },
     {
       path: 'plan-estudios/semestres-2',
