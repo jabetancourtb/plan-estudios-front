@@ -35,8 +35,8 @@ export class PrerrequisitoService extends BaseService<any> {
   }
 
 
-  consultarAsignaturasPosterioresPorCodigoPrerrequisito(codigoPrerrequisito: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Prerrequisito>> {
-    this.resource = "/prerrequisitos/" + codigoPrerrequisito;
+  consultarAsignaturaAnterioresPorCodigoAsignatura(codigo: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Prerrequisito>> {
+    this.resource = "/asignaturas/" + codigo + "/anteriores";
 
     const params = new HttpParams()
     .set('page', page)
@@ -48,8 +48,8 @@ export class PrerrequisitoService extends BaseService<any> {
   }
 
 
-  consultarAsignaturaPrerrequisitosPorCodigoAsignatura(codigoAsignatura: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Prerrequisito>> {
-    this.resource = "/asignaturas/" + codigoAsignatura + "/prerrequisitos";
+  consultarAsignaturasPosterioresPorCodigoPrerrequisito(codigo: number, page: number, pageSize: number, field: string, asc: boolean) : Observable<ResponseListDTO<Prerrequisito>> {
+    this.resource = "/asignaturas/" + codigo + "/posteriores";
 
     const params = new HttpParams()
     .set('page', page)

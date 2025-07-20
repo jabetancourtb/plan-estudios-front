@@ -349,10 +349,10 @@ export class PlanEstudiosSemestresComponent {
     let prerrequisitos = this.responseListPrerrequisitos().content;
 
      for(let asignatura of this.responseListAsignaturas().content) {
-      let role = prerrequisitos.find(p => p.asignatura == asignatura.nombre) ? 't' : 'b';
+      let role = prerrequisitos.find(p => p.asignaturaPosteriorNombre == asignatura.nombre) ? 't' : 'b';
       let colorCampoFormacion = this.responseListCamposFormacion().content.find(a => a.nombre == asignatura.campoFormacion)?.colorHtml;
       let colorAreaFormacion = this.responseListAreasFormacion().content.find(a => a.nombre == asignatura.areaFormacion)?.colorHtml;
-      let colorBody = prerrequisitos.find(p => p.asignatura == asignatura.nombre) ? '#e3d8dc' : 'white';
+      let colorBody = prerrequisitos.find(p => p.asignaturaPosteriorNombre == asignatura.nombre) ? '#e3d8dc' : 'white';
 
       let data = {
         key: keyCounter,
@@ -369,15 +369,15 @@ export class PlanEstudiosSemestresComponent {
       }
       this.stateData.diagramNodeData.push(data);
 
-      let prerrequisitosAsignatura = prerrequisitos.filter(p => p.asignatura == asignatura.nombre);
+      let prerrequisitosAsignatura = prerrequisitos.filter(p => p.asignaturaPosteriorNombre == asignatura.nombre);
 
       for(let prerrequisito of prerrequisitosAsignatura) {
         this.stateData.diagramLinkData.push({
           key: -keyCounter,
           from: this.stateData.diagramNodeData
-            .find(n => n.text === prerrequisito.prerrequisito)?.key!,
+            .find(n => n.text === prerrequisito.asignaturaAnteriorNombre)?.key!,
           to: this.stateData.diagramNodeData
-            .find(n => n.text === prerrequisito.asignatura)?.key!,
+            .find(n => n.text === prerrequisito.asignaturaPosteriorNombre)?.key!,
           color: '#ff3c00ff'
         });
       }

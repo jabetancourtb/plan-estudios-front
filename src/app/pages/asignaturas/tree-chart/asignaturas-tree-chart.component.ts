@@ -14,10 +14,10 @@ import { ModalAsignaturasAsociadasComponent } from '../../../shared/components/m
 
 export interface PrerrequisitoDataGraph {
   id: number;
-  prerrequisitoCodigo: number;
-  prerrequisito: string;
-  asignaturaCodigo: number;
-  asignatura: string;
+  asignaturaAnteriorCodigo: number;
+  asignaturaAnteriorNombre: string;
+  asignaturaPosteriorCodigo: number;
+  asignaturaPosteriorNombre: string;
 }
 
 export interface NodoFlare {
@@ -134,11 +134,11 @@ export class AsignaturasTreeChartComponent {
 
       // Crear relaciones padre-hijo a partir de los prerrequisitos
       prerrequisitos.forEach(pr => {
-        const nodoPadre = mapaNodos.get(pr.prerrequisitoCodigo);
-        const nodoHijo = mapaNodos.get(pr.asignaturaCodigo);
+        const nodoPadre = mapaNodos.get(pr.asignaturaAnteriorCodigo);
+        const nodoHijo = mapaNodos.get(pr.asignaturaPosteriorCodigo);
         if (nodoPadre && nodoHijo) {
           nodoPadre.children.push(nodoHijo);
-          hijosSet.add(pr.asignaturaCodigo); // Marcar como no-raíz
+          hijosSet.add(pr.asignaturaPosteriorCodigo); // Marcar como no-raíz
         }
       });
 

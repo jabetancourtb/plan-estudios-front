@@ -199,7 +199,7 @@ export class AsignaturasAsociadasComponent {
 
     let prerrequisitos = this.responseListPrerrequisitos().content;
 
-    let prerrequisitosAsignatura = prerrequisitos.filter(p => p.asignaturaCodigo == this.asignatura().codigo);
+    let prerrequisitosAsignatura = prerrequisitos.filter(p => p.asignaturaPosteriorCodigo == this.asignatura().codigo);
 
     if(prerrequisitosAsignatura.length > 0) {
         let dataGroupPrerrequisitos = {
@@ -212,7 +212,7 @@ export class AsignaturasAsociadasComponent {
       this.stateData.diagramNodeData.push(dataGroupPrerrequisitos);
     }
 
-    let asignaturasPosteriores = prerrequisitos.filter(p => p.prerrequisitoCodigo == this.asignatura().codigo);
+    let asignaturasPosteriores = prerrequisitos.filter(p => p.asignaturaAnteriorCodigo == this.asignatura().codigo);
 
     if(asignaturasPosteriores.length > 0) {
       let dataGroupPosteriores = {
@@ -263,11 +263,11 @@ export class AsignaturasAsociadasComponent {
 
     function buscarAsignaturasAnteriores(asignaturaFunc: Asignatura) {
 
-      let asignaturasAnteriores = prerrequisitos.filter(p => p.asignaturaCodigo == asignaturaFunc.codigo);
+      let asignaturasAnteriores = prerrequisitos.filter(p => p.asignaturaPosteriorCodigo == asignaturaFunc.codigo);
 
       for(let prerrequisito of asignaturasAnteriores) {
 
-        let asignaturaAnterior = asignaturas.find(a => a.codigo == prerrequisito.prerrequisitoCodigo)!;
+        let asignaturaAnterior = asignaturas.find(a => a.codigo == prerrequisito.asignaturaAnteriorCodigo)!;
 
         let colorCampoFormacion = camposFormacion.find(a => a.nombre == asignaturaAnterior.campoFormacion)?.colorHtml;
         let colorAreaFormacion = areasFormacion.find(a => a.nombre == asignaturaAnterior.areaFormacion)?.colorHtml;
@@ -289,10 +289,10 @@ export class AsignaturasAsociadasComponent {
           stateData.diagramNodeData.push(data);
         }
 
-        if(!stateData.diagramLinkData.find(l => l.from == prerrequisito.prerrequisitoCodigo && l.to == asignaturaFunc.codigo)) {
+        if(!stateData.diagramLinkData.find(l => l.from == prerrequisito.asignaturaAnteriorCodigo && l.to == asignaturaFunc.codigo)) {
           stateData.diagramLinkData.push({
             key: -keyCounter,
-            from: prerrequisito.prerrequisitoCodigo,
+            from: prerrequisito.asignaturaAnteriorCodigo,
             to: asignaturaFunc.codigo,
             color: '#ff3c00ff'
           });
@@ -325,11 +325,11 @@ export class AsignaturasAsociadasComponent {
 
     function buscarAsignaturasPosteriores(asignaturaFunc: Asignatura) {
 
-      let asignaturasPosteriores = prerrequisitos.filter(p => p.prerrequisitoCodigo == asignaturaFunc.codigo);
+      let asignaturasPosteriores = prerrequisitos.filter(p => p.asignaturaAnteriorCodigo == asignaturaFunc.codigo);
 
       for(let ap of asignaturasPosteriores) {
 
-        let asignaturaPosterior = asignaturas.find(a => a.codigo == ap.asignaturaCodigo)!;
+        let asignaturaPosterior = asignaturas.find(a => a.codigo == ap.asignaturaPosteriorCodigo)!;
 
         let colorCampoFormacion = camposFormacion.find(a => a.nombre == asignaturaPosterior.campoFormacion)?.colorHtml;
         let colorAreaFormacion = areasFormacion.find(a => a.nombre == asignaturaPosterior.areaFormacion)?.colorHtml;
