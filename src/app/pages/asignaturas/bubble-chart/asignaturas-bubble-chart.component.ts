@@ -15,7 +15,7 @@ import { ModalAsignaturasAsociadasComponent } from '../../../shared/components/m
 
 @Component({
   selector: 'app-asignaturas-bubble-chart',
-  imports: [NavbarComponent, NgbModalModule, ModalAsignaturasAsociadasComponent],
+  imports: [NavbarComponent, NgbModalModule],
   templateUrl: './asignaturas-bubble-chart.component.html',
   styleUrl: './asignaturas-bubble-chart.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
