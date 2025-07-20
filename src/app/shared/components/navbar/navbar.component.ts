@@ -23,80 +23,36 @@ export class NavbarComponent {
 
 
   // Redirige a / luego redigecciona a la ruta deseada
-  goToCamposFormacionBubbleChart() {
+  goToCamposFormacionIndex() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.camposFormacionBubbleChart]);
+        this.router.navigate([APP_CONSTANTS.ROUTES.camposFormacionIndex]);
     });
   }
 
 
   // Redirige a / luego redigecciona a la ruta deseada
-  goToCamposFormacionLista() {
+  goToAreasFormacionIndex() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.camposFormacionLista]);
+        this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionIndex]);
     });
   }
 
 
   // Redirige a / luego redigecciona a la ruta deseada
-  goToAreasFormacionBubbleChart() {
+  goToAsignaturasIndex() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionBubbleChart]);
+        this.router.navigate([APP_CONSTANTS.ROUTES.asignaturasIndex]);
     });
   }
 
 
   // Redirige a / luego redigecciona a la ruta deseada
-  goToAreasFormacionLista() {
+  goToPlanEstudiosIndex() {
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.areasFormacionLista]);
+        this.router.navigate([APP_CONSTANTS.ROUTES.planEstudiosIndex]);
     });
   }
 
 
-  // Redirige a / luego redigecciona a la ruta deseada
-  goToAsignaturasBubbleChart() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.asignaturasBubbleChart]);
-    });
-  }
-
-  // Redirige a / luego redigecciona a la ruta deseada
-  goToAsignaturasLista() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.asignaturasLista]);
-    });
-  }
-
-
-  // Redirige a / luego redigecciona a la ruta deseada
-  goToPrerrequisitosTreeChart() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.prerrequisitosTreegraphChart]);
-    });
-  }
-
-
-  // Redirige a / luego redigecciona a la ruta deseada
-  goToPlanEstudiosCirclePacking() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.planEstudiosCirclePacking]);
-    });
-  }
-
-
-  // Redirige a / luego redigecciona a la ruta deseada
-  goToPlanEstudiosTabla() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.planEstudiosTabla]);
-    });
-  }
-
-  // Redirige a / luego redigecciona a la ruta deseada
-  goToPlanEstudiosSemestres() {
-    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate([APP_CONSTANTS.ROUTES.planEstudiosSemestre]);
-    });
-  }
 
 }
