@@ -28,13 +28,13 @@ export interface NodoFlare {
 
 
 @Component({
-  selector: 'app-prerrequisitos-tree-chart',
+  selector: 'app-asignaturas-tree-chart',
   imports: [NavbarComponent, NgbModalModule],
-  templateUrl: './prerrequisitos-tree-chart.component.html',
-  styleUrl: './prerrequisitos-tree-chart.component.css',
+  templateUrl: './asignaturas-tree-chart.component.html',
+  styleUrl: './asignaturas-tree-chart.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PrerrequisitosTreeChartComponent {
+export class AsignaturasTreeChartComponent {
 
   @ViewChild('chartContainer', { static: true }) chartContainer!: ElementRef;
   @ViewChild('contextMenuRef', { static: false }) contextMenuRef!: ElementRef;
