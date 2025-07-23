@@ -306,6 +306,10 @@ export class PlanEstudiosSemestresComponent {
 
   public fillNodeDataSemestres() {
     for(let semestre of this.responseListSemestres().content) {
+      let totalCreditosPorSemestre =  this.responseListAsignaturas().content
+        .filter(asignatura => asignatura.semestreAsignatura === semestre)
+        .reduce((total, asignatura) => total + asignatura.numeroCreditos, 0);
+
       if(semestre != 11) {
         let group = this.stateData.diagramNodeData.find(d => d.header == this.responseListAsignaturas().content.find(a => a.semestreAsignatura == semestre)?.carrera)?.key
 
@@ -313,6 +317,7 @@ export class PlanEstudiosSemestresComponent {
           key: semestre,
           header: `Semestre ${semestre}`,
           isGroup: true,
+          footerCreditos: "Total créditos " + totalCreditosPorSemestre,
           footer: `Semestre ${semestre}`,
           group: group,
           color: '#d3e5ed'
@@ -333,6 +338,7 @@ export class PlanEstudiosSemestresComponent {
           key: semestre,
           header: `Semestre ${semestre}`,
           isGroup: true,
+          footerCreditos: "Total créditos " + totalCreditosPorSemestre,
           footer: `Semestre ${semestre}`,
           group: group2,
           color: '#d3e5ed'
@@ -429,6 +435,12 @@ export class PlanEstudiosSemestresComponent {
         $(go.Shape, { fill: 'white' })
           .bind('fill', 'color'),
         $(go.Placeholder, { padding: 20 })
+      ),
+      $(go.Panel, 'Auto',
+        $(go.Shape, 'Rectangle', { fill: 'white', parameter2: 4 | 8 })
+          .bind('fill', 'role', r => r[0] === 'b' ? 'lightgray' : 'white'),
+        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
+          .bind('text', 'footerCreditos')
       ),
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedRectangle', { fill: 'white', parameter2: 4 | 8 })
