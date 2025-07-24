@@ -7,8 +7,6 @@ import { PrerrequisitoService } from '../../../services/prerrequisito.service';
 import { ResponseListDTO } from '../../../dto/response-list.model';
 import { Asignatura } from '../../../models/asignatura.model';
 import { Prerrequisito } from '../../../models/prerrequisito.model';
-import { CarreraService } from '../../../services/carrera.service';
-import { Carrera } from '../../../models/carrera.model';
 import { CampoFormacionService } from '../../../services/campo-formacion.service';
 import { AreaFormacionService } from '../../../services/area-formacion.service';
 import { AreaFormacion } from '../../../models/area-formacion.model';
@@ -33,20 +31,12 @@ export class PlanEstudiosSemestresComponent {
   @ViewChild('myDiagram', { static: true }) public myDiagramComponent!: ElementRef;
 
   private modalService = inject(NgbModal);
-  private carreraService: CarreraService = inject(CarreraService);
   private campoFormacionService: CampoFormacionService = inject(CampoFormacionService);
   private areaFormacionService: AreaFormacionService = inject(AreaFormacionService);
   private asignaturaService: AsignaturaService = inject(AsignaturaService);
   private prerrequisitoService: PrerrequisitoService = inject(PrerrequisitoService);
 
   planEstudiosGraphIsLoading = signal(false);
-
-  responseListCarreras = signal<ResponseListDTO<Carrera>>({
-    recordCountPerPage: 0,
-    totalRecordCount: 0,
-    totalPages: 0,
-    content: []
-  });
 
   responseListCamposFormacion = signal<ResponseListDTO<CampoFormacion>>({
     recordCountPerPage: 0,
@@ -56,13 +46,6 @@ export class PlanEstudiosSemestresComponent {
   });
 
   responseListAreasFormacion = signal<ResponseListDTO<AreaFormacion>>({
-    recordCountPerPage: 0,
-    totalRecordCount: 0,
-    totalPages: 0,
-    content: []
-  });
-
-  responseListSemestres = signal<ResponseListDTO<number>>({
     recordCountPerPage: 0,
     totalRecordCount: 0,
     totalPages: 0,
@@ -106,7 +89,13 @@ export class PlanEstudiosSemestresComponent {
     }[],
   };
 
-  creditosPorSemestre = [
+  grupoCarreras  = [
+    'Tecnología en Sistematización de Datos',
+    'Tecnología en Sistematización de Datos',
+    'Ingeniería Telemática',
+  ]
+
+  grupoSemestres = [
     {semestre: 1, totalCreditos: 18},
     {semestre: 2, totalCreditos: 18},
     {semestre: 3, totalCreditos: 15},
@@ -121,36 +110,7 @@ export class PlanEstudiosSemestresComponent {
   ]
 
   ngOnInit() {
-    this.consultarCarreras();
-  }
-
-
-  private consultarCarreras() {
-    this.planEstudiosGraphIsLoading.set(true);
-    this.carreraService.consultarCarreras(1, 100, 'id' , true).subscribe({
-      next: (res) => {
-        this.responseListCarreras.set(res);
-        this.consultarSemestres();
-        this.planEstudiosGraphIsLoading.set(false);
-      },
-      error: (e) => {
-        this.planEstudiosGraphIsLoading.set(false);
-      }
-    });
-  }
-
-  private consultarSemestres() {
-    this.planEstudiosGraphIsLoading.set(true);
-    this.asignaturaService.consultarSemestres(true).subscribe({
-      next: (res) => {
-        this.responseListSemestres.set(res);
-        this.consultarCamposFormacion();
-        this.planEstudiosGraphIsLoading.set(false);
-      },
-      error: (e) => {
-        this.planEstudiosGraphIsLoading.set(false);
-      }
-    });
+    this.consultarCamposFormacion();
   }
 
 
@@ -215,7 +175,7 @@ export class PlanEstudiosSemestresComponent {
 
 
   public loadAndConvertExternalData() {
-    this.fillNodeDataExample();
+    //this.fillNodeDataExample();
     this.fillNodeDataCarreras();
     this.fillNodeDataSemestres();
     this.fillNodeDataAsignaturasYPrerrequisitos();
@@ -277,12 +237,12 @@ export class PlanEstudiosSemestresComponent {
   public fillNodeDataCarreras() {
     let keyCarreraCounter = 10000;
 
-    for(let carrera of this.responseListCarreras().content) {
+    for(let carrera of this.grupoCarreras) {
       let data = {
         key: keyCarreraCounter,
-        header: carrera.nombre,
+        header: carrera,
         isGroup: true,
-        footer: carrera.nombre,
+        footer: carrera,
         color: '#f2f5df'
       }
       this.stateData.diagramNodeData.push(data);
@@ -297,68 +257,65 @@ export class PlanEstudiosSemestresComponent {
       keyCarreraCounter += 1;
     }
 
-    let carrera = this.responseListCarreras().content.find(c => c.nombre.startsWith('Tecnología'));
-
-    let data = {
-      key: keyCarreraCounter,
-      header: carrera?.nombre,
-      isGroup: true,
-      footer: carrera?.nombre,
-      color: '#f2f5df'
-    }
-    this.stateData.diagramNodeData.push(data);
-
   }
 
 
   public fillNodeDataSemestres() {
-    for(let semestre of this.responseListSemestres().content) {
-      let totalCreditosPorSemestre =  this.creditosPorSemestre.find(c => c.semestre == semestre)?.totalCreditos;
+    for(let grupoSemestre of this.grupoSemestres) {
 
-      if(semestre <= 6) {
+      if(grupoSemestre.semestre <= 6) {
         let group = this.stateData.diagramNodeData.filter(n => n.header?.toLowerCase().startsWith('tecnología'))[0].key;
 
         let data = {
-          key: semestre,
-          header: `Semestre ${semestre}`,
+          key: grupoSemestre.semestre,
+          header: `Semestre ${grupoSemestre.semestre}`,
           isGroup: true,
-          footerCreditos: "Total créditos " + totalCreditosPorSemestre,
-          footer: `Semestre ${semestre}`,
+          footerCreditos: "Total créditos " + grupoSemestre.totalCreditos,
+          footer: `Semestre ${grupoSemestre.semestre}`,
           group: group,
           color: '#d3e5ed'
         }
         this.stateData.diagramNodeData.push(data);
 
         this.stateData.diagramLinkData.push({
-          key: -semestre,
-          from: semestre,
-          to: semestre + 1,
+          key: -grupoSemestre.semestre,
+          from: grupoSemestre.semestre,
+          to: grupoSemestre.semestre + 1,
           color: '#43af65a8'
         });
       }
-      else if(semestre >= 7 && semestre < 11) {
+      else if(grupoSemestre.semestre >= 7 && grupoSemestre.semestre < 11) {
         let group = this.stateData.diagramNodeData.filter(n => n.header?.toLowerCase().startsWith('ingeniería'))[0].key;
 
         let data = {
-          key: semestre,
-          header: `Semestre ${semestre}`,
+          key: grupoSemestre.semestre,
+          header: `Semestre ${grupoSemestre.semestre}`,
           isGroup: true,
-          footerCreditos: "Total créditos " + totalCreditosPorSemestre,
-          footer: `Semestre ${semestre}`,
+          footerCreditos: "Total créditos " + grupoSemestre.totalCreditos,
+          footer: `Semestre ${grupoSemestre.semestre}`,
           group: group,
           color: '#d3e5ed'
         }
         this.stateData.diagramNodeData.push(data);
+
+        if(grupoSemestre.semestre < 10) {
+          this.stateData.diagramLinkData.push({
+            key: -grupoSemestre.semestre,
+            from: grupoSemestre.semestre,
+            to: grupoSemestre.semestre + 1,
+            color: '#43af65a8'
+          });
+        }
       }
-      else if(semestre == 11) {
+      else if(grupoSemestre.semestre == 11) {
         let group = this.stateData.diagramNodeData.filter(n => n.header?.toLowerCase().startsWith('tecnología'))[1].key;
 
         let data = {
-          key: semestre,
-          header: `Semestre ${semestre}`,
+          key: grupoSemestre.semestre,
+          header: `Componente propedéutico`,
           isGroup: true,
-          footerCreditos: "Total créditos " + totalCreditosPorSemestre,
-          footer: `Semestre ${semestre}`,
+          footerCreditos: "Total créditos " + grupoSemestre.totalCreditos,
+          footer: `Componente propedéutico`,
           group: group,
           color: '#d3e5ed'
         }
@@ -369,7 +326,7 @@ export class PlanEstudiosSemestresComponent {
 
 
   public fillNodeDataAsignaturasYPrerrequisitos() {
-    let keyCounter = this.responseListSemestres().totalRecordCount + 1;
+    let keyCounter = this.grupoSemestres.length + 1;
 
     let prerrequisitos = this.responseListPrerrequisitos().content;
 
