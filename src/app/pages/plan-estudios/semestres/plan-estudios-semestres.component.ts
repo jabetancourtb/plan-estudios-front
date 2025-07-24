@@ -115,8 +115,8 @@ export class PlanEstudiosSemestresComponent {
     {semestre: 6, totalCreditos: 17},
     {semestre: 7, totalCreditos: 16},
     {semestre: 8, totalCreditos: 18},
-    {semestre: 9, totalCreditos: 16},
-    {semestre: 10, totalCreditos: 14},
+    {semestre: 9, totalCreditos: 17},
+    {semestre: 10, totalCreditos: 13},
     {semestre: 11, totalCreditos: 9}
   ]
 
