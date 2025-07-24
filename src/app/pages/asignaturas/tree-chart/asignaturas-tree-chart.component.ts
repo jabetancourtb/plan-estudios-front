@@ -81,7 +81,7 @@ export class AsignaturasTreeChartComponent {
 
 
   ngOnInit() {
-    this.consultarAsignaturas(1, 200, 'semestreAsignatura', true);
+    this.consultarAsignaturas(1, 200, 'semestre_asignatura', true);
   }
 
 
