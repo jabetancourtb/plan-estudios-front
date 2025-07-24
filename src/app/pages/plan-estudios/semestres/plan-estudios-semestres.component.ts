@@ -161,7 +161,7 @@ export class PlanEstudiosSemestresComponent {
     this.areaFormacionService.consultarAreasFormacion(1, 100, 'id', true).subscribe({
       next: (res) => {
         this.responseListAreasFormacion.set(res);
-        this.consultarAsignaturas(1, 200, 'semestreAsignatura', true);
+        this.consultarAsignaturas(1, 200, 'semestre_asignatura', true);
         this.planEstudiosGraphIsLoading.set(false);
       },
       error: (e) => {
@@ -294,12 +294,12 @@ export class PlanEstudiosSemestresComponent {
     }
     this.stateData.diagramNodeData.push(data);
 
-    this.stateData.diagramLinkData.push({
+    /*this.stateData.diagramLinkData.push({
       key: -keyCarreraCounter,
       from: keyCarreraCounter,
       to: keyCarreraCounter+1,
       color: '#2957f0ff'
-    });
+    });*/
 
   }
 
