@@ -331,9 +331,10 @@ export class PlanEstudiosSemestresComponent {
     let prerrequisitos = this.responseListPrerrequisitos().content;
 
      for(let asignatura of this.responseListAsignaturas().content) {
-      let role = prerrequisitos.find(p => p.asignaturaPosteriorNombre == asignatura.nombre) ? 't' : 'b';
       let colorCampoFormacion = this.responseListCamposFormacion().content.find(a => a.nombre == asignatura.campoFormacion)?.colorHtml;
       let colorAreaFormacion = this.responseListAreasFormacion().content.find(a => a.nombre == asignatura.areaFormacion)?.colorHtml;
+
+      // Si la asignatura tiene prerrequisito se pintara de gris, sino será blanco.
       let colorBody = prerrequisitos.find(p => p.asignaturaPosteriorNombre == asignatura.nombre) ? '#e3d8dc' : 'white';
 
       let data = {
@@ -346,8 +347,7 @@ export class PlanEstudiosSemestresComponent {
         group: asignatura.semestreAsignatura,
         colorCampoFormacion: colorCampoFormacion,
         colorAreaFormacion: colorAreaFormacion,
-        colorBody: colorBody,
-        role: role
+        colorBody: colorBody
       }
       this.stateData.diagramNodeData.push(data);
 
@@ -403,7 +403,7 @@ export class PlanEstudiosSemestresComponent {
       },
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedRectangle', { fill: 'white', parameter2: 1 | 2 })
-          .bind('fill', 'role', r => r[0] === 't' ? 'lightgray' : 'white'),
+          .bind('fill', 'white'),
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'header')
       ),
@@ -412,15 +412,19 @@ export class PlanEstudiosSemestresComponent {
           .bind('fill', 'color'),
         $(go.Placeholder, { padding: 20 })
       ),
-      $(go.Panel, 'Auto',
+      // Solo visible si 'footerCreditos' tiene contenido
+      $(go.Panel, 'Auto',{ visible: false },
+        new go.Binding('visible', 'footerCreditos', function (val) {
+          return !!val; // solo visible si hay texto
+        }),
         $(go.Shape, 'Rectangle', { fill: 'white', parameter2: 4 | 8 })
-          .bind('fill', 'role', r => r[0] === 'b' ? 'lightgray' : 'white'),
+          .bind('fill', 'white'),
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'footerCreditos')
       ),
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedRectangle', { fill: 'white', parameter2: 4 | 8 })
-          .bind('fill', 'role', r => r[0] === 'b' ? 'lightgray' : 'white'),
+          .bind('fill', 'white'),
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'footer')
       )
@@ -431,14 +435,6 @@ export class PlanEstudiosSemestresComponent {
     this.diagram.nodeTemplate = $(
       go.Node, 'Vertical',
       { defaultStretch: go.GraphObject.Horizontal, fromSpot: go.Spot.RightSide, toSpot: go.Spot.LeftSide, contextMenu: contextMenu },
-
-      /*
-      $(go.Panel, 'Auto',
-        $(go.Shape, 'RoundedTopRectangle')
-          .bind('fill', 'colorCampoFormacion'), // Aquí usas el color definido por nodo
-        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
-          .bind('text', 'header')
-      ),*/
       $(go.Panel, 'Auto',
         $(go.Shape, 'RoundedTopRectangle')
           .bind('fill', 'colorCampoFormacion'),
@@ -456,14 +452,7 @@ export class PlanEstudiosSemestresComponent {
           .bind('fill', 'colorAreaFormacion'),
         $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
           .bind('text', 'creditos')
-      ),
-      /*
-      $(go.Panel, 'Auto',
-        $(go.Shape, 'RoundedBottomRectangle')
-          .bind('fill', 'colorAreaFormacion'), // O aquí también
-        $(go.TextBlock, { margin: new go.Margin(2, 2, 0, 2), textAlign: 'center' })
-          .bind('text', 'footer')
-      )*/
+      )
     );
 
     this.diagram.linkTemplate = $(
