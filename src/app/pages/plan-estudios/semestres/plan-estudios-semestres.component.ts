@@ -106,6 +106,19 @@ export class PlanEstudiosSemestresComponent {
     }[],
   };
 
+  creditosPorSemestre = [
+    {semestre: 1, totalCreditos: 18},
+    {semestre: 2, totalCreditos: 18},
+    {semestre: 3, totalCreditos: 15},
+    {semestre: 4, totalCreditos: 15},
+    {semestre: 5, totalCreditos: 16},
+    {semestre: 6, totalCreditos: 17},
+    {semestre: 7, totalCreditos: 16},
+    {semestre: 8, totalCreditos: 18},
+    {semestre: 9, totalCreditos: 16},
+    {semestre: 10, totalCreditos: 14},
+    {semestre: 11, totalCreditos: 9}
+  ]
 
   ngOnInit() {
     this.consultarCarreras();
@@ -260,6 +273,7 @@ export class PlanEstudiosSemestresComponent {
   }
 
 
+  // Se crean dos grupos de Tecnología en Sistematización de Datos y uno de Ingeniería Telemática
   public fillNodeDataCarreras() {
     let keyCarreraCounter = 10000;
 
@@ -294,24 +308,15 @@ export class PlanEstudiosSemestresComponent {
     }
     this.stateData.diagramNodeData.push(data);
 
-    /*this.stateData.diagramLinkData.push({
-      key: -keyCarreraCounter,
-      from: keyCarreraCounter,
-      to: keyCarreraCounter+1,
-      color: '#2957f0ff'
-    });*/
-
   }
 
 
   public fillNodeDataSemestres() {
     for(let semestre of this.responseListSemestres().content) {
-      let totalCreditosPorSemestre =  this.responseListAsignaturas().content
-        .filter(asignatura => asignatura.semestreAsignatura === semestre)
-        .reduce((total, asignatura) => total + asignatura.numeroCreditos, 0);
+      let totalCreditosPorSemestre =  this.creditosPorSemestre.find(c => c.semestre == semestre)?.totalCreditos;
 
-      if(semestre != 11) {
-        let group = this.stateData.diagramNodeData.find(d => d.header == this.responseListAsignaturas().content.find(a => a.semestreAsignatura == semestre)?.carrera)?.key
+      if(semestre <= 6) {
+        let group = this.stateData.diagramNodeData.filter(n => n.header?.toLowerCase().startsWith('tecnología'))[0].key;
 
         let data = {
           key: semestre,
@@ -331,8 +336,8 @@ export class PlanEstudiosSemestresComponent {
           color: '#43af65a8'
         });
       }
-      else {
-        let group2 = this.stateData.diagramNodeData.filter(n => n.header?.toLowerCase().startsWith('tecnología'))[1].key;
+      else if(semestre >= 7 && semestre < 11) {
+        let group = this.stateData.diagramNodeData.filter(n => n.header?.toLowerCase().startsWith('ingeniería'))[0].key;
 
         let data = {
           key: semestre,
@@ -340,7 +345,21 @@ export class PlanEstudiosSemestresComponent {
           isGroup: true,
           footerCreditos: "Total créditos " + totalCreditosPorSemestre,
           footer: `Semestre ${semestre}`,
-          group: group2,
+          group: group,
+          color: '#d3e5ed'
+        }
+        this.stateData.diagramNodeData.push(data);
+      }
+      else if(semestre == 11) {
+        let group = this.stateData.diagramNodeData.filter(n => n.header?.toLowerCase().startsWith('tecnología'))[1].key;
+
+        let data = {
+          key: semestre,
+          header: `Semestre ${semestre}`,
+          isGroup: true,
+          footerCreditos: "Total créditos " + totalCreditosPorSemestre,
+          footer: `Semestre ${semestre}`,
+          group: group,
           color: '#d3e5ed'
         }
         this.stateData.diagramNodeData.push(data);
