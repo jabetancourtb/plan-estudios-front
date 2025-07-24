@@ -532,7 +532,8 @@ export class PlanEstudiosCirclePackingComponent {
 
     Swal.fire({
       title: '(Campo de formación) ' + a.nombre,
-      html: html
+      html: html,
+      draggable: true
     });
   }
 
@@ -558,7 +559,8 @@ export class PlanEstudiosCirclePackingComponent {
 
     Swal.fire({
       title: '(Área de formación) ' + a.nombre,
-      html: html
+      html: html,
+      draggable: true
     });
   }
 
@@ -569,6 +571,7 @@ export class PlanEstudiosCirclePackingComponent {
     Swal.fire({
       title: '(Asignatura) ' + this.clickedData.nombre,
       width: '800px',
+      draggable: true,
       html: `
         <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
           <table class="table table-bordered text-start">
@@ -679,7 +682,8 @@ export class PlanEstudiosCirclePackingComponent {
       Swal.fire({
         title: 'Justificación no disponible',
         text: 'No hay justificación disponible para esta asignatura.',
-        icon: 'info'
+        icon: 'info',
+        draggable: true
       });
       return;
     }
@@ -687,6 +691,7 @@ export class PlanEstudiosCirclePackingComponent {
     Swal.fire({
       title:  a.nombre,
       width: '800px',
+      draggable: true,
       html: `
       <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
         <table class="table table-bordered text-start" style="table-layout: fixed; width: 100%;>

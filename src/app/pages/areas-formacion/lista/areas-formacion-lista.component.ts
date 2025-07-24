@@ -242,7 +242,8 @@ export class AreasFormacionListaComponent {
 
     Swal.fire({
       title: `Asignaturas de ${areaFormacion.nombre}`,
-      html: html
+      html: html,
+      draggable: true
     });
   }
 

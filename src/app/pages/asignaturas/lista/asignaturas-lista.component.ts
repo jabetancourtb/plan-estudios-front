@@ -160,7 +160,8 @@ export class AsignaturasListaComponent {
       Swal.fire({
         title: 'Justificación no disponible',
         text: 'No hay justificación disponible para esta asignatura.',
-        icon: 'info'
+        icon: 'info',
+        draggable: true
       });
       return;
     }
@@ -168,6 +169,7 @@ export class AsignaturasListaComponent {
     Swal.fire({
       title:  asignatura.nombre,
       width: '800px',
+      draggable: true,
       html: `
       <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
         <table class="table table-bordered text-start" style="table-layout: fixed; width: 100%;>
@@ -183,6 +185,7 @@ export class AsignaturasListaComponent {
     Swal.fire({
       title: asignatura.nombre,
       width: '800px',
+      draggable: true,
       html: `
         <div style="max-height: 300px; overflow-y: auto; overflow-x: auto;">
           <table class="table table-bordered text-start">

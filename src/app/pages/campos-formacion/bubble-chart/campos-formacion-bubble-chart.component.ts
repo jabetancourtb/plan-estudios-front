@@ -295,7 +295,8 @@ export class CamposFormacionBubbleChartComponent {
 
     Swal.fire({
       title: a.nombre,
-      html: html
+      html: html,
+      draggable: true
     });
   }
 

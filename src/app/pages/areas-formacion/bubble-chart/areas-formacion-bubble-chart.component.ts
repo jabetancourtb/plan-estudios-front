@@ -403,7 +403,8 @@ export class AreasFormacionBubbleChartComponent {
 
     Swal.fire({
       title: a.nombre,
-      html: html
+      html: html,
+      draggable: true
     });
   }
 

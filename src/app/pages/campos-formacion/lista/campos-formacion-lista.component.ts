@@ -219,7 +219,8 @@ export class CamposFormacionListaComponent {
 
     Swal.fire({
       title: `areas de formación de ${campoFormacion.nombre}`,
-      html: html
+      html: html,
+      draggable: true
     });
   }
 
@@ -272,7 +273,8 @@ export class CamposFormacionListaComponent {
 
     Swal.fire({
       title: `Asignaturas de ${campoFormacion.nombre}`,
-      html: html
+      html: html,
+      draggable: true
     });
   }
 
