@@ -86,6 +86,9 @@
             },
             "development": {
               "buildTarget": "front-plan-estudios:build:development"
+            },
+            "test": {
+              "buildTarget": "front-plan-estudios:build:test"
             }
           },
           "defaultConfiguration": "development"
