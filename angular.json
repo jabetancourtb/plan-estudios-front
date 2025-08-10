@@ -91,7 +91,10 @@
               "buildTarget": "front-plan-estudios:build:test"
             }
           },
-          "defaultConfiguration": "development"
+          "defaultConfiguration": "development",
+          "options": {
+            "allowedHosts": ["ogw8c0ws8c4kc44wckwcg4ww.168.231.125.253.sslip.io"]
+          }
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
